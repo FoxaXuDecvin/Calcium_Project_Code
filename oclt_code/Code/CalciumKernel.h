@@ -1208,6 +1208,7 @@ string _runcode_api(string command) {
 	}
 	if (SizeRead(command, 11) == "_file_open ") {
 		_rc_varid = _runcode_api(PartReadA(oldcmd, " ", PartRead_FMend, 1));
+		_logrec_write("[FileWrite] SoildWrite is Open :  " + _rc_varid);
 		_soildwrite_open(_rc_varid);
 		return "ok";
 	}
