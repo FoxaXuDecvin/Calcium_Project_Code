@@ -860,8 +860,8 @@ string _runcode_api(string command) {
 
 		_rc_varinfo = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", ",", ")", 1)));
 
-		//_p("1 = " + _rc_varid);
-		//_p("2 = " + _rc_varinfo);
+		_logrec_write("[CP]1 = " + _rc_varid);
+		_logrec_write("[CP]2 = " + _rc_varinfo);
 
 		if (_rc_varid == _rc_varinfo) {
 			return "true";
@@ -877,11 +877,11 @@ string _runcode_api(string command) {
 		//_p("LaoDeng");
 		CharCutD = "(" + PartRead(oldcmd, "(", "|", true);
 
-		charCutA = _Old_VSAPI_TransVar(PartRead(CharCutD, "(", ")",true));
+		charCutA = (PartRead(CharCutD, "(", ")",true));
 
 		if (SizeRead(charCutA, 1) == "!") {
 			_if_reverse = true;
-			charCutA = _Old_VSAPI_TransVar(PartRead(CharCutD, "!", ")", true));
+			charCutA = (PartRead(CharCutD, "!", ")", true));
 		}
 
 		//_p("Ready to XinDeng");
@@ -900,7 +900,7 @@ string _runcode_api(string command) {
 		}
 
 		if (charCutB == _str_true) {
-			CharCutC = _Old_VSAPI_TransVar(PartRead(command, "|", "$FROMEND$",true));
+			CharCutC = (PartRead(command, "|", "$FROMEND$",true));
 
 			CharCutD = _runcode_api(CharCutC);
 
