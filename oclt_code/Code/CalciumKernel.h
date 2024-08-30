@@ -1190,6 +1190,7 @@ string _runcode_api(string command) {
 		}
 	}
 	if (SizeRead(command, 9) == "_file_del") {
+		//del task
 		_rc_varid = _runcode_api(PartReadA(oldcmd, " ", PartRead_FMend, 1));
 
 		if (!check_file_existence(_rc_varid)) {
