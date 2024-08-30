@@ -347,7 +347,7 @@ bool _debug_type_detected = false;
 bool _var_auto_void = false;
 bool _shell_lock = false;
 bool _if_reverse = false;
-
+string lost_memory;
 //KernelCommand
 string _runcode_api(string command) {
 	_logrec_write("[Reset] --------------------------------New Command---------------------------------------------------------");
@@ -369,7 +369,7 @@ string _runcode_api(string command) {
 	}
 	//Command Process
 
-	_logrec_write("[Parsing] Command :   " + command + "   Old :  " + oldcmd);
+	_logrec_write("[Execute] Command :   " + command + "   Old :  " + oldcmd);
 	if (atoi(command.c_str()) != 0) {
 		return command;
 	}
@@ -444,13 +444,33 @@ string _runcode_api(string command) {
 
 		return "ok";
 	}
+	if (SizeRead(command, 1) == "\"") {
+		if (charTotal(command, "\"") < 2) {
+			_p("[ERROR]  Quotation Format illegal  --> " + command);
+			_logrec_write("[ERROR]  Quotation Format illegal-- > " + command);
+			return "illegal_format";
+		}
+		charCutA = PartReadA(command, "\"", "\"", 1);
+		_logrec_write("[INFO] Return char" + _$quo + charCutA + _$quo);
+		return charCutA;
+	}
+	if (SizeRead(command, 1) == "\'") {
+		if (charTotal(oldcmd, "\'") < 2) {
+			_p("[ERROR]  Quotation Format illegal  --> " + oldcmd);
+			_logrec_write("[ERROR]  Quotation Format illegal-- > " + oldcmd);
+			return "illegal_format";
+		}
+		charCutA = PartReadA(oldcmd, "\'", "\'", 1);
+		_logrec_write("[INFO] (No Var ) Return char " + _$quo + charCutA + _$quo);
+		return charCutA;
+	}
 
 	if (SizeRead(command, 5) == "_exit") {
 		_logrec_write("[Shutdown] Execute _Exit");
 		return "runid.exit";
 	}
 	if (SizeRead(command, 7) == "_return") {
-		charCutA = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1)));
+		charCutA = _runcode_api(PartReadA(oldcmd, " ", PartRead_FMend, 1));
 
 		_logrec_write("_Exec Return Data :  " + charCutA);
 		_stop_exec_script = true;
@@ -587,21 +607,12 @@ string _runcode_api(string command) {
 	}
 
 	//Open Command
-	oldcmd = command;
+	//oldcmd = command;
 
-	kernelcmdVid = "4.13";
-	if (SizeRead(command, 1) == "\"") {
-		if (charTotal(command, "\"") < 2) {
-			_p("[ERROR]  Quotation Format illegal  --> " + command);
-			_logrec_write("[ERROR]  Quotation Format illegal-- > " + command);
-			return "illegal_format";
-		}
-		charCutA = PartReadA(command, "\"", "\"", 1);
-		_logrec_write("[INFO] Return char" + _$quo + charCutA + _$quo);
-		return charCutA;
-	}
+	kernelcmdVid = "4.21";
+	_logrec_write("[Execute] Full : " + oldcmd);
 	if (SizeRead(command, 4) == "_prt") {
-		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
+		charCutA = PartReadA(oldcmd, " ", PartRead_FMend, 1);
 		_logrec_write("[Output Exec] Command :  -->  " + charCutA);
 		charCutB = _runcode_api(charCutA);
 		
@@ -611,7 +622,7 @@ string _runcode_api(string command) {
 		return "ok.print:<" + charCutB + ">";
 	}
 	if (SizeRead(command, 5) == "_cout") {
-		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
+		charCutA = PartReadA(oldcmd, " ", PartRead_FMend, 1);
 		_logrec_write("[Output Exec] Command :  -->  " + charCutA);
 		charCutB = _runcode_api(charCutA);
 
@@ -845,9 +856,9 @@ string _runcode_api(string command) {
 	}
 	if (SizeRead(command, 3) == "_cp") {
 
-		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", "(", ",", 1)));
+		_rc_varid = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", "(", ",", 1)));
 
-		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", ",", ")", 1)));
+		_rc_varinfo = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", ",", ")", 1)));
 
 		//_p("1 = " + _rc_varid);
 		//_p("2 = " + _rc_varinfo);

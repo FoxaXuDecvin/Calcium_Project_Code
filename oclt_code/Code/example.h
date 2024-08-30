@@ -308,7 +308,7 @@ int _HeadMainLoad() {
 	_gf_line = 1;
 	_gf_charget = "";
 
-	if (check_file_existence(_$GetSelfPath + "/CALCIUM-PROJECT_Rebuild.pdb")) {
+	if (check_file_existence(_$GetSelfPath + "/Calcium.pdb")) {
 		//Debug Mode
 		_rcset_anticrash = false;
 		_p("Detected PDB File.  AntiCrash Service is Disabled");
