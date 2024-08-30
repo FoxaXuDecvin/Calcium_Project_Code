@@ -1190,7 +1190,7 @@ string _runcode_api(string command) {
 		}
 	}
 	if (SizeRead(command, 9) == "_file_del") {
-		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ")", 1)));
+		_rc_varid = _runcode_api(PartReadA(oldcmd, " ", PartRead_FMend, 1));
 
 		if (!check_file_existence(_rc_varid)) {
 			return "true";
