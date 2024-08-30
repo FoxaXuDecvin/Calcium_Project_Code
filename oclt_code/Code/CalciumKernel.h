@@ -1115,7 +1115,7 @@ string _runcode_api(string command) {
 	}
 
 	//System
-	sysexecVid = "2.14";
+	sysexecVid = "4.23";
 	if (SizeRead(command, 11) == "_file_exist") {
 		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
 		_logrec_write("[File] Check File Exist..  command -->  " + charCutA);
@@ -1205,6 +1205,16 @@ string _runcode_api(string command) {
 			_p("[FileSystemIO] Delete File " + _rc_varinfo + " failed. Access Denied");
 			return "false";
 		}
+	}
+	if (SizeRead(command, 11) == "_file_open ") {
+		_rc_varid = _runcode_api(PartReadA(oldcmd, " ", PartRead_FMend, 1));
+		_soildwrite_open(_rc_varid);
+		return "ok";
+	}
+	if (SizeRead(command, 12) == "_file_write ") {
+		_rc_varid = _runcode_api(PartReadA(oldcmd, " ", PartRead_FMend, 1));
+		_soildwrite_write(_rc_varid);
+		return "ok";
 	}
 
 	//Toolkit
