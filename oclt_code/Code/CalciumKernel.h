@@ -999,7 +999,7 @@ string _runcode_api(string command) {
 	}
 
 	//Get
-	gethookVid = "2.32";
+	gethookVid = "4.31";
 	if (SizeRead(command, 7) == "_getenv") {
 		charCutA = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1)));
 		return _SystemAPI_getenv(charCutA);
@@ -1037,6 +1037,16 @@ string _runcode_api(string command) {
 	if (SizeRead(command, 8) == "_getpath") {
 		return _$GetSelfPath;
 	}
+	if (SizeRead(command, 12) == "_getfulltime") {
+		return __GetFullTime();
+	}
+	if (SizeRead(command, 8) == "_getdate") {
+		return __GetFullDate();
+	}
+	if (SizeRead(command, 9) == "_getclock") {
+		return __GetFullClock();
+	}
+
 
 	//IsTest
 	isGetVid = "4.01";
@@ -1215,6 +1225,12 @@ string _runcode_api(string command) {
 	}
 	if (SizeRead(command, 12) == "_file_write ") {
 		_rc_varid = _runcode_api(PartReadA(oldcmd, " ", PartRead_FMend, 1));
+
+		_rc_varid = ReplaceChar(_rc_varid, "%fulltime%", __GetFullTime());
+		_rc_varid = ReplaceChar(_rc_varid, "%date%", __GetFullDate());
+		_rc_varid = ReplaceChar(_rc_varid, "%time%", __GetFullClock());
+
+
 		_soildwrite_write(_rc_varid);
 		return "ok";
 	}
