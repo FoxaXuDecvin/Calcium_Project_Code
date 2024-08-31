@@ -1,356 +1,4 @@
-//Calcium Kernel Base
-
-//Copyright FoxaXu 2024
-// Based on OpenCppLangTab
-
-#include"../shload.h"
-#include"../Code/RCapi.h"
-
-
-//VCODE
-// 110(Software Version).1(General).1(Release Version).1(Debug/Preview/preRelease/Release  1 - 4)
-
-void _KernelVersion_LoadText(void) {
-	_KV_relver$int = atoi(_KV_releaseVer.c_str());
-	_KV_rV_Text = "{Unknown KrV ;  " + _KV_releaseVer + " }";
-
-	if (_KV_releaseVer == _KV_rV_Debug) {
-		_KV_rV_Text = _kv_text_debug;
-	}
-	if (_KV_releaseVer == _KV_rV_Preview) {
-		_KV_rV_Text = _kv_text_preview;
-	}
-	if (_KV_releaseVer == _KV_rV_preRelease) {
-		_KV_rV_Text = _kv_text_prerelease;
-	}
-	if (_KV_releaseVer == _KV_rV_Demo) {
-		_KV_rV_Text = _kv_text_demo;
-	}
-	if (_KV_releaseVer == _KV_rV_Release) {
-		_KV_rV_Text = _kv_text_release;
-	}
-	if (_KV_releaseVer == _KV_rV_Stable) {
-		_KV_rV_Text = _kv_text_stable;
-	}
-
-	//Other
-	if (_KV_releaseVer == _KV_rV_Custom) {
-		_KV_rV_Text = _kv_text_custom;
-	}
-	if (_KV_releaseVer == _KV_rV_Embed) {
-		_KV_rV_Text = _kv_text_embed;
-	}
-	if (_KV_releaseVer == _KV_rV_Deluxe) {
-		_KV_rV_Text = _kv_text_deluxe;
-	}
-
-	return;
-}
-
-//Define-Head
-string _runcode_api(string command);
-string PartReadA(string Info, string StartMark, string EndMark, int RPartSizeA);
-
-//HeadSpaceClean .  Default = true
-bool _gf_hsc = true;
-void _gfL_reset(void);
-//GetFULL API
-const int _gf_line_maxallow = 4096;
-bool _gf_status;
-string _gf_FLMark = ";";
-string _gf_charget;
-string _gf_makebuffer,_gf_getbuffer;
-string _get_fullLine(string load_script, string EndMark) {
-	_gf_FLMark = EndMark;
-	if (!check_file_existence(load_script)) {
-		return "badfound";
-	}
-	//Clear Makebuffer
-	_gf_makebuffer = "";
-
-	//get and make
-	for (; true; _gf_line++) {
-		//Reset Char
-		for (; true; _gf_cg++) {
-			//_p("Road Fresh    Line :   " + to_string(_gf_line));
-			//Textread
-			_gf_getbuffer = _fileapi_textread(load_script, _gf_line);
-			//Check Status Code
-			if (_gf_getbuffer == "overline") {
-				_gf_status = false;
-				return "badread";
-			}
-			if (_gf_getbuffer == "ReadFailed") {
-				_gf_status = false;
-				return "badopen";
-			}
-
-			if (_gf_hsc == true) {
-				_gf_getbuffer = HeadSpaceClean_NoSEM(_gf_getbuffer);
-			}
-
-			if (SizeRead(_gf_getbuffer, 2) == "//") {
-				_gf_cg = -1;
-				_gf_cgmax = 1;
-				_gf_line++;
-				_gf_charget = "";
-				continue;
-			}
-			if (_gf_getbuffer == "") {
-				_gf_cg = -1;
-				_gf_cgmax = 1;
-				_gf_line++;
-				_gf_charget = "";
-				continue;
-			}
-
-			//GetProcess
-			_gf_cgmax = _gf_getbuffer.size();
-			//_p("   cg :   " + to_string(_gf_cg) + " cgmax :  " + to_string(_gf_cgmax));
-
-			//OpenProcess
-			while (true) {
-				//Reset char get
-				if (_gf_cg == _gf_cgmax) {
-					//_p("Char Reset");
-					_gf_cg = -1;
-					_gf_cgmax = 1;
-					_gf_line++;
-					_gf_charget = "";
-					break;
-				}
-
-				if (_gf_line > _gf_line_maxallow) {
-					_gf_status = false;
-					return "Over Size";
-				}
-
-				//_p("line :  " + to_string(_gf_line) + "   cg :   " + to_string(_gf_cg) + " cgmax :  " + to_string(_gf_cgmax) + "   charMake = " + _gf_makebuffer);
-
-				_gf_charget = _gf_getbuffer[_gf_cg];
-				if (_gf_charget == "\\") {
-					_gf_cg++;
-					_gf_charget = _gf_charget + _gf_getbuffer[_gf_cg];
-					_gf_cg++;
-					_gf_charget = _gf_charget + _gf_getbuffer[_gf_cg];
-				}
-				_gf_cg++;
-				//_p("charget =  " + _gf_charget);
-				_gf_makebuffer = _gf_makebuffer + _gf_charget;
-				//_p("_gf_makebuffer = _gf_makebuffer + _gf_charge  ===  _gf_makebuffer  = " + _gf_makebuffer + "  + " + _gf_charget + "$");
-				if (_gf_charget == _gf_FLMark) {
-					_gf_status = true;
-					return _gf_makebuffer;
-				}
-				//EndProcess
-			}
-		}
-
-		continue;
-	}
-
-	_gf_status = false;
-	return "Kernel Exception :   _get_fullLine";
-}
-//END GETFULL API
-
-//Direct read
-string _get_direct_read(string load_script) {;
-	if (!check_file_existence(load_script)) {
-		return "badfound";
-	}
-	//Clear Makebuffer
-	_gf_getbuffer = "";
-
-	//get and make
-
-	while (true) {
-		//_p("D START");
-		_gf_getbuffer = LineReader(load_script, _gf_line);
-		//_p("DATA :   " + _gf_getbuffer + "    " + to_string(_gf_line));
-
-		if (_gf_getbuffer == "overline") {
-			_gf_status = false;
-			return "badread";
-		}
-		if (_gf_getbuffer == "ReadFailed") {
-			_gf_status = false;
-			return "badopen";
-		}
-
-		if (_gf_hsc == true) {
-			_gf_getbuffer = HeadSpaceCleanA(_gf_getbuffer);
-		}
-
-		if (_gf_getbuffer == "") {
-			_logrec_write("[Engine Direct] Find Empty Line --> on :  " + to_string(_gf_line) + "  size :  " + to_string(_gf_cg));
-			_gf_line++;
-			continue;
-		}
-
-		if (SizeRead(_gf_getbuffer, 2) == "//") {
-			_gf_line++;
-			continue;
-		}
-
-		break;
-	}
-
-	_gf_line++;
-
-	_gf_status = true;
-	//_p("D STOP");
-	return _gf_getbuffer;
-}
-
-
-//Main Script Load
-bool _CK_ShellMode = false;
-string _cmd_marks = "_";
-string cmdbuffer;
-string _api_result;
-bool _stop_exec_script = false;
-string _ckapi_scriptload(string load_Script,string Sargs) {
-	//_p("Load Main Kernel");
-	ifstream _SessionLock;
-	_SessionLock.open(load_Script);
-	if (!_language_mode) {
-		if (!_kernel_activate) {
-			_pv("_$lang.notactivate");
-			_pv("_$lang.activatehelp");
-			_pv("ScriptAPI _$lang.Access_Denied : ");
-			return "ok";
-		}
-	}
-	//_p("Speed check point 1");
-	_global_scriptload = load_Script;
-	script_args = Sargs;
-	_$logfile = _rcbind_logrec + "/" + _Char_Filter_EndFileName(load_Script) + "_LogRec.log";
-	//_p("Speed check point 2");
-	if (check_file_existence(_$logfile))_fileapi_del(_$logfile);
-	if (!check_file_existence(load_Script)) {
-		_pv("_$lang.runfail");
-		_pv("Error :  _$lang.filenotfound");
-		return "nf01";
-	}
-	//_p("Speed check point 3");
-	//Character Process ...
-	_api_result = "scriptloadfailed";
-
-	_logrec_write("[Start] PreCheck Script Run Environment");
-	_logrec_write("[Log] Log file is Bind :  " + _$logfile);
-	_gfL_reset();
-	_logrec_write("[Notice] Memory Address is Reset");
-
-	//_p("Speed check point 4");
-
-	if (_rcset_logrec == true) {
-		if (!check_file_existence(_$logfile)) {
-			_pv("_$lang.logfail " + _$logfile);
-		}
-	}
-
-	//_p("Speed check point 5");
-
-	while (true) {
-		_logrec_write("[Notice]Start to Execute script :  " + load_Script);
-		_logrec_write("[Exec] Execute Start on :  " + to_string(_gf_line) + "  size :  " + to_string(_gf_cg));
-		_global_scriptload = load_Script;
-		_logrec_write("[Exec]Complete Read Script   --> on :  " + to_string(_gf_line) + "  size :  " + to_string(_gf_cg));
-		//_p("Speed check point 6");
-		if (_direct_read_script == false) {
-			_logrec_write("[Script Read] Use Full Mode");
-			cmdbuffer = _get_fullLine(load_Script, ";");
-		}
-		else {
-			_logrec_write("[Script Read] Use Direct Mode");
-			cmdbuffer = _get_direct_read(load_Script);
-		}
-		_logrec_write("[Exec]Get Full Command :  -->  " + cmdbuffer + "  <-- on :  " + to_string(_gf_line) + "  size :  " + to_string(_gf_cg));
-		if (_gf_status == false) {
-			_pv("_$lang.stoprun.  Return status code :  " + cmdbuffer + "  . Args :  " + _global_scriptload + "   Line :  " + to_string(_gf_line) + " + " + to_string(_gf_cg));
-			_logrec_write("[ERROR]Kernel stop Running. address :  " + to_string(_gf_line) + " size :  " + to_string(_gf_cg) + "    on file: " + load_Script);
-			return "ok";
-		}
-
-		//_p("Speed check point 7");
-
-		//Code Analysis
-		if (_stop_exec_script == true) {
-			_stop_exec_script = false;
-		}
-		_logrec_write("-start Running -- <Line " + to_string(_gf_line) + " /File " + _global_scriptload + "> -----------------------------------------");
-		last_return = _api_result = _runcode_api(cmdbuffer);
-		//_p("Speed check point 8");
-		_logrec_write("Command Execute End, Result -->  " +_api_result);
-		_logrec_write("-end -----------------------------------------------------");
-		if (_api_result == "runid.exit") {
-			return "runid.exit";
-		}
-		if (_api_result == "runid.entershell") {
-			return "runid.entershell";
-		}
-
-		if (_stop_exec_script == true) {
-			return _api_result;
-		}
-
-		//_p("Speed check point 9");
-
-		//NEXT
-	}
-
-	return _api_result;
-}
-
-int thread_debug_status;
-int _Thread_CreateScript(string File,string argument_s) {
-	thread_debug_status = _system_autoRun(_$GetSelfFull, _$GetSelfFull + "  -run \"" + File + "\" -args \"" + argument_s + "\" -threadmode -anticrash_ok");
-	return thread_debug_status;
-}
-
-void _gfL_reset(void) {
-	_gf_cg = 0;
-	_gf_cgmax = 1;
-	_gf_line = 1;
-	return;
-}
-string langfile;
-string seclangfile;
-bool _skipcheck_language = false;
-bool LanguageLoad() {
-	langfile = _rcbind_langpath + "/" + _rcset_lang;
-	seclangfile = _rcbind_langpath + "/" + _rcset_seclang;
-	if (!check_file_existence(langfile)) {
-		return false;
-	}
-	_logrec_write("Loading  Language :   " + langfile);
-	_language_mode = true;
-	_ckapi_scriptload(seclangfile, "langmode");
-	_gfL_reset();
-	_ckapi_scriptload(langfile, "langmode");
-	_gfL_reset();
-	_ckapi_scriptload(_rcbind_langpath + "/errcode_list.txt", "langmode");
-	_gfL_reset();
-	_language_mode = false;
-	_stop_exec_script = false;
-	return true;
-}
-
-string varbufA;
-string charCutA, charCutB, CharCutC, CharCutD;
-string chartempA, chartempB, chartempC, chartempD;
-string _rc_varid, _rc_varinfo;
-int intCutA, intCutB, intCutC;
-int dbA, dbB, dbC, dbD;
-bool _debug_type_detected = false;
-bool _var_auto_void = false;
-bool _shell_lock = false;
-bool _if_reverse = false;
-string lost_memory;
-//KernelCommand
-
-string _runcode_api(string command) {
+string _runcode_api_old_method(string command) {
 	_logrec_write("[Reset] --------------------------------New Command---------------------------------------------------------");
 	if (_gf_hsc == true) {
 		command = HeadSpaceCleanA(command);
@@ -380,7 +28,7 @@ string _runcode_api(string command) {
 		}
 		return"empty";
 	}
-	if (SizeRead(command, 1) == ":") {
+	if (SizeRead(command,1) == ":") {
 		if (_debug_type_detected == true) {
 			_p("command is goto mark");
 		}
@@ -616,9 +264,9 @@ string _runcode_api(string command) {
 		charCutA = PartReadA(oldcmd, " ", PartRead_FMend, 1);
 		_logrec_write("[Output Exec] Command :  -->  " + charCutA);
 		charCutB = _runcode_api(charCutA);
-
+		
 		_logrec_write("[Exec] PRINT :  " + _$quo + charCutB + _$quo);
-
+		
 		_prts(charCutB);
 		return "ok.print:<" + charCutB + ">";
 	}
@@ -682,7 +330,7 @@ string _runcode_api(string command) {
 				return "filenotfound";
 			}
 		}
-		_logrec_write("[Exec] Run Application :   " + _rc_varid + "  Argument :  " + _rc_varinfo);
+		_logrec_write("[Exec] Run Application :   " + _rc_varid +"  Argument :  " + _rc_varinfo);
 		intCutA = _system_autoRun(_rc_varid, _rc_varinfo);
 
 		return to_string(intCutA);
@@ -697,7 +345,7 @@ string _runcode_api(string command) {
 		if (_direct_read_script == true) {
 			_gf_line--;
 		}
-		intCutA = _FindAllLine(1, _gf_line, _global_scriptload, charCutA);
+		intCutA = _FindAllLine(1,_gf_line,_global_scriptload, charCutA);
 		if (_direct_read_script == true) {
 			_gf_line++;
 		}
@@ -762,7 +410,7 @@ string _runcode_api(string command) {
 
 		//Run
 
-		CharCutC = _ckapi_scriptload(charCutB, chartempA);
+		CharCutC = _ckapi_scriptload(charCutB,chartempA);
 
 		if (_stop_exec_script == true) {
 			_stop_exec_script = false;
@@ -855,50 +503,6 @@ string _runcode_api(string command) {
 		}
 		return CharCutC;
 	}
-	if (SizeRead(command, 3) == "_if") {
-		_if_reverse = false;
-		//_p("LaoDeng");
-		CharCutD = "(" + PartRead(oldcmd, "(", "|", true);
-
-		charCutA = (PartRead(CharCutD, "(", ")", true));
-
-		if (SizeRead(charCutA, 1) == "!") {
-			_if_reverse = true;
-			charCutA = (PartRead(CharCutD, "!", ")", true));
-		}
-
-		//_p("Ready to XinDeng");
-
-		charCutB = _runcode_api(charCutA);
-
-		//_p("XinDeng");
-
-		if (_if_reverse == true) {
-			if (charCutB == _str_true) {
-				charCutB = _str_false;
-			}
-			else {
-				charCutB = _str_true;
-			}
-		}
-
-		if (charCutB == _str_true) {
-			CharCutC = (PartRead(command, "|", "$FROMEND$", true));
-
-			CharCutD = _runcode_api(CharCutC);
-
-			return CharCutD;
-		}
-		if (charCutB == _str_false) {
-			return "notrue";
-		}
-
-		_pv("_$lang.if.err.t1");
-		_pv("_$lang.if.err.t2 " + charCutB);
-		return "NullReturn";
-	}
-	
-	//Compare
 	if (SizeRead(command, 3) == "_cp") {
 
 		_rc_varid = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", "(", ",", 1)));
@@ -917,77 +521,47 @@ string _runcode_api(string command) {
 
 		return "FAIL";
 	}
-	if (SizeRead(command, 2) == "_<") {
+	if (SizeRead(command, 3) == "_if") {
+		_if_reverse = false;
+		//_p("LaoDeng");
+		CharCutD = "(" + PartRead(oldcmd, "(", "|", true);
 
-		_rc_varid = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", "(", ",", 1)));
+		charCutA = (PartRead(CharCutD, "(", ")",true));
 
-		_rc_varinfo = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", ",", ")", 1)));
-
-		_logrec_write("[CP <]1 = " + _rc_varid);
-		_logrec_write("[CP <]2 = " + _rc_varinfo);
-
-		if (atoi(_rc_varid.c_str()) < atoi(_rc_varinfo.c_str())) {
-			return "true";
-		}
-		else {
-			return "false";
+		if (SizeRead(charCutA, 1) == "!") {
+			_if_reverse = true;
+			charCutA = (PartRead(CharCutD, "!", ")", true));
 		}
 
-		return "FAIL";
-	}
-	if (SizeRead(command, 3) == "_=<") {
+		//_p("Ready to XinDeng");
 
-		_rc_varid = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", "(", ",", 1)));
+		charCutB = _runcode_api(charCutA);
 
-		_rc_varinfo = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", ",", ")", 1)));
+		//_p("XinDeng");
 
-		_logrec_write("[CP <=]1 = " + _rc_varid);
-		_logrec_write("[CP <=]2 = " + _rc_varinfo);
-
-		if (atoi(_rc_varid.c_str()) <= atoi(_rc_varinfo.c_str())) {
-			return "true";
-		}
-		else {
-			return "false";
+		if (_if_reverse == true) {
+			if (charCutB == _str_true){
+				charCutB = _str_false;
+			}
+			else{
+				charCutB = _str_true;
+			}
 		}
 
-		return "FAIL";
-	}
-	if (SizeRead(command, 2) == "_>") {
+		if (charCutB == _str_true) {
+			CharCutC = (PartRead(command, "|", "$FROMEND$",true));
 
-		_rc_varid = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", "(", ",", 1)));
+			CharCutD = _runcode_api(CharCutC);
 
-		_rc_varinfo = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", ",", ")", 1)));
-
-		_logrec_write("[CP >]1 = " + _rc_varid);
-		_logrec_write("[CP >]2 = " + _rc_varinfo);
-
-		if (atoi(_rc_varid.c_str()) > atoi(_rc_varinfo.c_str())) {
-			return "true";
+			return CharCutD;
 		}
-		else {
-			return "false";
+		if (charCutB == _str_false) {
+			return "notrue";
 		}
 
-		return "FAIL";
-	}
-	if (SizeRead(command, 3) == "_=>") {
-
-		_rc_varid = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", "(", ",", 1)));
-
-		_rc_varinfo = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", ",", ")", 1)));
-
-		_logrec_write("[CP >=]1 = " + _rc_varid);
-		_logrec_write("[CP >=]2 = " + _rc_varinfo);
-
-		if (atoi(_rc_varid.c_str()) >= atoi(_rc_varinfo.c_str())) {
-			return "true";
-		}
-		else {
-			return "false";
-		}
-
-		return "FAIL";
+		_pv("_$lang.if.err.t1");
+		_pv("_$lang.if.err.t2 " + charCutB);
+		return "NullReturn";
 	}
 
 	//OldMath
@@ -1136,7 +710,7 @@ string _runcode_api(string command) {
 			_logrec_write("[IsGet] Num is False   " + charCutA);
 			return _rc_false;
 		}
-
+	
 		return "_KernelFail_Status: Unknown";
 	}
 
@@ -1166,7 +740,7 @@ string _runcode_api(string command) {
 		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
 		_logrec_write("[Output Exec] Command :  -->  " + charCutA);
 		charCutB = _runcode_api(charCutA);
-
+		
 		_shellTitle = charCutB;
 		return "ok";
 	}
@@ -1404,7 +978,7 @@ string _runcode_api(string command) {
 		charCutB = _runcode_api(charCutA);
 
 		if (!check_file_existenceA(charCutB)) {
-			_fileapi_createmark(charCutB, "//default   --Simple Config File");
+			_fileapi_createmark(charCutB,"//default   --Simple Config File");
 		}
 
 		nt_sipcfg_open = charCutB;
@@ -1505,6 +1079,6 @@ string _runcode_api(string command) {
 		return command;
 	}
 	_logrec_write("[ERROR]Unknown COMMAND   " + command);
-	_pv("_$lang.nullcmd   :  <" + _global_scriptload + ">  Line " + to_string(_gf_line) + "  INFO --> " + command + "    (Resource -->  " + oldcmd + ")");
+	_pv("_$lang.nullcmd   :  <" + _global_scriptload + ">  Line " + to_string(_gf_line) + "  INFO --> " + command + "    (Resource -->  " + oldcmd +  ")");
 	return "unknown.command";
 }
