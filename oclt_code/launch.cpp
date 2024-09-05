@@ -32,8 +32,6 @@ void printmsgoclt() {
 }
 
 int main(int argc, char* argv[]) {
-
-
     if (!_dapi_ExistFolder_check(_Build_Path)) {
         _dapi_mkdir(_Build_Path);
     }
@@ -91,7 +89,8 @@ int main(int argc, char* argv[]) {
     if (argsSetExit == true) {
         return 0;
     }
-    
-   
-    return _HeadMainLoad();
+
+    int return_code = _HeadMainLoad();
+
+    return return_code;
 }

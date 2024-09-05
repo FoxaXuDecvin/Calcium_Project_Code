@@ -217,3 +217,7 @@ string _SystemAPI_getenv(string Environment) {
 	}
 	return envbuffer;
 }
+
+bool _Execute_Admin(string File, string Args) {
+	return ShellExecute(0, "runas", File.c_str(), Args.c_str(), 0, SW_SHOW);
+}

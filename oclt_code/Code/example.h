@@ -114,6 +114,10 @@ void argsApi(string args$api) {
 		Thread_Env = true;
 	}
 
+	if (args$api == "-%NowIsRunAdmin%") {
+		_isAdminOK_ = true;
+	}
+
 	//auto set args
 	if (_setnextargs_runscript == true) {
 		runscript = args$api;
@@ -312,6 +316,13 @@ int _HeadMainLoad() {
 		//Debug Mode
 		_rcset_anticrash = false;
 		_p("Detected PDB File.  AntiCrash Service is Disabled");
+	}
+
+	if (_rcset_useAdmin) {
+		if (!_isAdminOK_) {
+			_system_autoRun_admin(_$GetSelfFull, native_argument + " -%NowIsRunAdmin%");
+			return 0;
+		}
 	}
 
 	if (_rcset_anticrash == true) {

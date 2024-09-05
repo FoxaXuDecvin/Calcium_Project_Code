@@ -41,7 +41,7 @@ string _CK_Runid = _get_random_s(100000, 999999);
 
 string _KV_softwareVersion = "114"; //(Software Version)
 
-string _KV_gen = "11";//(General)
+string _KV_gen = "12";//(General)
 
 string _KV_rv = "2";//(Release Version)
 
@@ -73,9 +73,10 @@ string buildshell = _Build_Path + "/" + _KernelVersion + "/calcium_settings.cfg"
 string ExecBackups = _Build_Path + "/" + _KernelVersion + "/calcium.exe";
 string _shellTitle = "Calcium Kernel  " + _KernelVersion + "   Shell Console>";
 
+bool _isAdminOK_ = false;
+
 //Rc Config var
 bool _rcset_syscmd;
-bool _rcset_allowsu;
 bool _rcset_allowdiredit;
 bool _rcset_allowtp;
 bool _rcset_anticrash;
@@ -89,6 +90,8 @@ bool _rcset_shelledit,_rcset_scriptedit;
 bool _rcset_enforceUTF8;
 
 bool _rcset_aosr;
+
+bool _rcset_useAdmin;
 
 bool _rcset_shell_log;
 
@@ -184,7 +187,6 @@ bool _RcApiLoadConfig() {
 		_soildwrite_write("$EnableAntiCrash=true;");
 		_soildwrite_write("$EnableCrashReload=true;");
 		_soildwrite_write("$EnableLogRecord=true;");
-		_soildwrite_write("$AllowSuperUser=false;");
 		_soildwrite_write("$AllowDirectoryEdit=false;");
 		_soildwrite_write("$AllowThirdPartyPlugin=false;");
 		_soildwrite_write("$AllowShellEdit=true;");
@@ -195,6 +197,7 @@ bool _RcApiLoadConfig() {
 		_soildwrite_write("");
 		_soildwrite_write("//ShellSettings");
 		_soildwrite_write("$AutoOpenShellAfterRun=true;");
+		_soildwrite_write("$UseSuperUser=false;");
 		_soildwrite_write("$EnableShellLog=true;");
 		_soildwrite_write("");
 		_soildwrite_write("//Bind");
@@ -226,7 +229,6 @@ bool _RcApiLoadConfig() {
 	_rcset_anticrash = _RcLoad_TransApi("EnableAntiCrash");
 	_rcset_crash_reload = _RcLoad_TransApi("EnableCrashReload");
 	_rcset_logrec = _RcLoad_TransApi("EnableLogRecord");
-	_rcset_allowsu = _RcLoad_TransApi("AllowSuperUser");
 	_rcset_allowdiredit = _RcLoad_TransApi("AllowDirectoryEdit");
 	_rcset_allowtp = _RcLoad_TransApi("AllowThirdPartyPlugin");
 	_rcset_shelledit = _RcLoad_TransApi("AllowShellEdit");
@@ -236,6 +238,7 @@ bool _RcApiLoadConfig() {
 	_rcset_offlangcheck = _RcLoad_TransApi("OffLangCheck");
 
 	_rcset_aosr = _RcLoad_TransApi("AutoOpenShellAfterRun");
+	_rcset_useAdmin = _RcLoad_TransApi("UseSuperUser");
 	_rcset_shell_log = _RcLoad_TransApi("EnableShellLog");
 
 	//String
