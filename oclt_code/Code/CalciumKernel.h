@@ -1214,6 +1214,25 @@ string _runcode_api(string command) {
 			return "false";
 		}
 	}
+	if (SizeRead(command, 12) == "_file_rename") {
+		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1)));
+		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));
+
+		if (!check_file_existence(_rc_varid)) {
+			_p("[FileSystemIO] RenameFile A " + _rc_varid + " is not Exist");
+			return "false";
+		}
+
+		rename(_rc_varid.c_str(), _rc_varinfo.c_str());
+
+		if (check_file_existence(_rc_varinfo)) {
+			return "true";
+		}
+		else {
+			_p("[FileSystemIO] RenameFile B " + _rc_varinfo + " failed. Access Denied");
+			return "false";
+		}
+	}
 	if (SizeRead(command, 9) == "_dir_make") {
 		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
 		_logrec_write("[Dir] Create Directory ..  command -->  " + charCutA);
