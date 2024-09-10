@@ -1415,6 +1415,24 @@ string _runcode_api(string command) {
 		}
 		return _str_false;
 	}
+	if (SizeRead(command, 8) == "_url_msg") {
+		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
+		_logrec_write("[GetHttp] GET URL -->  " + charCutA);
+		charCutB = _runcode_api(charCutA);
+
+		CharCutD = _get_random_s(111111, 999999);
+
+		if (!_urldown_api_nocache(charCutB, CharCutD)) {
+			_p("[GetHttp] Fail Get URL " + charCutB);
+			return "fail";
+		}
+
+		charCutB = _fileapi_textread(CharCutD, 1);
+
+		_fileapi_del(CharCutD);
+
+		return charCutB;
+	}
 
 	//SipCfg Native
 	if (SizeRead(command, 13) == "_sipcfg.open ") {
