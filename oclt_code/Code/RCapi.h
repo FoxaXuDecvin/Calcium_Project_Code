@@ -8,7 +8,8 @@
 #include"../Code/ThirdPartyCode.h"
 
 
-int CL_FMV_ID = 1402;
+int CL_FMV_ID = 1403; // Calcium Lang Format Version
+//_$req_cl_fmv <Version>
 
 /// <VERSION>
 //releaseVerKnd
@@ -43,9 +44,9 @@ string _CK_Runid = _get_random_s(100000, 999999);
 
 string _KV_softwareVersion = "114"; //(Software Version)
 
-string _KV_gen = "12";//(General)
+string _KV_gen = "13";//(General)
 
-string _KV_rv = "5";//(Release Version)
+string _KV_rv = "2";//(Release Version)
 
 string _KV_releaseVer = _KV_rV_Release;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
