@@ -405,6 +405,28 @@ string _runcode_api(string command) {
 		return "false";
 	}
 
+	if (SizeRead(command, 12) == "_$req_cl_fmv") {
+		//Request CL Format Version
+
+		charCutA = PartReadA(oldcmd, " ", PartRead_FMend, 1);
+
+		intCutA = atoi(charCutA.c_str());
+
+		if (CL_FMV_ID >= intCutA) {
+			return "allow";
+		}
+		else {
+			_pv("_$lang.req.clfmv " + charCutA);
+			_pause();
+			return "runid.exit";
+		}
+
+
+
+		_p(charCutB);
+		return "error";
+	}
+
 	//Memory Control
 	kernelenvVid = "3.21";
 	if (SizeRead(command, 5) == "_var ") {
@@ -731,13 +753,21 @@ string _runcode_api(string command) {
 		chartempA = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ">", "$FROMEND$", 1)));
 
 		if (!check_file_existenceA(charCutB)) {
-			charCutB = _rcbind_pluginscript + "/" + charCutB;
-			if (!check_file_existenceA(charCutB)) {
-				_p("_runscript Error:  File not Exist");
-				_p(charCutB);
-				return "filenotfound";
+			if (check_file_existence(_rcbind_pluginscript + "/" + charCutB)) {
+				charCutB = _rcbind_pluginscript + "/" + charCutB;
+				goto markstartExecuteScript;
 			}
+			if (check_file_existence(_$GetSelfPath + "/" + charCutB)) {
+				charCutB = _$GetSelfPath + "/" + charCutB;
+				goto markstartExecuteScript;
+			}
+
+			_p("_runscript Error:  File not Exist");
+			_p(charCutB);
+			return "filenotfound";
 		}
+
+		markstartExecuteScript:
 
 		//Backup old GFapi data;
 
@@ -1434,6 +1464,47 @@ string _runcode_api(string command) {
 		return charCutB;
 	}
 
+	//pack/unpack Tools
+	if (SizeRead(command, 10) == "_file_pack") {
+		readptr = 1;
+		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1)));
+		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));
+
+		if (!_dapi_ExistFolder_check(_rc_varid)) {
+			_p("Error.FilePack.  Access Denied or not exist");
+			return "fails";
+		}
+		if (check_file_existence(_rc_varinfo)) {
+			_fileapi_del(_rc_varinfo);
+			if (check_file_existence(_rc_varinfo)) {
+				_p("Error.FilePack.  Pack file is exist, delete fail");
+				return "fails";
+			}
+		}
+
+		_cstp_maker(_rc_varid, _rc_varinfo);
+
+		return "Complete";
+	}
+	if (SizeRead(command, 12) == "_file_unpack") {
+		readptr = 1;
+		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1)));
+		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));
+
+		if (!check_file_existence(_rc_varid)) {
+			_p("Error.UnFilePack.  File Access Denied or not exist");
+			return "fails";
+		}
+
+		if (_dapi_ExistFolder_check(_rc_varinfo)) {
+			_dapi_rmdir(_rc_varinfo);
+		}
+
+		_cstp_unpack(_rc_varinfo, _rc_varid);
+
+		return "Complete";
+	}
+
 	//SipCfg Native
 	if (SizeRead(command, 13) == "_sipcfg.open ") {
 		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
@@ -1532,6 +1603,9 @@ string _runcode_api(string command) {
 		}
 		if (charCutA == "getsys") {
 			return _Run_SysKernel;
+		}
+		if (charCutA == "clfmv") {
+			return to_string(CL_FMV_ID);
 		}
 
 		return "null";
