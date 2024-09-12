@@ -48,7 +48,7 @@ string _KV_gen = "13";//(General)
 
 string _KV_rv = "2";//(Release Version)
 
-string _KV_releaseVer = _KV_rV_Release;//(Debug/Preview/preRelease/demo/Release  1 - 4)
+string _KV_releaseVer = _KV_rV_Stable;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
 string _mk = ".";
 
@@ -221,7 +221,7 @@ bool _RcApiLoadConfig() {
 		_soildwrite_write("$EnforceUTF-8=true;");
 		_soildwrite_write("");
 		_soildwrite_write("//Server");
-		_soildwrite_write("$RootAPIServer=https://api.foxaxu.com/calcium/serverapi;");
+		_soildwrite_write("$RootAPIServer=https://api-calcium.foxaxu.com;");
 		_soildwrite_write("$Kernelactivate={Nokey};");
 		_soildwrite_write("$ExecuteFile=" + _$GetSelfFull + ";");
 		_soildwrite_write("");
@@ -520,7 +520,7 @@ string at_cache;
 bool _TrustedServer;
 bool _activate_calcium(string Key_Register) {
 	if (_rcset_trustcheck == true) {
-		if (!_urldown_api_nocache("https://api.foxaxu.com/calcium/TrustedServer.txt", "TrustedList.txt")) {
+		if (!_urldown_api_nocache("https://api-calcium.foxaxu.com/TrustedServer.txt", "TrustedList.txt")) {
 			_TrustedServer = false;
 		}
 		else {
@@ -552,7 +552,7 @@ bool _activate_calcium(string Key_Register) {
 
 	if (_TrustedServer == false) {
 		_p("You are trying to activate Calcium using an untrusted server.");
-		_p("Please use a trusted server. you can read this list https://api.foxaxu.com/calcium/TrustedServer.txt");
+		_p("Please use a trusted server. you can read this list https://api-calcium.foxaxu.com/TrustedServer.txt");
 		return false;
 	}
 	if (_TBD_WARNING == true) {
