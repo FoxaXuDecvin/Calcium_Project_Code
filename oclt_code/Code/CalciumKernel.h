@@ -1224,6 +1224,10 @@ string _runcode_api(string command) {
 		_rcset_logrec = false;
 		return "ok";
 	}
+	if (SizeRead(command, 15) == "_$no_err_report") {
+		__settings_throwErrorMode = false;
+		return "ok";
+	}
 	if (SizeRead(command, 12) == "_$shell_lock") {
 		_shell_lock = true;
 		return "ok";
