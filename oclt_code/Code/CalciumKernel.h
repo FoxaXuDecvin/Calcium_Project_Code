@@ -1,4 +1,4 @@
-//Calcium Kernel Base
+//Calcium Kernel Base2
 
 //Copyright FoxaXu 2024
 // Based on OpenCppLangTab
@@ -1154,7 +1154,7 @@ string _runcode_api(string command) {
 
 
 	//IsTest
-	isGetVid = "4.01";
+	isGetVid = "4.23";
 	if (SizeRead(command, 7) == "_isNum ") {
 		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
 		_logrec_write("[IsGet] _is Num  :  -->  " + charCutA);
@@ -1230,7 +1230,7 @@ string _runcode_api(string command) {
 	}
 
 	//System
-	sysexecVid = "4.53";
+	sysexecVid = "4.54";
 	if (SizeRead(command, 11) == "_file_exist") {
 		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
 		_logrec_write("[File] Check File Exist..  command -->  " + charCutA);
@@ -1360,7 +1360,7 @@ string _runcode_api(string command) {
 	}
 
 	//Toolkit
-	ThirdExecVid = "4.12";
+	ThirdExecVid = "4.13";
 	if (SizeRead(command, 10) == "_file_read") {
 		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1)));
 		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));
