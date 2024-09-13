@@ -8,7 +8,7 @@
 #include"../Code/ThirdPartyCode.h"
 
 
-int CL_FMV_ID = 1504; // Calcium Lang Format Version
+int CL_FMV_ID = 1506; // Calcium Lang Format Version
 //_$req_cl_fmv <Version>
 
 /// <VERSION>
