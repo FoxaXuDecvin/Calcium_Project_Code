@@ -1547,7 +1547,7 @@ string _runcode_api(string command) {
 		}
 		else {
 			_rc_varid = _Old_VSAPI_TransVar(HeadSpaceCleanA(PartReadA(command, " ", "$FROMEND$", 1)));
-			return _load_sipcfg(nt_sipcfg_open, _rc_varid);
+			return _Old_VSAPI_TransVar(_load_sipcfg(nt_sipcfg_open, _rc_varid));
 		}
 		return "falseproblem";
 	}
