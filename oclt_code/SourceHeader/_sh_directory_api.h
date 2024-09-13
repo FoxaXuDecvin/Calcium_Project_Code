@@ -2,7 +2,7 @@
 // Copyright FoxaXu 2024
 
 #include "../SourceHeader/include.h"
-
+#define _CRT_SECURE_NO_WARNINGS
 //DEF
 bool _fileapi_createmark(string File, string info);
 int _get_random(int min, int max);

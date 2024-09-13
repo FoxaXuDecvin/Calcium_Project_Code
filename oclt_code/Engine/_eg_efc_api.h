@@ -4,7 +4,7 @@
 //Easy File Connect API
 
 #include"../shload.h"
-
+#define _CRT_SECURE_NO_WARNINGS
 //Copyright FoxaXu 2024
 //File Connect API
 // Use File monitor

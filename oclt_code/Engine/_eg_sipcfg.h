@@ -3,7 +3,7 @@
 //Copyright FoxaXu 2024
 
 #include"../shload.h"
-
+#define _CRT_SECURE_NO_WARNINGS
 string tempreadbuffEr_;
 
 //Design On Calcium Project
@@ -143,6 +143,8 @@ bool _spcfg_wiriteapi(string _sc_File, int _sc_Line, string _sc_header, string _
 	else {
 		_sw_target_remove = false;
 	}
+
+	return false;
 }
 
 bool _write_sipcfg(string _sc_File, string _sc_ID, string _sc_writeINFO) {

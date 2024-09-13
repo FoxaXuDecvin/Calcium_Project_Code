@@ -3,7 +3,7 @@
 // Copyright FoxaXu 2024
 
 #include "../SourceHeader/include.h"
-
+#define _CRT_SECURE_NO_WARNINGS
 //DEF
 string _fileapi_textread(string File, int line_number);
 

@@ -2,6 +2,7 @@
 
 #pragma once
 #include "../SourceHeader/include.h"
+#define _CRT_SECURE_NO_WARNINGS
 //Define
 string PartReadA(string Info, string StartMark, string EndMark, int RPartSizeA);
 

@@ -3,7 +3,7 @@
 
 //Code
 #include"Code/example.h"
-
+#define _CRT_SECURE_NO_WARNINGS
 //EDIT ON Example_H
 // 
 //Other Main

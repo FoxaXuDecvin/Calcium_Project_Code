@@ -1,4 +1,5 @@
 #include <ctime>
+#define _CRT_SECURE_NO_WARNINGS
 
 const std::string __Time_Year = "TIMEYEAR";
 const std::string __Time_Month = "TIMEMONTH";

@@ -2,7 +2,7 @@
 
 #pragma once
 #include "../../SourceHeader/include.h"
-
+#define _CRT_SECURE_NO_WARNINGS
 //Settings
 //Type :   true/false
 

@@ -4,7 +4,7 @@
 
 #pragma once
 #include"../shload.h"
-
+#define _CRT_SECURE_NO_WARNINGS
 int maxread = 1;
 string ReadNULLCheck;
 int _textapi_getdocmax(string file) {

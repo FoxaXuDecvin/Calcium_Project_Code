@@ -3,7 +3,7 @@
 
 #pragma once
 #include"../shload.h"
-
+#define _CRT_SECURE_NO_WARNINGS
 using namespace std;
 //TEXT READ
 
@@ -45,7 +45,7 @@ string PartRead(string Info, string StartMark, string EndMark,bool EndSearch) {
 	for (; readbufferPR != StartMark; readptr++) {
 		if (readptr > MaxInfoSize) {
 			//cout << "Message :  " << Info << endl;
-			return "notfoundstart :  " + Info;
+			return "notfound(" + StartMark + ")start :  " + Info;
 		}
 		readbufferPR = Info[readptr];
 	}
@@ -62,7 +62,7 @@ SKIPGETMARKSTART:
 	if (EndSearch == true) {
 		for (readptr = MaxInfoSize; readbufferPR != EndMark; readptr--) {
 			if (readptr < 0) {
-				return "(EndSearch)notfoundEnd :  " + Info;
+				return "(EndSearch)notfound(" + EndMark + ")End :  " + Info;
 			}
 			readbufferPR = Info[readptr];
 		}
@@ -73,7 +73,7 @@ SKIPGETMARKSTART:
 	else {
 		for (; readbufferPR != EndMark; readptr++) {
 			if (readptr > MaxInfoSize) {
-				return "notfoundEnd :  " + Info;
+				return "notfound(" + EndMark + ")End :  " + Info;
 			}
 			readbufferPR = Info[readptr];
 		}
@@ -138,7 +138,7 @@ string PartReadA(string Info, string StartMark, string EndMark, int RPartSizeA) 
 	//GetStart
 	for (; readbufferD != StartMark; readptr++) {
 		if (readptr > MAXSIZEA) {
-			return "sizeoutStart";
+			return "sizeout(" + StartMark + ")Start";
 		}
 		readbufferD = Info[readptr];
 	}
@@ -150,7 +150,7 @@ string PartReadA(string Info, string StartMark, string EndMark, int RPartSizeA) 
 	//GetEnd
 	for (; readbufferD != EndMark; readptr++) {
 		if (readptr > MAXSIZEA) {
-			return "sizeoutEnd";
+			return "sizeout(" + EndMark + ")End";
 		}
 		readbufferD = Info[readptr];
 	}
@@ -210,7 +210,7 @@ string PartRead_A(string Info, string StartMark, string EndMark, int RPartSizeA)
 	//GetStart
 	for (; readbufferD != StartMark; readptr++) {
 		if (readptr > MAXSIZEA) {
-			return "sizeoutStart";
+			return "sizeout(" + StartMark + ")Start";
 		}
 		readbufferD = Info[readptr];
 	}
@@ -222,7 +222,7 @@ string PartRead_A(string Info, string StartMark, string EndMark, int RPartSizeA)
 	//GetEnd
 	for (; readbufferD != EndMark; readptr++) {
 		if (readptr > MAXSIZEA) {
-			return "sizeoutEnd";
+			return "sizeout(" + EndMark + ")End";
 		}
 		readbufferD = Info[readptr];
 	}

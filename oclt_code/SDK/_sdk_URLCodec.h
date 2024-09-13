@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include <cctype>
-
+#define _CRT_SECURE_NO_WARNINGS
 struct UTF8Url
 {
     static std::string Encode(const std::string& url);
