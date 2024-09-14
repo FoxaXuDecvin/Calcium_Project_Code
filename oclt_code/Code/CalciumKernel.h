@@ -84,6 +84,10 @@ string _get_fullLine(string load_script, string EndMark) {
 				_gf_status = false;
 				return "badopen";
 			}
+			if (_gf_getbuffer == "LineError") {
+				_gf_status = false;
+				return "badParameter";
+			}
 
 			if (_gf_hsc == true) {
 				_gf_getbuffer = HeadSpaceClean_NoSEM(_gf_getbuffer);
@@ -176,6 +180,10 @@ string _get_direct_read(string load_script) {;
 		if (_gf_getbuffer == "ReadFailed") {
 			_gf_status = false;
 			return "badopen";
+		}
+		if (_gf_getbuffer == "LineError") {
+			_gf_status = false;
+			return "badParameter";
 		}
 
 		if (_gf_hsc == true) {
@@ -273,6 +281,16 @@ string _ckapi_scriptload(string load_Script,string Sargs) {
 			return "ok";
 		}
 
+		if (cmdbuffer == "badread") {
+			return "Error :   badread";
+		}
+		if (cmdbuffer == "badParameter") {
+			return "Error :   badParameter";
+		}
+		if (cmdbuffer == "badopen") {
+			return "Error :   badopen";
+		}
+
 		//_p("Speed check point 7");
 
 		//Code Analysis
@@ -290,7 +308,6 @@ string _ckapi_scriptload(string load_Script,string Sargs) {
 		if (_api_result == "runid.entershell") {
 			return "runid.entershell";
 		}
-
 		if (_stop_exec_script == true) {
 			return _api_result;
 		}
