@@ -1554,16 +1554,18 @@ string _runcode_api(string command) {
 
 		if (checkChar(command, "=")) {
 			_rc_varid = _Old_VSAPI_TransVar(HeadSpaceCleanA(PartReadA(command, " ", "=", 1)));
-			_rc_varinfo = _Old_VSAPI_TransVar(HeadSpaceCleanA(PartReadA(command, "=", PartRead_FMend, 1)));
+			_rc_varinfo = HeadSpaceCleanA(PartReadA(oldcmd, "=", PartRead_FMend, 1));
 
 			_rc_varinfo = ReplaceChar(_rc_varinfo, ";", "");
+			_rc_varinfo = _runcode_api(_rc_varinfo);
 
 			_write_sipcfg(nt_sipcfg_open, _rc_varid, _rc_varinfo);
 			_logrec_write("[SipCfg] Sipcfg Set :  " + _rc_varid + " = " + _rc_varinfo);
 			return "ok";
 		}
 		else {
-			_rc_varid = _Old_VSAPI_TransVar(HeadSpaceCleanA(PartReadA(command, " ", "$FROMEND$", 1)));
+			_rc_varid = HeadSpaceCleanA(PartReadA(command, " ", "$FROMEND$", 1));
+			//_Old_VSAPI_TransVar(_load_sipcfg(nt_sipcfg_open, _rc_varid));
 			return _Old_VSAPI_TransVar(_load_sipcfg(nt_sipcfg_open, _rc_varid));
 		}
 		return "falseproblem";
