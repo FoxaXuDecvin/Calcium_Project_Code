@@ -1546,10 +1546,6 @@ string _runcode_api(string command) {
 			return "fails";
 		}
 
-		if (_dapi_ExistFolder_check(_rc_varinfo)) {
-			_dapi_rmdir(_rc_varinfo);
-		}
-
 		_cstp_unpack(_rc_varinfo, _rc_varid);
 
 		return "Complete";
