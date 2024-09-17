@@ -525,7 +525,9 @@ string _runcode_api(string command) {
 
 		if (check_file_existence(charCutB))_fileapi_del(charCutB);
 
+		_fileapi_write(charCutB, to_string(VarSpaceMax));
 		_fileapi_write(charCutB, VarSpace);
+
 
 		return "ok.save";
 	}
@@ -540,7 +542,8 @@ string _runcode_api(string command) {
 			return "failfile";
 		}
 
-		VarSpace = _fileapi_textread(charCutB, 1);
+		VarSpaceMax = atoi(_fileapi_textread(charCutB, 1).c_str());
+		VarSpace = _fileapi_textread(charCutB, 2);
 
 		return "ok.save";
 	}
