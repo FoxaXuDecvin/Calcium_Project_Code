@@ -1200,7 +1200,7 @@ string _runcode_api(string command) {
 
 
 	//IsTest
-	isGetVid = "4.23";
+	isGetVid = "5.11";
 	if (SizeRead(command, 7) == "_isNum ") {
 		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
 		_logrec_write("[IsGet] _is Num  :  -->  " + charCutA);
@@ -1251,10 +1251,6 @@ string _runcode_api(string command) {
 
 		_p("PluginPath =   " + _rcbind_pluginpath);
 		_p("PluginScript = " + _rcbind_pluginscript);
-		return "ok";
-	}
-	if (SizeRead(command, 10) == "_var.reset") {
-		_clear_varspace();
 		return "ok";
 	}
 
