@@ -518,6 +518,32 @@ string _runcode_api(string command) {
 	}
 
 	//CONFIG
+	if (SizeRead(command, 8) == "_envsave") {
+		charCutA = PartReadA(oldcmd, " ", PartRead_FMend, 1);
+		_logrec_write("[EnvSave] Save :  -->  " + charCutA);
+		charCutB = _runcode_api(charCutA);
+
+		if (check_file_existence(charCutB))_fileapi_del(charCutB);
+
+		_fileapi_write(charCutB, VarSpace);
+
+		return "ok.save";
+	}
+	if (SizeRead(command, 8) == "_envload") {
+		charCutA = PartReadA(oldcmd, " ", PartRead_FMend, 1);
+		_logrec_write("[EnvSave] Load :  -->  " + charCutA);
+		charCutB = _runcode_api(charCutA);
+
+		if (!check_file_existence(charCutB)) {
+			_p("EnvLoad Error Fail");
+			_p("FileNotExist");
+			return "failfile";
+		}
+
+		VarSpace = _fileapi_textread(charCutB, 1);
+
+		return "ok.save";
+	}
 	if (SizeRead(command, 9) == "_cfgedit ") {
 		_logrec_write("[KernelManager] CFGEDIT");
 
