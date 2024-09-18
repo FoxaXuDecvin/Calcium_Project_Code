@@ -1,8 +1,12 @@
 # Calcium
-此项目是 Calcium-Project_Rebuild 的重建库
-旧的代码库已经废弃，请移动至当前库
+Calcium新项目
+新的官网       https://calcium.foxaxu.com
+开发帮助       https://dev-calcium.foxaxu.com
 
-因推送问题导致我们重置了当前代码库，Release将在不久后重新发布
+Website         https://calcium.foxaxu.com
+Develop Help    https://dev-calcium.foxaxu.com
+
+老版本请前往   [https://github.com/FoxaXuDecvin/CALCIUM_PROJECT_REBUILD](https://github.com/FoxaXuDecvin/CALCIUM-PROJECT_Rebuild)  (已废弃)
 
 This project is a rebuild library for Calcium-Project_Rebuild
 The old repository has been deprecated, please move to the current repository
