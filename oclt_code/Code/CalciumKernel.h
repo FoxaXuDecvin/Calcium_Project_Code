@@ -736,6 +736,22 @@ string _runcode_api(string command) {
 		sleepapi(intCutA);
 		return "ok";
 	}
+	if (SizeRead(command, 9) == "_ms_sleep") {
+		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
+		if (charCutA == "0") {
+			_pv("Error :  _sleep(0) _$lang.notNum");
+			return "ok";
+		}
+		intCutA = atoi(charCutA.c_str());
+		if (intCutA == 0) {
+			_pv("Error :  _sleep(" + charCutA + ") _$lang.notNum.");
+			return "ok";
+		}
+
+		_logrec_write("_Program Sleep " + charCutA);
+		sleepapi_ms(intCutA);
+		return "ok";
+	}
 	if (SizeRead(command, 8) == "_execute") {
 		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ")", 1)));
 		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ")", "$FROMEND$", 1)));

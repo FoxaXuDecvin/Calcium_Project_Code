@@ -358,3 +358,8 @@ bool _Execute_Admin(string File, string Args) {
 	Process_cache = "sudo " + File + " " + Args;
 	return system(Process_cache.c_str());
 }
+
+void sleepapi_ms(int secondsNum) {
+	usleep(secondsNum * 1000);
+	return;
+}
