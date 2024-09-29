@@ -233,6 +233,11 @@ int _HeadMainLoad() {
 		_p("Calcium Running on Network Path");
 		_p("But Windows Command is not support Network Path");
 		_p("Please use Network mapping and running on mapping path");
+		_p("");
+		_p("不支持的网络驱动器");
+		_p("Calcium 正在运行在网络驱动器");
+		_p("Console 无法在当前路径运行");
+		_p("为保证兼容性请使用本地路径或将当前路径映射到本地运行 ");
 		_pause();
 		return 0;
 	}
@@ -246,6 +251,8 @@ int _HeadMainLoad() {
 	if (!_dapi_ExistFolder_check(_$GetSelfPath)) {
 		_p("Unable to access the currently running directory");
 		_p("Calcium cannot be run in the current directory");
+		_p("无法访问Calcium运行的目录");
+		_p("请尝试将Calcium运行在其它目录或使用管理员权限运行");
 		_pause();
 		return 1;
 	}
@@ -273,10 +280,8 @@ int _HeadMainLoad() {
 		if (_skipcheck_language == false) {
 			if (!LanguageLoad()) {
 				langpackfile = _$GetSelfPath + "/" + "temp_languagepack.pack";
-				_p("Install Language Pack ?");
-				_prts("type y/n >");
+				_p("Download Language files");
 
-				if (_getline_type() != "n") {
 					if (_Run_SysKernel == Linux_kernel) {
 						_p("Install Linux Language");
 						if (!_api_request_download("lang/linux.txt", langpackfile)) {
@@ -294,7 +299,7 @@ int _HeadMainLoad() {
 					_fileapi_del(langpackfile);
 					sleepapi(1);
 					cleanConsole();
-				}
+
 				LanguageLoad();
 			}
 		}

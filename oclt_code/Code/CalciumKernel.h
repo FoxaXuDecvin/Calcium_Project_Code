@@ -1365,6 +1365,12 @@ string _runcode_api(string command) {
 			return "false";
 		}
 	}
+	if (SizeRead(command, 9) == "_dir_list") {
+		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1)));
+		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));
+		CreateFileMap_txt(_rc_varid, _rc_varinfo);
+		return "true";
+	}
 
 	//FileSystemIO
 	if (SizeRead(command, 10) == "_file_copy") {
