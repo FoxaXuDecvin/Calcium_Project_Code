@@ -8,7 +8,7 @@
 #include"../Code/ThirdPartyCode.h"
 
 
-int CL_FMV_ID = 1532; // Calcium Lang Format Version
+int CL_FMV_ID = 1543; // Calcium Lang Format Version
 //_$req_cl_fmv <Version>
 
 /// <VERSION>
@@ -44,9 +44,9 @@ string _CK_Runid = _get_random_s(100000, 999999);
 
 string _KV_softwareVersion = "115"; //(Software Version)
 
-string _KV_gen = "3";//(General)
+string _KV_gen = "4";//(General)
 
-string _KV_rv = "8";//(Release Version)
+string _KV_rv = "2";//(Release Version)
 
 string _KV_releaseVer = _KV_rV_Stable;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
@@ -686,4 +686,55 @@ int _FindAllLine(int startline, int skipline, string file, string charData) {
 	}
 
 	return fal_cache;
+}
+
+int FC_A, FC_B,CP_POINT;
+string CP_CACHE_A, CP_CACHE_B;
+bool FileCompare_(string fileA, string fileB) {
+
+	if (!check_file_existence(fileA))return false;
+	if (!check_file_existence(fileB))return false;
+
+	FC_A = _textapi_getdocmax(fileA);
+	FC_B = _textapi_getdocmax(fileB);
+
+	if (FC_A != FC_B)return false;
+
+	CP_POINT = 1;
+
+	for (; 1;CP_POINT++) {
+
+		CP_CACHE_A = _fileapi_textread(fileA, CP_POINT);
+		CP_CACHE_B = _fileapi_textread(fileB, CP_POINT);
+
+		if (CP_CACHE_A == "badread") {
+			return false;
+		}
+		if (CP_CACHE_A == "badParameter") {
+			return false;
+		}
+		if (CP_CACHE_A == "badopen") {
+			return false;
+		}
+
+		if (CP_CACHE_B == "badread") {
+			return false;
+		}
+		if (CP_CACHE_B == "badParameter") {
+			return false;
+		}
+		if (CP_CACHE_B == "badopen") {
+			return false;
+		}
+
+		//Check Over
+		if (CP_CACHE_A == CP_CACHE_B) {
+			if (CP_CACHE_A == "overline") return true;
+		}
+
+		if (CP_CACHE_A != CP_CACHE_B) return false;
+
+		continue;
+	}
+	//P2
 }

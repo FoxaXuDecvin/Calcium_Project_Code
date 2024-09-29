@@ -360,6 +360,7 @@ string chartempA, chartempB, chartempC, chartempD;
 string _rc_varid, _rc_varinfo;
 int intCutA, intCutB, intCutC;
 int dbA, dbB, dbC, dbD;
+bool sw_a, sw_b, sw_c;
 bool _debug_type_detected = false;
 bool _var_auto_void = false;
 bool _shell_lock = false;
@@ -1524,6 +1525,21 @@ string _runcode_api(string command) {
 		_fileapi_del(CharCutD);
 
 		return charCutB;
+	}
+	if (SizeRead(command, 8) == "_file_cp") {
+		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1)));
+		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));
+
+		_logrec_write("[FileCP] FileCompare");
+		_logrec_write("[FileCP] A :  " + _rc_varid);
+		_logrec_write("[FileCP] B :  " + _rc_varinfo);
+
+		sw_a = FileCompare_(_rc_varid, _rc_varinfo);
+
+		if (sw_a == true)return "true";
+		if (sw_a == false)return "false";
+
+		return "ok";
 	}
 
 	//pack/unpack Tools
