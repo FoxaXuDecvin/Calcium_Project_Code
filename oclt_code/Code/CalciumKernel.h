@@ -1545,7 +1545,7 @@ string _runcode_api(string command) {
 		if (sw_a == true)return "true";
 		if (sw_a == false)return "false";
 
-		return "ok";
+		return "false";
 	}
 
 	//pack/unpack Tools
