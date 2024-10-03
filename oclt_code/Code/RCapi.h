@@ -8,7 +8,7 @@
 #include"../Code/ThirdPartyCode.h"
 
 
-int CL_FMV_ID = 1546; // Calcium Lang Format Version
+int CL_FMV_ID = 1551; // Calcium Lang Format Version
 //_$req_cl_fmv <Version>
 
 /// <VERSION>
@@ -46,7 +46,7 @@ string _KV_softwareVersion = "115"; //(Software Version)
 
 string _KV_gen = "4";//(General)
 
-string _KV_rv = "6";//(Release Version)
+string _KV_rv = "7";//(Release Version)
 
 string _KV_releaseVer = _KV_rV_Stable;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
@@ -688,7 +688,7 @@ int _FindAllLine(int startline, int skipline, string file, string charData) {
 	return fal_cache;
 }
 
-int FC_A, FC_B,CP_POINT;
+int FC_A, FC_B, CP_POINT;
 string CP_CACHE_A, CP_CACHE_B;
 bool FileCompare_(string fileA, string fileB) {
 
@@ -702,7 +702,7 @@ bool FileCompare_(string fileA, string fileB) {
 
 	CP_POINT = 1;
 
-	for (; 1;CP_POINT++) {
+	for (; 1; CP_POINT++) {
 
 		CP_CACHE_A = _fileapi_textread(fileA, CP_POINT);
 		CP_CACHE_B = _fileapi_textread(fileB, CP_POINT);

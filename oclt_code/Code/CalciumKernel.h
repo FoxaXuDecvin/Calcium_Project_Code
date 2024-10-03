@@ -1427,6 +1427,16 @@ string _runcode_api(string command) {
 		_soildwrite_write(_rc_varid);
 		return "ok";
 	}
+	if (SizeRead(command, 14) == "_file_replace ") {
+		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, " ", "(", 1)));
+		CharCutC = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1)));
+		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));
+
+		BatchFileReplace_(_rc_varid, CharCutC, _rc_varinfo);
+
+		return "ok";
+	}
+
 
 	//Toolkit
 	ThirdExecVid = "4.13";
