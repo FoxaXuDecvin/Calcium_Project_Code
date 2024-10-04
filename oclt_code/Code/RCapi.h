@@ -46,7 +46,7 @@ string _KV_softwareVersion = "115"; //(Software Version)
 
 string _KV_gen = "4";//(General)
 
-string _KV_rv = "7";//(Release Version)
+string _KV_rv = "8";//(Release Version)
 
 string _KV_releaseVer = _KV_rV_Stable;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
@@ -208,17 +208,17 @@ bool _RcApiLoadConfig() {
 		_soildwrite_write("$AutoRunArgs=null;");
 		_soildwrite_write("");
 		_soildwrite_write("//PathBind");
-		_soildwrite_write("$DefaultPluginPath={oclt_path}/Plugin;");
-		_soildwrite_write("$DefaultPluginScript={oclt_path}/script;");
-		_soildwrite_write("$DefaultLogRecord={oclt_path}/{VersionID}/logs;");
-		_soildwrite_write("$DefaultLanguagePath={oclt_path}/{VersionID}/lang;");
+		_soildwrite_write("$DefaultPluginPath={path}/Plugin;");
+		_soildwrite_write("$DefaultPluginScript={path}/script;");
+		_soildwrite_write("$DefaultLogRecord={path}/logs;");
+		_soildwrite_write("$DefaultLanguagePath={path}/lang;");
 		_soildwrite_write("");
 		_soildwrite_write("//Display Settings");
 		_soildwrite_write("$Language=en-us;");
 		_soildwrite_write("$SecondLanguage=en-us;");
 		_soildwrite_write("");
 		_soildwrite_write("//Windows Only");
-		_soildwrite_write("$EnforceUTF-8=true;");
+		_soildwrite_write("$EnforceUTF-8=false;");
 		_soildwrite_write("");
 		_soildwrite_write("//Server");
 		_soildwrite_write("$RootAPIServer=https://api-calcium.foxaxu.com;");
