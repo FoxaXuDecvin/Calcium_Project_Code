@@ -46,7 +46,7 @@ string _KV_softwareVersion = "115"; //(Software Version)
 
 string _KV_gen = "4";//(General)
 
-string _KV_rv = "8";//(Release Version)
+string _KV_rv = "9";//(Release Version)
 
 string _KV_releaseVer = _KV_rV_Stable;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
@@ -393,7 +393,7 @@ int readptr = 1;
 bool _$cstp_unpackapi(string file,string resourcefile,int startline,string extract_dir) {
 	_dapi_create_full_path(extract_dir + "/" + file);
 	readptr++;
-	_p("Extract File :  " + file);
+	cout << "\33[2K\r Extract File :  " + file;
 	if (check_file_existence(extract_dir + "/" + file)) {
 		_fileapi_del(extract_dir + "/" + file);
 	}
