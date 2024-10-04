@@ -393,7 +393,7 @@ int readptr = 1;
 bool _$cstp_unpackapi(string file,string resourcefile,int startline,string extract_dir) {
 	_dapi_create_full_path(extract_dir + "/" + file);
 	readptr++;
-	cout << "\33[2K\r Extract File :  " + file;
+	cout << "\r                                                             \r Extract File :  " + file;
 	if (check_file_existence(extract_dir + "/" + file)) {
 		_fileapi_del(extract_dir + "/" + file);
 	}
