@@ -8,7 +8,7 @@
 #include"../Code/ThirdPartyCode.h"
 
 
-int CL_FMV_ID = 1553; // Calcium Lang Format Version
+int CL_FMV_ID = 1556; // Calcium Lang Format Version
 //_$req_cl_fmv <Version>
 
 /// <VERSION>
@@ -46,7 +46,7 @@ string _KV_softwareVersion = "115"; //(Software Version)
 
 string _KV_gen = "4";//(General)
 
-string _KV_rv = "10";//(Release Version)
+string _KV_rv = "11";//(Release Version)
 
 string _KV_releaseVer = _KV_rV_Stable;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
@@ -741,6 +741,12 @@ bool FileCompare_(string fileA, string fileB) {
 
 string CharFilter_(string msg) {
 	msg = ReplaceChar(msg, "\\r", "\r");
+
+	msg = ReplaceChar(msg, "\\t", "\t");
+
+	msg = ReplaceChar(msg, "\\n", "\n");
+
+	msg = ReplaceChar(msg, "\\b", "\b");
 
 	return msg;
 }
