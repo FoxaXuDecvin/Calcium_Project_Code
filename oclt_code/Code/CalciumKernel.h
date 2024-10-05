@@ -492,6 +492,9 @@ string _runcode_api(string command) {
 			return "illegal_format";
 		}
 		charCutA = PartReadA(command, "\"", "\"", 1);
+		//
+		charCutA = CharFilter_(charCutA);
+		//
 		_logrec_write("[INFO] Return char" + _$quo + charCutA + _$quo);
 		return charCutA;
 	}
@@ -502,6 +505,9 @@ string _runcode_api(string command) {
 			return "illegal_format";
 		}
 		charCutA = PartReadA(oldcmd, "\'", "\'", 1);
+
+		charCutA = CharFilter_(charCutA);
+
 		_logrec_write("[INFO] (No Var ) Return char " + _$quo + charCutA + _$quo);
 		return charCutA;
 	}
