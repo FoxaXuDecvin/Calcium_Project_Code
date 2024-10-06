@@ -398,7 +398,7 @@ bool _$cstp_unpackapi(string file,string resourcefile,int startline,string extra
 	if (check_file_existence(extract_dir + "/" + file)) {
 		_fileapi_del(extract_dir + "/" + file);
 	}
-	creatpath(file);
+	creatpath(extract_dir + "/" + file);
 	_soildwrite_open(extract_dir + "/" + file);
 	for (; true; readptr++) {
 		cachecstp = LineReader(resourcefile, readptr);
