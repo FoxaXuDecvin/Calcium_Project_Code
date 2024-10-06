@@ -5,6 +5,15 @@
 #include"../shload.h"
 
 bool creatpath(string fileaddress) {
+
+
+	//For Windows System
+	if (_Run_SysKernel == Win32_kernel) {
+		if (!checkChar(fileaddress, ":")) {
+			fileaddress = _$GetSelfPath + "/" + fileaddress;
+		}
+	}
+
 	string tempdata, outdata;
 
 	if (checkChar(fileaddress, "/")) cp_true = true;

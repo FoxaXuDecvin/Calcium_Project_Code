@@ -1377,6 +1377,13 @@ string _runcode_api(string command) {
 		CreateFileMap_txt(_rc_varid, _rc_varinfo);
 		return "true";
 	}
+	if (SizeRead(command, 9) == "_dir_full") {
+		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
+		charCutB = _runcode_api(charCutA);
+
+		creatpath(charCutB);
+		return "true";
+	}
 
 	//FileSystemIO
 	if (SizeRead(command, 10) == "_file_copy") {
