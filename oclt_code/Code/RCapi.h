@@ -46,7 +46,7 @@ string _KV_softwareVersion = "115"; //(Software Version)
 
 string _KV_gen = "4";//(General)
 
-string _KV_rv = "12";//(Release Version)
+string _KV_rv = "13";//(Release Version)
 
 string _KV_releaseVer = _KV_rV_Stable;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
@@ -332,7 +332,7 @@ bool _$cstp_writeapi(string file) {
 		return false;
 	}
 	cache_filepath = ReplaceChar(file, filiter_mfh, "");
-	_soildwrite_write("$sign_file_output(" + cache_filepath + ");");
+	_soildwrite_write("$CSTP_FILE_RECORD_MARK_ID_START(" + cache_filepath + ");");
 
 	for (int readptr = 1; true; readptr++) {
 		cachecstp = LineReader(file, readptr);
@@ -345,11 +345,12 @@ bool _$cstp_writeapi(string file) {
 		}
 		_soildwrite_write(cachecstp);
 	}
-	_soildwrite_write("$sign_file_close;");
+	_soildwrite_write("$CSTP_FILE_RECORD_MARK_ID_END(" + cache_filepath + ");");
 	return true;
 }
 
 string getfile;
+string verifyGet;
 bool _cstp_maker(string make_file_header,string file) {
 	CreateFileMap_txt("makedirmap.txt", make_file_header);
 	_cstp_file_write = file;
@@ -364,8 +365,8 @@ bool _cstp_maker(string make_file_header,string file) {
 		_pv("Cstp Make failed :   _$lang.filenotfound");
 		return false;
 	}
-	_soildwrite_write("calcium_script_text_package");
-	_soildwrite_write("//Text Package");
+	_soildwrite_write("Calcium_Text_Pack_File  New Format");
+	_soildwrite_write("//START EXTRACT");
 	for (int readptr = 1; true; readptr++) {
 		getfile = cachecstp = LineReader(make_file_header, readptr);
 		if (cachecstp == "overline") {
@@ -390,6 +391,7 @@ bool _cstp_maker(string make_file_header,string file) {
 }
 
 int readptr = 1;
+bool AntiDoubleCopy = false;
 bool _$cstp_unpackapi(string file,string resourcefile,int startline,string extract_dir) {
 
 	_dapi_create_full_path(extract_dir + "/" + file);
@@ -408,8 +410,11 @@ bool _$cstp_unpackapi(string file,string resourcefile,int startline,string extra
 		if (cachecstp == "ReadFailed") {
 			return false;
 		}
-		if (SizeRead(cachecstp, 16) == "$sign_file_close") {
-			break;
+		if (SizeRead(cachecstp, 29) == "$CSTP_FILE_RECORD_MARK_ID_END") {
+			verifyGet = PartReadA(cachecstp, "(", ")", 1);
+			if (verifyGet == getfile) {
+				break;
+			}
 		}
 		_soildwrite_write(cachecstp);
 	}
@@ -439,11 +444,11 @@ bool _cstp_unpack(string unpack_path, string file) {
 		if (cachecstp == "ReadFailed") {
 			break;
 		}
-		if (SizeRead(cachecstp,17) == "$sign_file_output") {
-			getfile = PartReadA(cachecstp, "(", ")", 1);
-			if (!_$cstp_unpackapi(getfile,file, readptr,unpack_path)) {
-				_pv("Failed :  " + getfile);
-			}
+			if (SizeRead(cachecstp, 31) == "$CSTP_FILE_RECORD_MARK_ID_START") {
+				getfile = PartReadA(cachecstp, "(", ")", 1);
+				if (!_$cstp_unpackapi(getfile, file, readptr, unpack_path)) {
+					_pv("Failed :  " + getfile);
+				}
 		}
 		continue;
 	}
