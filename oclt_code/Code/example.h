@@ -439,12 +439,12 @@ int _HeadMainLoad() {
 		return 0;
 	}
 	if (_runmode == _runmode_cstpmake) {
-		_cstp_maker(runscript, o_info);
+		_cstp_makerN(runscript, o_info);
 
 		return 0;
 	}
 	if (_runmode == _runmode_cstpunpack) {
-		_cstp_unpack(o_info,runscript);
+		_cstp_unpackN(o_info,runscript);
 
 		return 0;
 	}

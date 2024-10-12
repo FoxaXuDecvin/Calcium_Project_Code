@@ -325,8 +325,14 @@ string _Char_Filter_EndFileName(string fitchar) {
 string cachecstp;
 string filiter_mfh;
 string cache_filepath;
+string getfile;
+string verifyGet;
 string _cstp_file_write = "a.cstp";
-bool _$cstp_writeapi(string file) {
+int readptr = 1;
+bool AntiDoubleCopy = false;
+
+
+bool _$cstp_writeapiN(string file) {
 	if (!check_file_existence(file)) {
 		_pv("Cstp _$lang.loadfail :  _$lang.filenotfound");
 		return false;
@@ -348,10 +354,7 @@ bool _$cstp_writeapi(string file) {
 	_soildwrite_write("$CSTP_FILE_RECORD_MARK_ID_END(" + cache_filepath + ");");
 	return true;
 }
-
-string getfile;
-string verifyGet;
-bool _cstp_maker(string make_file_header,string file) {
+bool _cstp_makerN(string make_file_header,string file) {
 	CreateFileMap_txt("makedirmap.txt", make_file_header);
 	_cstp_file_write = file;
 	filiter_mfh = make_file_header;
@@ -376,7 +379,7 @@ bool _cstp_maker(string make_file_header,string file) {
 			break;
 		}
 		_p("Add File :   " + cachecstp);
-		if (_$cstp_writeapi(cachecstp)) {
+		if (_$cstp_writeapiN(cachecstp)) {
 			_pv("Cstp File :  " + getfile);
 		}
 		else {
@@ -389,10 +392,7 @@ bool _cstp_maker(string make_file_header,string file) {
 	_fileapi_del("empty.txt");
 	return true;
 }
-
-int readptr = 1;
-bool AntiDoubleCopy = false;
-bool _$cstp_unpackapi(string file,string resourcefile,int startline,string extract_dir) {
+bool _$cstp_unpackapiN(string file,string resourcefile,int startline,string extract_dir) {
 
 	_dapi_create_full_path(extract_dir + "/" + file);
 	readptr++;
@@ -429,8 +429,7 @@ bool _$cstp_unpackapi(string file,string resourcefile,int startline,string extra
 
 	return false;
 }
-
-bool _cstp_unpack(string unpack_path, string file) {
+bool _cstp_unpackN(string unpack_path, string file) {
 	_p("Extract Package " + file);
 	if (!check_file_existence(file)) {
 		_pv("Cstp Unpack failed :   _$lang.filenotfound " + file);
@@ -446,9 +445,134 @@ bool _cstp_unpack(string unpack_path, string file) {
 		}
 			if (SizeRead(cachecstp, 31) == "$CSTP_FILE_RECORD_MARK_ID_START") {
 				getfile = PartReadA(cachecstp, "(", ")", 1);
-				if (!_$cstp_unpackapi(getfile, file, readptr, unpack_path)) {
+				if (!_$cstp_unpackapiN(getfile, file, readptr, unpack_path)) {
 					_pv("Failed :  " + getfile);
 				}
+		}
+		continue;
+	}
+	_pv("cstp unpack _$lang.complete");
+	return true;
+}
+
+
+//Legacy CSTP
+bool _Legacy_$cstp_writeapi(string file) {
+	if (!check_file_existence(file)) {
+		_pv("Cstp _$lang.loadfail :  _$lang.filenotfound");
+		return false;
+	}
+	cache_filepath = ReplaceChar(file, filiter_mfh, "");
+	_soildwrite_write("$CSTP_FILE_RECORD_MARK_ID_START(" + cache_filepath + ");");
+
+	for (int readptr = 1; true; readptr++) {
+		cachecstp = LineReader(file, readptr);
+		if (cachecstp == "overline") {
+			_p("End LoadScript. Total :  " + to_string(readptr));
+			break;
+		}
+		if (cachecstp == "ReadFailed") {
+			return false;
+		}
+		_soildwrite_write(cachecstp);
+	}
+	_soildwrite_write("$CSTP_FILE_RECORD_MARK_ID_END(" + cache_filepath + ");");
+	return true;
+}
+bool _Legacy_cstp_maker(string make_file_header, string file) {
+	CreateFileMap_txt("makedirmap.txt", make_file_header);
+	_cstp_file_write = file;
+	filiter_mfh = make_file_header;
+	make_file_header = "makedirmap.txt";
+	_p("Execute Pack Directory " + _cstp_file_write);
+	if (check_file_existence(_cstp_file_write)) {
+		_fileapi_del(_cstp_file_write);
+	}
+	_soildwrite_open(_cstp_file_write);
+	if (!check_file_existence(make_file_header)) {
+		_pv("Cstp Make failed :   _$lang.filenotfound");
+		return false;
+	}
+	_soildwrite_write("Calcium_Text_Pack_File  New Format");
+	_soildwrite_write("//START EXTRACT");
+	for (int readptr = 1; true; readptr++) {
+		getfile = cachecstp = LineReader(make_file_header, readptr);
+		if (cachecstp == "overline") {
+			break;
+		}
+		if (cachecstp == "ReadFailed") {
+			break;
+		}
+		_p("Add File :   " + cachecstp);
+		if (_Legacy_$cstp_writeapi(cachecstp)) {
+			_pv("Cstp File :  " + getfile);
+		}
+		else {
+			_pv("Failed :  " + getfile);
+		}
+		continue;
+	}
+	_pv("cstp make _$lang.complete");
+	_fileapi_del("makedirmap.txt");
+	_fileapi_del("empty.txt");
+	return true;
+}
+bool _Legacy_$cstp_unpackapi(string file, string resourcefile, int startline, string extract_dir) {
+
+	_dapi_create_full_path(extract_dir + "/" + file);
+	readptr++;
+	cout << "\r                                                             \r Extract File :  " + file;
+	if (check_file_existence(extract_dir + "/" + file)) {
+		_fileapi_del(extract_dir + "/" + file);
+	}
+	creatpath(extract_dir + "/" + file);
+	_soildwrite_open(extract_dir + "/" + file);
+	for (; true; readptr++) {
+		cachecstp = LineReader(resourcefile, readptr);
+		if (cachecstp == "overline") {
+			break;
+		}
+		if (cachecstp == "ReadFailed") {
+			return false;
+		}
+		if (SizeRead(cachecstp, 29) == "$CSTP_FILE_RECORD_MARK_ID_END") {
+			verifyGet = PartReadA(cachecstp, "(", ")", 1);
+			if (verifyGet == getfile) {
+				break;
+			}
+		}
+		_soildwrite_write(cachecstp);
+	}
+	_soildwrite_close();
+	if (!check_file_existence(extract_dir + "/" + file)) {
+		_p("failed to write file " + file);
+		return false;
+	}
+	else {
+		return true;
+	}
+
+	return false;
+}
+bool _Legacy_cstp_unpack(string unpack_path, string file) {
+	_p("Extract Package " + file);
+	if (!check_file_existence(file)) {
+		_pv("Cstp Unpack failed :   _$lang.filenotfound " + file);
+		return false;
+	}
+	for (; true; readptr++) {
+		getfile = cachecstp = LineReader(file, readptr);
+		if (cachecstp == "overline") {
+			break;
+		}
+		if (cachecstp == "ReadFailed") {
+			break;
+		}
+		if (SizeRead(cachecstp, 31) == "$CSTP_FILE_RECORD_MARK_ID_START") {
+			getfile = PartReadA(cachecstp, "(", ")", 1);
+			if (!_Legacy_$cstp_unpackapi(getfile, file, readptr, unpack_path)) {
+				_pv("Failed :  " + getfile);
+			}
 		}
 		continue;
 	}
@@ -466,7 +590,7 @@ bool _packsetup(string packid) {
 		}
 	}
 
-	_cstp_unpack(_rcbind_pluginscript, dircache);
+	_Legacy_cstp_unpack(_rcbind_pluginscript, dircache);
 	_p("complete ...");
 
 	_fileapi_del(dircache);

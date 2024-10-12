@@ -1589,7 +1589,7 @@ string _runcode_api(string command) {
 			}
 		}
 
-		_cstp_maker(_rc_varid, _rc_varinfo);
+		_Legacy_cstp_maker(_rc_varid, _rc_varinfo);
 
 		return "Complete";
 	}
@@ -1603,7 +1603,44 @@ string _runcode_api(string command) {
 			return "fails";
 		}
 
-		_cstp_unpack(_rc_varinfo, _rc_varid);
+		_Legacy_cstp_unpack(_rc_varinfo, _rc_varid);
+
+		return "Complete";
+	}
+
+	//New Pack Format
+	if (SizeRead(command, 10) == "_file_cstp") {
+		readptr = 1;
+		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1)));
+		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));
+
+		if (!_dapi_ExistFolder_check(_rc_varid)) {
+			_p("Error.FilePack.  Access Denied or not exist");
+			return "fails";
+		}
+		if (check_file_existence(_rc_varinfo)) {
+			_fileapi_del(_rc_varinfo);
+			if (check_file_existence(_rc_varinfo)) {
+				_p("Error.FilePack.  Pack file is exist, delete fail");
+				return "fails";
+			}
+		}
+
+		_cstp_makerN(_rc_varid, _rc_varinfo);
+
+		return "Complete";
+	}
+	if (SizeRead(command, 12) == "_file_uncstp") {
+		readptr = 1;
+		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1)));
+		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));
+
+		if (!check_file_existence(_rc_varid)) {
+			_p("Error.UnFilePack.  File Access Denied or not exist");
+			return "fails";
+		}
+
+		_cstp_unpackN(_rc_varinfo, _rc_varid);
 
 		return "Complete";
 	}
