@@ -283,13 +283,13 @@ int _HeadMainLoad() {
 				_p("Download Language files");
 
 					if (_Run_SysKernel == Linux_kernel) {
-						_p("Install Linux Language");
+						_p("Use Linux Language");
 						if (!_api_request_download("lang/linux.txt", langpackfile)) {
 							_p("Install Failed");
 						}
 					}
 					if (_Run_SysKernel == Win32_kernel) {
-						_p("Install Windows Language");
+						_p("Use Windows Language");
 						if (!_api_request_download("lang/win.txt", langpackfile)) {
 							_p("Install Failed");
 						}
@@ -439,12 +439,12 @@ int _HeadMainLoad() {
 		return 0;
 	}
 	if (_runmode == _runmode_cstpmake) {
-		_cstp_makerN(runscript, o_info);
+		_Legacy_cstp_maker(runscript, o_info);
 
 		return 0;
 	}
 	if (_runmode == _runmode_cstpunpack) {
-		_cstp_unpackN(o_info,runscript);
+		_Legacy_cstp_unpack(o_info,runscript);
 
 		return 0;
 	}
