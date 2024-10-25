@@ -1,7 +1,7 @@
 //RC API 
 // Run Config API
 
-//Copyright FoxaXu 2024
+//Copyright FoxaXu 2024C
 // Based on OpenCppLangTab
 
 #include"../shload.h"
