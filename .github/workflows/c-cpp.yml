@@ -18,6 +18,6 @@ jobs:
     - name: curlsetup
       run: sudo apt-get install curl
     - name: g++make
-      run: ./oclt_code/make.sh
+      run: oclt_code/make.sh
     - name: make distcheck
       run: make distcheck
