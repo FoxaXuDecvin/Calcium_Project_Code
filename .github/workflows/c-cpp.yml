@@ -19,5 +19,3 @@ jobs:
       run: sudo apt-get install libcurl4-openssl-dev
     - name: g++make
       run: g++ oclt_code/launch.cpp -l curl -o OpenCppLangTab
-    - name: make distcheck
-      run: make distcheck
