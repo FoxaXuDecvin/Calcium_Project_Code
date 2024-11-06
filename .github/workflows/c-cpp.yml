@@ -18,4 +18,4 @@ jobs:
     - name: curl install
       run: sudo apt-get install libcurl4-openssl-dev
     - name: g++make
-      run: g++ oclt_code/launch.cpp -l curl -o OpenCppLangTab
+      run: g++ oclt_code/launch.cpp -l curl -o Calcium_for_linux
