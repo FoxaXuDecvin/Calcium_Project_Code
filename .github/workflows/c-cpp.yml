@@ -14,6 +14,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: dir check
+    - name: Curl for Github Actions
+      uses: sozo-design/curl@v1.0.2
       run: sudo chmod 777 ./oclt_code
     - name: curl install
       run: sudo apt-get install libcurl
