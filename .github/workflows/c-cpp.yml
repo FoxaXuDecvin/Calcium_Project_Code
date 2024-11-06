@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: ocltbuild
-      run: ./oclt_code/make.sh
+      run: ./oclt_code/launch.cpp
     - name: make
       run: make
     - name: make check
