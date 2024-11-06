@@ -19,3 +19,9 @@ jobs:
       run: sudo apt-get install libcurl4-openssl-dev
     - name: g++make
       run: g++ oclt_code/launch.cpp -l curl -o Calcium_for_linux
+    - name: 'Upload artifacts'
+      uses: actions/upload-artifact@v4
+      with:
+        if-no-files-found: error
+        name: 'Artifacts'
+        path: Calcium_for_linux
