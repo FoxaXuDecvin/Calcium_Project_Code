@@ -13,11 +13,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: dir make
+      run: sudo chmod 777./oclt_code
+    - name: curlsetup
+      run: sudo apt-get install curl
     - name: g++make
       run: ./oclt_code/make.sh
-    - name: make
-      run: make
-    - name: make check
-      run: make check
     - name: make distcheck
       run: make distcheck
