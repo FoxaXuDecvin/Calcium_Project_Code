@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: dir make
-      run: sudo chmod 777./oclt_code
+      run: sudo chmod 777 ./oclt_code
     - name: curlsetup
       run: sudo apt-get install curl
     - name: g++make
