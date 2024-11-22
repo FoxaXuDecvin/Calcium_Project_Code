@@ -55,7 +55,6 @@ string PartReadA(string Info, string StartMark, string EndMark, int RPartSizeA);
 bool _gf_hsc = true;
 void _gfL_reset(void);
 //GetFULL API
-const int _gf_line_maxallow = 4096;
 bool _gf_status;
 string _gf_FLMark = ";";
 string _gf_charget;
@@ -369,6 +368,9 @@ string lost_memory;
 //KernelCommand
 
 string _runcode_api(string command) {
+	
+	sleepapi_ms(_exec_runtimesleep);
+
 	_logrec_write("[Reset] --------------------------------New Command---------------------------------------------------------");
 	if (_gf_hsc == true) {
 		command = HeadSpaceCleanA(command);
@@ -513,6 +515,10 @@ string _runcode_api(string command) {
 	}
 
 	if (SizeRead(command, 5) == "_exit") {
+		_logrec_write("[Shutdown] Execute _Exit");
+		return "runid.exit";
+	}
+	if (SizeRead(command, 4) == "exit") {
 		_logrec_write("[Shutdown] Execute _Exit");
 		return "runid.exit";
 	}
@@ -1295,6 +1301,15 @@ string _runcode_api(string command) {
 	}
 	if (SizeRead(command, 12) == "_$shell_lock") {
 		_shell_lock = true;
+		return "ok";
+	}
+	if (SizeRead(command, 12) == "_$exec_speed") {
+		_rc_varid = _runcode_api(PartReadA(oldcmd, " ", PartRead_FMend, 1));
+
+		_exec_runtimesleep = atoi(_rc_varid.c_str());
+
+		_p("Sleep time is :  " + _rc_varid);
+
 		return "ok";
 	}
 
