@@ -46,7 +46,7 @@ string _KV_softwareVersion = "115"; //(Software Version)
 
 string _KV_gen = "4";//(General)
 
-string _KV_rv = "20";//(Release Version)
+string _KV_rv = "21";//(Release Version)
 
 string _KV_releaseVer = _KV_rV_Stable;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
@@ -201,7 +201,7 @@ bool _RcApiLoadConfig() {
 		_soildwrite_write("$TrustedServerCheck=true;");
 		_soildwrite_write("$OffLangCheck=false;");
 		_soildwrite_write("$MaxScriptExecuteLine=4096;");
-		_soildwrite_write("$AfterExecuteSleepTime=1;");
+		_soildwrite_write("$AfterExecuteSleepTime=0;");
 		_soildwrite_write("");
 		_soildwrite_write("//ShellSettings");
 		_soildwrite_write("$AutoOpenShellAfterRun=true;");
