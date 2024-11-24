@@ -172,7 +172,7 @@ bool CK_Shell_open(void) {
 		}
 	}
 	else {
-		_pv("_$lang.trustoff");
+		_pv("_$lang.untrusted.server");
 	}
 	_p("----------------------------------------------------------");
 	_pv("_$lang.language :  _$lang.about .....  " + _rcset_lang);
