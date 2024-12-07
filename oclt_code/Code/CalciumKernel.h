@@ -1188,7 +1188,12 @@ string _runcode_api(string command) {
 		return _CK_Runid;
 	}
 	if (SizeRead(command, 8) == "_getline") {
-		return _getline_type();
+		charCutA = _getline_type();
+		if (charCutA == "@fxtools_closescript") {
+			_stop_exec_script = true;
+			return "runid.exit";
+		}
+		return charCutA;
 	}
 	if (SizeRead(command, 8) == "_getargs") {
 		return script_args;
