@@ -63,3 +63,4 @@ int _gf_line = 1;
 string nt_sipcfg_open;
 
 bool _setnextargs_loadenv;
+bool _FastMode;

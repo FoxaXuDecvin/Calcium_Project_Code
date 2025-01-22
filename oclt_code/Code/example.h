@@ -119,6 +119,10 @@ void argsApi(string args$api) {
 		_isAdminOK_ = true;
 	}
 
+	if (args$api == "-fastmode") {
+		_FastMode = true;
+	}
+
 	//auto set args
 	if (_setnextargs_runscript == true) {
 		runscript = args$api;
@@ -275,11 +279,7 @@ int _HeadMainLoad() {
 	if (_anticrash_services == false) {
 		//History Code
 	}
-	if (!check_file_existence(ExecBackups)) {
-		_p("Create File Path on :   " + _Build_Path + "/" + _KernelVersion);
-		_dapi_create_full_path(_Build_Path + "/" + _KernelVersion);
-		_fileapi_CpFile(_$GetSelfFull, ExecBackups);
-	}
+
 	_RcApi_vp_load();
 	if (!_RcApiLoadConfig()) {
 		_p("Failed to Load RCapi.");
@@ -289,14 +289,15 @@ int _HeadMainLoad() {
 		return -1;
 	}
 
-	if (_rcset_offlangcheck) {
-		_skipcheck_language = true;
-	}
-	else {
-		if (_skipcheck_language == false) {
-			if (!LanguageLoad()) {
-				langpackfile = _$GetSelfPath + "/" + "temp_languagepack.pack";
-				_p("Download Language files");
+	if (!_FastMode) {
+		if (_rcset_offlangcheck) {
+			_skipcheck_language = true;
+		}
+		else {
+			if (_skipcheck_language == false) {
+				if (!LanguageLoad()) {
+					langpackfile = _$GetSelfPath + "/" + "temp_languagepack.pack";
+					_p("Download Language files");
 
 					if (_Run_SysKernel == Linux_kernel) {
 						_p("Use Linux Language");
@@ -316,9 +317,11 @@ int _HeadMainLoad() {
 					sleepapi(1);
 					cleanConsole();
 
-				LanguageLoad();
+					LanguageLoad();
+				}
 			}
 		}
+
 	}
 
 	if (_Run_SysKernel == Win32_kernel) {
@@ -332,90 +335,96 @@ int _HeadMainLoad() {
 	_gf_cgmax = 1;
 	_gf_line = 1;
 	_gf_charget = "";
-
-	if (check_file_existence(_$GetSelfPath + "/Calcium.pdb")) {
-		//Debug Mode
-		_rcset_anticrash = false;
-		_p("Detected PDB File.  AntiCrash Service is Disabled");
-	}
-
-	if (_rcset_useAdmin) {
-		if (!_isAdminOK_) {
-			_system_autoRun_admin(_$GetSelfFull, native_argument + " -%NowIsRunAdmin%");
-			return 0;
+	
+	if (!_FastMode) {
+		if (check_file_existence(_$GetSelfPath + "/Calcium.pdb")) {
+			//Debug Mode
+			_rcset_anticrash = false;
+			_p("Detected PDB File.  AntiCrash Service is Disabled");
 		}
-	}
 
-	if (_rcset_anticrash == true) {
-		if (_anticrash_services == false) {
-			Crash_Reload_service:
-			AntiCrash_Return_Code = _system_autoRun(_$GetSelfFull, native_argument + " \"-anticrash_ok\"");
-			if (AntiCrash_Return_Code == 0) {
+		if (_rcset_useAdmin) {
+			if (!_isAdminOK_) {
+				_system_autoRun_admin(_$GetSelfFull, native_argument + " -%NowIsRunAdmin%");
 				return 0;
 			}
+		}
 
-			AC_FAILCODE = _Old_VSAPI_TransVar("_erc_" + to_string(AntiCrash_Return_Code));
+		if (_rcset_anticrash == true) {
+			if (_anticrash_services == false) {
+			Crash_Reload_service:
+				AntiCrash_Return_Code = _system_autoRun(_$GetSelfFull, native_argument + " \"-anticrash_ok\"");
+				if (AntiCrash_Return_Code == 0) {
+					return 0;
+				}
 
-			if (AC_FAILCODE == "_erc_" + to_string(AntiCrash_Return_Code)) {
-				AC_FAILCODE = "UNKNOWN_KERNEL_STATUS";
-			}
+				AC_FAILCODE = _Old_VSAPI_TransVar("_erc_" + to_string(AntiCrash_Return_Code));
 
-			cleanConsole();
-			_pn();
-			_pv("_$lang.crash.title");
-			_pn();
-			_pv("     _$lang.crash.t1");
-			_pv("       _$lang.crash.t2");
-			_pv("       _$lang.crash.t3");
-			_pv("       _$lang.crash.errcode --> " + AC_FAILCODE);
-			_pv("       _$lang.crash.kcode :  " + to_string(AntiCrash_Return_Code));
-			_pv("     _$lang.runargs :  " + native_argument);
-			_pn();
-			_pv("  _$lang.presskey");
-			_pv("  _$lang.crash.report");
-			_pn();
-			_pn();
-			_pause();
-			if (_rcset_crash_reload) {
+				if (AC_FAILCODE == "_erc_" + to_string(AntiCrash_Return_Code)) {
+					AC_FAILCODE = "UNKNOWN_KERNEL_STATUS";
+				}
+
 				cleanConsole();
-				goto Crash_Reload_service;
+				_pn();
+				_pv("_$lang.crash.title");
+				_pn();
+				_pv("     _$lang.crash.t1");
+				_pv("       _$lang.crash.t2");
+				_pv("       _$lang.crash.t3");
+				_pv("       _$lang.crash.errcode --> " + AC_FAILCODE);
+				_pv("       _$lang.crash.kcode :  " + to_string(AntiCrash_Return_Code));
+				_pv("     _$lang.runargs :  " + native_argument);
+				_pn();
+				_pv("  _$lang.presskey");
+				_pv("  _$lang.crash.report");
+				_pn();
+				_pn();
+				_pause();
+				if (_rcset_crash_reload) {
+					cleanConsole();
+					goto Crash_Reload_service;
+				}
+				else {
+					return 0;
+				}
+			}
+		}
+		else {
+			//_p("Anti Crash Services is " + to_string(_rcset_anticrash));
+		}
+
+		if (_Time_Bomb_Detect(_KV_releaseVer)) return 661;
+		
+
+		if (_rcbind_autorun != "null") {
+			_runmode = _runmode_runscript;
+			runscript = _rcbind_autorun;
+			script_args = _rcbind_autorunargs;
+
+			ckapi_result = _ckapi_scriptload(runscript, script_args);
+			if (ckapi_result == "runid.entershell") {
+				_runmode = _runmode_openshell;
 			}
 			else {
 				return 0;
 			}
 		}
-	}
-	else {
-		//_p("Anti Crash Services is " + to_string(_rcset_anticrash));
-	}
 
-	if (_Time_Bomb_Detect(_KV_releaseVer)) return 661;
-	if (_activate_request(_rc_activate_key) == false) {
-		_p("Activate Calcium");
-	}
-
-	if (_rcbind_autorun != "null") {
-		_runmode = _runmode_runscript;
-		runscript = _rcbind_autorun;
-		script_args = _rcbind_autorunargs;
-
-		ckapi_result = _ckapi_scriptload(runscript, script_args);
-		if (ckapi_result == "runid.entershell") {
-			_runmode = _runmode_openshell;
-		}
-		else {
+		if (_debugMode == true) {
+			_p("Runmode ID " + _runmode);
+			_p("runscript :  " + runscript);
+			_p("Argument :  " + script_args);
+			_p("o info :  " + o_info);
+			_pause();
 			return 0;
 		}
 	}
 
-	if (_debugMode == true) {
-		_p("Runmode ID " + _runmode);
-		_p("runscript :  " + runscript);
-		_p("Argument :  " + script_args);
-		_p("o info :  " + o_info);
-		_pause();
-		return 0;
+	if (_activate_request(_rc_activate_key) == false) {
+		_p("Activate Calcium");
 	}
+
+	
 	//main
 	if (_runmode == _runmode_null) {
 		TypeHelpMenu();

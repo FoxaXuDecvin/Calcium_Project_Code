@@ -369,7 +369,7 @@ string lost_memory;
 
 int procesid_ccode;
 int __CreateNewThreads(string Script,string args,string originEnv) {
-	procesid_ccode = _system_autoRun(_$GetSelfFull, "-run \"" + Script + "\" -args \"" + args + "\" -loadenv \"" + originEnv + "\"");
+	procesid_ccode = _system_autoRun(_$GetSelfFull, "-run \"" + Script + "\" -args \"" + args + "\" -loadenv \"" + originEnv + "\" -fastmode");
 	return procesid_ccode;
 }
 
