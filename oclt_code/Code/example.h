@@ -110,8 +110,9 @@ void argsApi(string args$api) {
 		_skipcheck_language = true;
 	}
 
-	if (args$api == "-threadmode") {
-		Thread_Env = true;
+	if (args$api == "-loadenv") {
+		_setnextargs_loadenv = true;
+		return;
 	}
 
 	if (args$api == "-%NowIsRunAdmin%") {
@@ -127,6 +128,21 @@ void argsApi(string args$api) {
 	if (_setnextargs_addargs == true) {
 		script_args = args$api;
 		_setnextargs_addargs = false;
+	}
+
+	if (_setnextargs_loadenv == true) {
+		_setnextargs_loadenv = false;
+		charCutB = args$api;
+
+		if (!check_file_existence(charCutB)) {
+			_p("EnvLoad Error Fail");
+			_p("FileNotExist");
+			return;
+		}
+
+		VarSpaceMax = atoi(_fileapi_textread(charCutB, 1).c_str());
+		VarSpace = _fileapi_textread(charCutB, 2);
+		return;
 	}
 
 	if (_setnextargs_addo == true) {

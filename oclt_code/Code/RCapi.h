@@ -8,7 +8,7 @@
 #include"../Code/ThirdPartyCode.h"
 
 
-int CL_FMV_ID = 1609; // Calcium Lang Format Version
+int CL_FMV_ID = 1612; // Calcium Lang Format Version
 //_$req_cl_fmv <Version>
 
 /// <VERSION>
@@ -46,7 +46,7 @@ string _KV_softwareVersion = "115"; //(Software Version)
 
 string _KV_gen = "4";//(General)
 
-string _KV_rv = "23";//(Release Version)
+string _KV_rv = "24";//(Release Version)
 
 string _KV_releaseVer = _KV_rV_Stable;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
@@ -108,6 +108,7 @@ string _rcset_seclang;
 string _rcbind_serverapi;
 string _rc_activate_key;
 string _rc_exec_address;
+string _pagefile_savedir;
 
 int _exec_runtimesleep = 1;
 
@@ -217,6 +218,7 @@ bool _RcApiLoadConfig() {
 		_soildwrite_write("$DefaultPluginScript={path}/script;");
 		_soildwrite_write("$DefaultLogRecord={path}/logs;");
 		_soildwrite_write("$DefaultLanguagePath={path}/lang;");
+		_soildwrite_write("$PageFile=script/pagefile.catemp;");
 		_soildwrite_write("");
 		_soildwrite_write("//Display Settings");
 		_soildwrite_write("$Language=en-us;");
@@ -258,6 +260,7 @@ bool _RcApiLoadConfig() {
 	_rcbind_pluginscript = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "DefaultPluginScript"));
 	_rcbind_logrec = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "DefaultLogRecord"));
 	_rcbind_langpath = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "DefaultLanguagePath"));
+	_pagefile_savedir = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "PageFile"));
 
 	_rcset_lang = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "Language"));
 	_rcset_seclang = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "SecondLanguage"));

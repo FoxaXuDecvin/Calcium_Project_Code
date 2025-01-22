@@ -61,3 +61,5 @@ int _gf_cgmax = 1;
 int _gf_line = 1;
 
 string nt_sipcfg_open;
+
+bool _setnextargs_loadenv;

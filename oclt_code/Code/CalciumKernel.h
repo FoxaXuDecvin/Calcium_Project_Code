@@ -367,6 +367,12 @@ bool _if_reverse = false;
 string lost_memory;
 //KernelCommand
 
+int procesid_ccode;
+int __CreateNewThreads(string Script,string args,string originEnv) {
+	procesid_ccode = _system_autoRun(_$GetSelfFull, "-run \"" + Script + "\" -args \"" + args + "\" -loadenv \"" + originEnv + "\"");
+	return procesid_ccode;
+}
+
 string _runcode_api(string command) {
 	
 	sleepapi_ms(_exec_runtimesleep);
@@ -691,7 +697,7 @@ string _runcode_api(string command) {
 	//Open Command
 	//oldcmd = command;
 
-	kernelcmdVid = "4.21";
+	kernelcmdVid = "5.13";
 	_logrec_write("[Execute] Full : " + oldcmd);
 	if (SizeRead(command, 4) == "_prt") {
 		charCutA = PartReadA(oldcmd, " ", PartRead_FMend, 1);
@@ -894,9 +900,46 @@ string _runcode_api(string command) {
 		return CharCutC;
 	}
 	if (SizeRead(command, 11) == "_new_thread") {
-		_p("This Command is Stop Debug");
+		charCutB = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "<", ">", 1)));
+		chartempA = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ">", "$FROMEND$", 1)));
+		
+		if (!check_file_existenceA(charCutB)) {
+			if (check_file_existence(_rcbind_pluginscript + "/" + charCutB)) {
+				charCutB = _rcbind_pluginscript + "/" + charCutB;
+				goto CmarkstartExecuteScript;
+			}
+			if (check_file_existence(_$GetSelfPath + "/" + charCutB)) {
+				charCutB = _$GetSelfPath + "/" + charCutB;
+				goto CmarkstartExecuteScript;
+			}
+
+			_p("_runscript Error:  File not Exist");
+			_p(charCutB);
+			return "filenotfound";
+		}
+
+	CmarkstartExecuteScript:
+
+		//Create New Page File
+
+		_fileapi_del(_pagefile_savedir);
+
+		_fileapi_write(_pagefile_savedir, to_string(VarSpaceMax));
+		_fileapi_write(_pagefile_savedir, VarSpace);
+
+		//Add New Threads
+		thread sec(__CreateNewThreads, charCutB, chartempA, _pagefile_savedir);
+		sec.detach();
+
 		return "ok";
 	}
+	if (SizeRead(command, 13) == "_set_pagefile") {
+		charCutA = PartReadA(oldcmd, " ", PartRead_FMend, 1);
+		charCutB = _runcode_api(charCutA);
+		_pagefile_savedir = charCutB;
+		return "ok";
+	}
+
 	if (SizeRead(command, 7) == "_invoke") {
 
 		charCutB = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "<", ">", 1)));
@@ -1183,6 +1226,9 @@ string _runcode_api(string command) {
 	if (SizeRead(command, 7) == "_getenv") {
 		charCutA = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1)));
 		return _SystemAPI_getenv(charCutA);
+	}
+	if (SizeRead(command, 12) == "_getpagefile") {
+		return _pagefile_savedir;
 	}
 	if (SizeRead(command, 9) == "_getrunid") {
 		return _CK_Runid;
