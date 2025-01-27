@@ -1235,7 +1235,7 @@ string _runcode_api(string command) {
 	}
 
 	//Get
-	gethookVid = "4.31";
+	gethookVid = "5.12";
 	if (SizeRead(command, 7) == "_getenv") {
 		charCutA = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1)));
 		return _SystemAPI_getenv(charCutA);
@@ -1290,7 +1290,9 @@ string _runcode_api(string command) {
 	if (SizeRead(command, 9) == "_getclock") {
 		return __GetFullClock();
 	}
-
+	if (SizeRead(command, 14) == "_get_thread_id") {
+		return Reg_Proces_runid;
+	}
 
 	//IsTest
 	isGetVid = "5.11";
