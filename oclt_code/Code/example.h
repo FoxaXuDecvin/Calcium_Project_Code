@@ -115,6 +115,11 @@ void argsApi(string args$api) {
 		return;
 	}
 
+	if (args$api == "-runid") {
+		_setproces_runid = true;
+		return;
+	}
+
 	if (args$api == "-%NowIsRunAdmin%") {
 		_isAdminOK_ = true;
 	}
@@ -152,6 +157,11 @@ void argsApi(string args$api) {
 	if (_setnextargs_addo == true) {
 		o_info = args$api;
 		_setnextargs_addo = false;
+	}
+
+	if (_setproces_runid == true) {
+		Reg_Proces_runid = args$api;
+		_setproces_runid = false;
 	}
 
 	return;
@@ -424,7 +434,20 @@ int _HeadMainLoad() {
 		_p("Activate Calcium");
 	}
 
+	if (Reg_Proces_runid == "NoNameProcess") {
+		Reg_Proces_runid = _get_random_s(10000000, 99999999) + "~DiaReg";
+	}
+
+	//Register Session Dialogue
 	
+	Reg_Process_Map = _$GetSelfPath + "/session_map.txt";
+	
+	if (!check_file_existence(Reg_Process_Map)) {
+		_fileapi_write(Reg_Process_Map, "//  Calcium Dialogue Register");
+	}
+
+	_write_sipcfg(Reg_Process_Map, Reg_Proces_runid, "alive");
+
 	//main
 	if (_runmode == _runmode_null) {
 		TypeHelpMenu();
@@ -433,6 +456,7 @@ int _HeadMainLoad() {
 			_runmode = _runmode_openshell;
 		}
 		else {
+			_remove_sipcfg(Reg_Process_Map, Reg_Proces_runid);
 			return 0;
 		}
 	}
@@ -441,6 +465,7 @@ int _HeadMainLoad() {
 		_p("Optimi Mode");
 		if (runscript == "{null}") {
 			_p("Command :  <program.exe> -optimi <file>");
+			_remove_sipcfg(Reg_Process_Map, Reg_Proces_runid);
 			return 0;
 		}
 		_p("Optimi Script :  " + runscript);
@@ -448,6 +473,7 @@ int _HeadMainLoad() {
 		if (!check_file_existence(runscript)) {
 			_p("File Not Found :  " + runscript);
 			_p("Command :  <program.exe> -optimi <file>");
+			_remove_sipcfg(Reg_Process_Map, Reg_Proces_runid);
 			return 0;
 		}
 		_soildwrite_open(readbufferA);
@@ -455,30 +481,34 @@ int _HeadMainLoad() {
 		_soildwrite_write("_$nolog;");
 		while(true) {
 			charCutA = _get_fullLine(runscript, ";");
+			_remove_sipcfg(Reg_Process_Map, Reg_Proces_runid);
 			if (_gf_status == false) break;
 			_soildwrite_write(charCutA);
 		}
 		_soildwrite_close();
 
 		_p("Optimi Complete");
+		_remove_sipcfg(Reg_Process_Map, Reg_Proces_runid);
 		return 0;
 	}
 	if (_runmode == _runmode_cstpmake) {
 		_Legacy_cstp_maker(runscript, o_info);
-
+		_remove_sipcfg(Reg_Process_Map, Reg_Proces_runid);
 		return 0;
 	}
 	if (_runmode == _runmode_cstpunpack) {
 		_Legacy_cstp_unpack(o_info,runscript);
-
+		_remove_sipcfg(Reg_Process_Map, Reg_Proces_runid);
 		return 0;
 	}
 	if (_runmode == _runmode_typehelp) {
 		TypeHelpMenu();
 		_pause();
+		_remove_sipcfg(Reg_Process_Map, Reg_Proces_runid);
 		return 0;
 	}
 	if (_runmode == _runmode_autoexit) {
+		_remove_sipcfg(Reg_Process_Map, Reg_Proces_runid);
 		return 0;
 	}
 	if (_runmode == _runmode_runscript) {
@@ -487,12 +517,14 @@ int _HeadMainLoad() {
 			_runmode = _runmode_openshell;
 		}
 		else {
+			_remove_sipcfg(Reg_Process_Map, Reg_Proces_runid);
 			return 0;
 		}
 
 	}
 	if (_runmode == _runmode_openshell) {
 		CK_Shell_open();
+		_remove_sipcfg(Reg_Process_Map, Reg_Proces_runid);
 		return 0;
 	}
 	if (_runmode == _runmode_listversion) {
@@ -512,8 +544,10 @@ int _HeadMainLoad() {
 		_p($year_message);
 		_p("All rights reserved.");
 		_pause();
+		_remove_sipcfg(Reg_Process_Map, Reg_Proces_runid);
 		return 0;
 	}
 
+	_remove_sipcfg(Reg_Process_Map, Reg_Proces_runid);
 	return 0;
 }

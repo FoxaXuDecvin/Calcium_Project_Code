@@ -368,8 +368,8 @@ string lost_memory;
 //KernelCommand
 
 int procesid_ccode;
-int __CreateNewThreads(string Script,string args,string originEnv) {
-	procesid_ccode = _system_autoRun(_$GetSelfFull, "-run \"" + Script + "\" -args \"" + args + "\" -loadenv \"" + originEnv + "\" -fastmode");
+int __CreateNewThreads(string Script,string args,string originEnv,string proces_runid) {
+	procesid_ccode = _system_autoRun(_$GetSelfFull, "-run \"" + Script + "\" -args \"" + args + "\" -loadenv \"" + originEnv + "\" -runid \"" + proces_runid + "\" -fastmode");
 	return procesid_ccode;
 }
 
@@ -899,9 +899,10 @@ string _runcode_api(string command) {
 		}
 		return CharCutC;
 	}
-	if (SizeRead(command, 11) == "_new_thread") {
-		charCutB = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "<", ">", 1)));
-		chartempA = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ">", "$FROMEND$", 1)));
+	if (SizeRead(command, 12) == "_new_thread ") {
+		chartempC = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, " ", "<", 1))); //TaskID
+		charCutB = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "<", ">", 1)));  //TaskFile
+		chartempA = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ">", "$FROMEND$", 1))); //Task Argument
 		
 		if (!check_file_existenceA(charCutB)) {
 			if (check_file_existence(_rcbind_pluginscript + "/" + charCutB)) {
@@ -928,10 +929,22 @@ string _runcode_api(string command) {
 		_fileapi_write(_pagefile_savedir, VarSpace);
 
 		//Add New Threads
-		thread sec(__CreateNewThreads, charCutB, chartempA, _pagefile_savedir);
+		thread sec(__CreateNewThreads, charCutB, chartempA, _pagefile_savedir,chartempC);
 		sec.detach();
 
 		return "ok";
+	}
+	if (SizeRead(command, 12) == "_thread_live") {
+		charCutA = _runcode_api(PartReadA(oldcmd, " ", PartRead_FMend, 1)); //GET Task id
+		
+		__settings_throwErrorMode = false;
+
+		if (_load_sipcfg(Reg_Process_Map, charCutA) == "alive") return _str_true;
+		if (_load_sipcfg(Reg_Process_Map, charCutA) != "alive") return _str_false;
+
+		//End
+
+		return "status Error : Report this bugs";
 	}
 	if (SizeRead(command, 13) == "_set_pagefile") {
 		charCutA = PartReadA(oldcmd, " ", PartRead_FMend, 1);

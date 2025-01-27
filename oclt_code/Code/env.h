@@ -11,6 +11,7 @@ string o_info = "{null}";
 bool _setnextargs_runscript = false;
 bool _setnextargs_addargs = false;
 bool _setnextargs_addo = false;
+bool _setproces_runid = false;
 
 bool _debugMode = false;
 
@@ -64,3 +65,7 @@ string nt_sipcfg_open;
 
 bool _setnextargs_loadenv;
 bool _FastMode;
+
+string Reg_Proces_runid = "NoNameProcess";
+
+string Reg_Process_Map;
