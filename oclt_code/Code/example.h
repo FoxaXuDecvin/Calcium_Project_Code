@@ -3,9 +3,6 @@
 #include"../shload.h"
 #include"../Code/CalciumKernel.h"
 
-//Other head
-#include <csignal>
-
 bool PreLaunchLoad(void) {
 	//Put Preload code here
 	//
@@ -472,9 +469,8 @@ int _HeadMainLoad() {
 	signal(SIGILL, regout_atexit);
 	signal(SIGFPE, regout_atexit);
 	signal(SIGSEGV, regout_atexit);
-	signal(SIGBREAK, regout_atexit);
-	signal(SIGABRT, regout_atexit);
-	signal(SIGABRT_COMPAT, regout_atexit);
+	if (_Run_SysKernel == Win32_kernel) ProcessSIGONLY();
+ 	signal(SIGABRT, regout_atexit);
 
 	//main
 	if (_runmode == _runmode_null) {

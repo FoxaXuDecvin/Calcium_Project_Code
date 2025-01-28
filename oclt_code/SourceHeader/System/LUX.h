@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <csignal>
 
 const string Win32_kernel = "Win32";
 const string Linux_kernel = "Linux";
@@ -361,5 +362,11 @@ bool _Execute_Admin(string File, string Args) {
 
 void sleepapi_ms(int secondsNum) {
 	usleep(secondsNum * 1000);
+	return;
+}
+
+//System Only
+void regout_atexit(int TNum);
+void ProcessSIGONLY() {
 	return;
 }

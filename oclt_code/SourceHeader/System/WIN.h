@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include<ShlObj.h>
+#include <csignal>
 
 const string Win32_kernel = "Win32";
 const string Linux_kernel = "Linux";
@@ -224,5 +225,13 @@ bool _Execute_Admin(string File, string Args) {
 
 void sleepapi_ms(int secondsNum) {
 	Sleep(secondsNum);
+	return;
+}
+
+
+//System Only
+void regout_atexit(int TNum);
+void ProcessSIGONLY() {
+	signal(SIGBREAK, regout_atexit);  //WinCLEAN
 	return;
 }

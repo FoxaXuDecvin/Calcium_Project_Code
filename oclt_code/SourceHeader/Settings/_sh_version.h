@@ -5,10 +5,10 @@
 #define _CRT_SECURE_NO_WARNINGS
 using namespace std;
 
-string $version_title = "OCLT _ 4 (Release)";
+string $version_title = "OCLT _ 4 (Release) (Modify)";
 string $version_msg = "Stable 24";
 
-string $codename = "Ocean";
+string $codename = "Ocean(Modify)";
 
 int $version_code = 4135;
 
