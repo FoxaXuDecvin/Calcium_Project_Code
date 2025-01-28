@@ -3,6 +3,9 @@
 #include"../shload.h"
 #include"../Code/CalciumKernel.h"
 
+//Other head
+#include <csignal>
+
 bool PreLaunchLoad(void) {
 	//Put Preload code here
 	//
@@ -251,6 +254,19 @@ bool CK_Shell_open(void) {
 	return true;
 }
 
+
+//ATEXIT RegOut Exit
+void regout_atexit_noparameter() {
+	_remove_sipcfg(Reg_Process_Map, Reg_Proces_runid);
+	return;
+}
+
+void regout_atexit(int TNum) {
+	_remove_sipcfg(Reg_Process_Map, Reg_Proces_runid);
+	exit(TNum);
+}
+
+
 int AntiCrash_Return_Code;
 string ckapi_result;
 string langpackfile;
@@ -447,6 +463,18 @@ int _HeadMainLoad() {
 	}
 
 	_write_sipcfg(Reg_Process_Map, Reg_Proces_runid, "alive");
+
+	//Config at process Exit 
+	// 
+	
+	signal(SIGINT, regout_atexit);
+	signal(SIGTERM, regout_atexit);
+	signal(SIGILL, regout_atexit);
+	signal(SIGFPE, regout_atexit);
+	signal(SIGSEGV, regout_atexit);
+	signal(SIGBREAK, regout_atexit);
+	signal(SIGABRT, regout_atexit);
+	signal(SIGABRT_COMPAT, regout_atexit);
 
 	//main
 	if (_runmode == _runmode_null) {

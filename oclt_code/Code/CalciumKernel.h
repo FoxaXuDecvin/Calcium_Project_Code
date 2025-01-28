@@ -486,6 +486,11 @@ string _runcode_api(string command) {
 
 		return "ok";
 	}
+	if (SizeRead(command, 10) == "_var_reset") {
+		VarSpace = "varspace;";
+		VarSpaceMax = 0;
+		return "ok";
+	}
 	if (SizeRead(command, 6) == "_free ") {
 		_rc_varid = HeadSpaceCleanA(PartReadA(oldcmd, " ", "$FROMEND$", 1));
 		_varspacedelete(_rc_varid);
