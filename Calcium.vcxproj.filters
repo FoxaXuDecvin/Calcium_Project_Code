@@ -102,6 +102,9 @@
     <ClInclude Include="resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="oclt_code\launch.cpp">
@@ -109,18 +112,18 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <Text Include="oclt_code\Code\recyc.txt">
+      <Filter>源文件</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
     <ResourceCompile Include="Calcium.rc">
       <Filter>资源文件</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\NewLogo.ico">
+    <Image Include="..\newlogo.ico">
       <Filter>资源文件</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="oclt_code\Code\recyc.txt">
-      <Filter>源文件</Filter>
-    </Text>
   </ItemGroup>
 </Project>
