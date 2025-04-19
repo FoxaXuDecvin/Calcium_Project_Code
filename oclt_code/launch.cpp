@@ -83,6 +83,14 @@ int main(int argc, char* argv[]) {
             return 0;
         }
 
+        if (readbuffer == "--perf-test") {
+            
+            _p("Disk Performance Test Result is :  " + to_string(FileWriteSpeedTest()));
+            _p("Command Performance Test Result is :  " + to_string(FileCmdProcessSpeedTest()));
+            _p("Benchmark Version :  " + _KernelVersion);
+            return 0;
+        }
+
         argsApi(readbuffer);
     }
 

@@ -6,9 +6,10 @@
 
 #include"../shload.h"
 #include"../Code/ThirdPartyCode.h"
+#include<thread>
 
 
-int CL_FMV_ID = 1702; // Calcium Lang Format Version
+int CL_FMV_ID = 1863; // Calcium Lang Format Version
 //_$req_cl_fmv <Version>
 
 /// <VERSION>
@@ -44,9 +45,9 @@ string _CK_Runid = _get_random_s(100000, 999999);
 
 string _KV_softwareVersion = "116"; //(Software Version)
 
-string _KV_gen = "2";//(General)
+string _KV_gen = "4";//(General)
 
-string _KV_rv = "1";//(Release Version)
+string _KV_rv = "2";//(Release Version)
 
 string _KV_releaseVer = _KV_rV_Stable;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
@@ -388,12 +389,12 @@ bool _cstp_makerN(string make_file_header,string file) {
 		if (cachecstp == "ReadFailed") {
 			break;
 		}
-		_p("Add File :   " + cachecstp);
+		_p("\r                                                             \r Add File :   " + cachecstp);
 		if (_$cstp_writeapiN(cachecstp)) {
-			_pv("Cstp File :  " + getfile);
+			//_pv("Cstp File :  " + getfile);
 		}
 		else {
-			_pv("Failed :  " + getfile);
+			//_pv("Failed :  " + getfile);
 		}
 		continue;
 	}
@@ -885,4 +886,69 @@ string CharFilter_(string msg) {
 	msg = ReplaceChar(msg, "\\b", "\b");
 
 	return msg;
+}
+
+//DiskPerfTest
+
+bool SWTTStop = false;
+int TotalWrtSize;
+int SpeedWriteTestThread() {
+	//File WriteStream
+	while (SWTTStop == false) {
+		_fileapi_write(_$GetSelfPath + "/bmwf.tmp", "This is Calcium File Write Performance Test");
+		TotalWrtSize++;
+	}
+
+	return 0;
+}
+
+
+
+int FileWriteSpeedTest() {
+	SWTTStop = false;
+	TotalWrtSize = 1;
+	_fileapi_write(_$GetSelfPath + "/bmwf.tmp","Start BenchMark");
+	thread SpeedWrite(SpeedWriteTestThread);
+	SpeedWrite.detach();
+	sleepapi_ms(1000);
+	SWTTStop = true;
+	_fileapi_del(_$GetSelfPath + "/bmwf.tmp");
+
+	return TotalWrtSize;
+}
+
+//COmmand ProcessAPI
+
+bool CMDPROCStop = false;
+int TotalProcSize;
+int OperateSize, OSA, OSB;
+
+int FileCmdProcThread() {
+	while(CMDPROCStop == false) {
+		LineReader(_$GetSelfPath + "/bmwf.tmp", 1);
+		OperateSize = _get_random(1, 100);
+		OSA = _get_random(1, 100);
+		OSB = _get_random(1, 100);
+		OperateSize = OperateSize * OSA;
+		OperateSize = OperateSize * OSB;
+		TotalProcSize++;
+	}
+	return 0;
+}
+
+
+int FileCmdProcessSpeedTest() {
+	_fileapi_write(_$GetSelfPath + "/bmwf.tmp","Start Analysis Test: OOOOOOOOOOOOOOOOOOOOQQQQQQQQQQQQQQQQQQQQQQAAAAAAAAAAAAAAAAAA");
+
+	CMDPROCStop = false;
+	TotalProcSize = 0;
+
+	thread ProcessCmd(FileCmdProcThread);
+	ProcessCmd.detach();
+	sleepapi_ms(1000);
+	CMDPROCStop = true;
+
+	_fileapi_del(_$GetSelfPath + "/bmwf.tmp");
+
+	return TotalProcSize;
 }

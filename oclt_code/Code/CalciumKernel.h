@@ -296,17 +296,19 @@ string _ckapi_scriptload(string load_Script,string Sargs) {
 		if (_stop_exec_script == true) {
 			_stop_exec_script = false;
 		}
-		_logrec_write("-start Running -- <Line " + to_string(_gf_line) + " /File " + _global_scriptload + "> -----------------------------------------");
 		last_return = _api_result = _runcode_api(cmdbuffer);
 		//_p("Speed check point 8");
-		_logrec_write("Command Execute End, Result -->  " +_api_result);
-		_logrec_write("-end -----------------------------------------------------");
 		if (_api_result == "runid.exit") {
 			return "runid.exit";
 		}
 		if (_api_result == "runid.entershell") {
 			return "runid.entershell";
 		}
+		if (_api_result == "runid.coverscript") {
+			return "runid.coverscript";
+		}
+
+
 		if (_stop_exec_script == true) {
 			return _api_result;
 		}
@@ -877,8 +879,16 @@ string _runcode_api(string command) {
 		_CK_ShellMode = false;
 
 		//Run
-
+	COVERRUNTAGS:
+		//_p("LoadScript :  " + charCutB);
 		CharCutC = _ckapi_scriptload(charCutB, chartempA);
+		//_p("LoadScriptEnd Result :  " + CharCutC);
+		if (CharCutC == "runid.coverscript") {
+			//_p("Detect Cover");
+			charCutB = $coverscript;
+			chartempA = $coverscript_args;
+			goto COVERRUNTAGS;
+		}
 
 		if (_stop_exec_script == true) {
 			_stop_exec_script = false;
@@ -903,6 +913,34 @@ string _runcode_api(string command) {
 			return CharCutC;
 		}
 		return CharCutC;
+	}
+	if (SizeRead(command, 6) == "_cover") {
+
+		charCutB = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "<", ">", 1)));
+		chartempA = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ">", "$FROMEND$", 1)));
+
+		if (!check_file_existenceA(charCutB)) {
+			if (check_file_existence(_rcbind_pluginscript + "/" + charCutB)) {
+				charCutB = _rcbind_pluginscript + "/" + charCutB;
+				goto StartExecuteMode;
+			}
+			if (check_file_existence(_$GetSelfPath + "/" + charCutB)) {
+				charCutB = _$GetSelfPath + "/" + charCutB;
+				goto StartExecuteMode;
+			}
+
+			_p("_runscript Error:  File not Exist");
+			_p(charCutB);
+			return "filenotfound";
+		}
+
+		StartExecuteMode:
+		$coverscript = charCutB;
+		$coverscript_args = chartempA;
+		//_p("Cover Script : " + $coverscript);
+		//_p("Cover Script Args : " + $coverscript_args);
+		return "runid.coverscript";
+
 	}
 	if (SizeRead(command, 12) == "_new_thread ") {
 		chartempC = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, " ", "<", 1))); //TaskID
@@ -956,6 +994,14 @@ string _runcode_api(string command) {
 		charCutB = _runcode_api(charCutA);
 		_pagefile_savedir = charCutB;
 		return "ok";
+	}
+
+	//PERF
+	if (SizeRead(command, 15) == "_perftest-write") {
+		return to_string(FileWriteSpeedTest());
+	}
+	if (SizeRead(command, 13) == "_perftest-cmd") {
+		return to_string(FileCmdProcessSpeedTest());
 	}
 
 	if (SizeRead(command, 7) == "_invoke") {

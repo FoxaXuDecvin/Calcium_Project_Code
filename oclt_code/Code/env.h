@@ -69,3 +69,4 @@ bool _FastMode;
 string Reg_Proces_runid = "NoNameProcess";
 
 string Reg_Process_Map;
+string $coverscript, $coverscript_args;
