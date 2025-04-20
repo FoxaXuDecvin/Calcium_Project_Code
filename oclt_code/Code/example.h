@@ -128,6 +128,17 @@ void argsApi(string args$api) {
 		_FastMode = true;
 	}
 
+	if (args$api == "--perf-test") {
+
+		_p("Disk Performance Test Result is :  " + to_string(FileWriteSpeedTest()));
+		_p("Command Performance Test Result is :  " + to_string(FileCmdProcessSpeedTest()));
+		_p("Benchmark Version :  " + _KernelVersion + "    Platform :  " + _Run_SysKernel);
+
+		argsSetExit = true;
+
+		return;
+	}
+
 	//auto set args
 	if (_setnextargs_runscript == true) {
 		runscript = args$api;

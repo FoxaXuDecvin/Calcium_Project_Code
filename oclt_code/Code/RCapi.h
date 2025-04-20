@@ -9,7 +9,7 @@
 #include<thread>
 
 
-int CL_FMV_ID = 1863; // Calcium Lang Format Version
+int CL_FMV_ID = 1867; // Calcium Lang Format Version
 //_$req_cl_fmv <Version>
 
 /// <VERSION>
@@ -47,7 +47,7 @@ string _KV_softwareVersion = "116"; //(Software Version)
 
 string _KV_gen = "4";//(General)
 
-string _KV_rv = "2";//(Release Version)
+string _KV_rv = "5";//(Release Version)
 
 string _KV_releaseVer = _KV_rV_Stable;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
@@ -910,9 +910,13 @@ int FileWriteSpeedTest() {
 	_fileapi_write(_$GetSelfPath + "/bmwf.tmp","Start BenchMark");
 	thread SpeedWrite(SpeedWriteTestThread);
 	SpeedWrite.detach();
-	sleepapi_ms(1000);
+	sleepapi_ms(3000);
 	SWTTStop = true;
+	
+	sleepapi_ms(1000);
 	_fileapi_del(_$GetSelfPath + "/bmwf.tmp");
+
+	TotalWrtSize = TotalWrtSize / 3;
 
 	return TotalWrtSize;
 }
@@ -945,10 +949,13 @@ int FileCmdProcessSpeedTest() {
 
 	thread ProcessCmd(FileCmdProcThread);
 	ProcessCmd.detach();
-	sleepapi_ms(1000);
+	sleepapi_ms(3000);
 	CMDPROCStop = true;
+	sleepapi_ms(1000);
 
 	_fileapi_del(_$GetSelfPath + "/bmwf.tmp");
+
+	TotalProcSize = TotalProcSize / 3;
 
 	return TotalProcSize;
 }
