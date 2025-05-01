@@ -1399,7 +1399,13 @@ string _runcode_api(string command) {
 		_p("PluginScript = " + _rcbind_pluginscript);
 		return "ok";
 	}
+	if (SizeRead(command, 9) == "_fun_test") {
+		string CCFK =  NULL;
 
+		_prtoutmsg(CCFK);
+
+		return "ok";
+	}
 	//Settings
 	if (SizeRead(command, 12) == "_$directmode") {
 		_logrec_write("[Settings] Script using direct mode to read");
