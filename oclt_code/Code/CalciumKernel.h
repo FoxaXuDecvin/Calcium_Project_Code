@@ -1,4 +1,4 @@
-//Calcium Kernel Base2
+﻿//Calcium Kernel Base2
 
 //Copyright FoxaXu 2024
 // Based on OpenCppLangTab
@@ -1422,7 +1422,7 @@ string _runcode_api(string command) {
 			if (VarSpace[ModifyCount] == ';') goto NullREGETRANDOMBRK;
 			if (VarSpace[ModifyCount] == '=') goto NullREGETRANDOMBRK;
 
-			VarSpace[ModifyCount] = '^';
+			VarSpace[ModifyCount] = '�';
 			_p("Address : " + to_string(ModifyCount) + " data is break.  Max Data :  " + to_string(intCutB) + "  Request Break :  " + to_string(intCutA) + "  Current :  " + to_string(count_addr));
 		}
 		return "ok";
