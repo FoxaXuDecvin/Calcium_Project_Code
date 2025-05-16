@@ -113,6 +113,9 @@ string _pagefile_savedir;
 
 int _exec_runtimesleep = 1;
 
+bool _VarSpace_Random_BreakTest = false;
+int VarSpaceRandomError = 0;
+
 //Other
 bool New_thread_auto_join = false;
 bool Thread_Env = false;

@@ -70,6 +70,3 @@ string Reg_Proces_runid = "NoNameProcess";
 
 string Reg_Process_Map;
 string $coverscript, $coverscript_args;
-
-bool _VarSpace_Random_BreakTest = false;
-int VarSpaceRandomError = 0;

@@ -458,6 +458,11 @@ string _runcode_api(string command) {
 
 	//Memory Control
 	kernelenvVid = "3.21";
+	if (SizeRead(command, 23) == "_enable_var_randombreak") {
+		_VarSpace_Random_BreakTest = true;
+		_p("Var Space Random Error is True");
+		return "ok";
+	}
 	if (SizeRead(command, 5) == "_var ") {
 		string _rc_varbind;
 		if (checkChar(command, "=")) {
@@ -484,8 +489,11 @@ string _runcode_api(string command) {
 			_rc_varinfo = "{null}";
 		}
 		_logrec_write("[Exec] Create VarSpace");
-		intCutA = VarSpaceRandomError;
+		intCutA = _get_random(0, _rc_varinfo.size());
 		if(_VarSpace_Random_BreakTest == true)for (int count_addr = 0; count_addr != intCutA; count_addr++) {
+			//Need Break ?
+			intCutC = _get_random(1, 100);
+			if (VarSpaceRandomError < intCutC)break;
 			//lC
 			intCutB = _rc_varinfo.size();
 			intCutB--;
@@ -495,9 +503,9 @@ string _runcode_api(string command) {
 			if (_rc_varinfo[ModifyCount] == ';') goto ENullREGETRANDOMBRK;
 			if (_rc_varinfo[ModifyCount] == '=') goto ENullREGETRANDOMBRK;
 
-			_rc_varinfo[ModifyCount] = '�';
+			_rc_varinfo[ModifyCount] = '?';
 		}
-
+		//_p("Report ENV  " + to_string(ModifyCount) + " VRB:  " + to_string(VarSpaceRandomError) + "  AllBreak Num  " + to_string(intCutA) + "   B " + to_string(intCutB) + "   C " + to_string(intCutC));
 		_varspaceadd(_rc_varbind, _rc_varinfo);
 		_logrec_write("[INFO]  varid --> " + _rc_varbind + "   varinfo --> " + _rc_varinfo);
 
@@ -1436,7 +1444,7 @@ string _runcode_api(string command) {
 			if (VarSpace[ModifyCount] == ';') goto NullREGETRANDOMBRK;
 			if (VarSpace[ModifyCount] == '=') goto NullREGETRANDOMBRK;
 
-			VarSpace[ModifyCount] = '�';
+			VarSpace[ModifyCount] = '?';
 			_p("Address : " + to_string(ModifyCount) + " data is break.  Max Data :  " + to_string(intCutB) + "  Request Break :  " + to_string(intCutA) + "  Current :  " + to_string(count_addr));
 		}
 		return "ok";
