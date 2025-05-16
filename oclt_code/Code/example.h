@@ -128,6 +128,10 @@ void argsApi(string args$api) {
 		_FastMode = true;
 	}
 
+	if (args$api == "-enable-vs-randombreak") {
+		_VarSpace_Random_BreakTest = true;
+	}
+
 	if (args$api == "--perf-test") {
 
 		_p("Disk Performance Test Result is :  " + to_string(FileWriteSpeedTest()));

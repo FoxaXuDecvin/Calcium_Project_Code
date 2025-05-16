@@ -9,7 +9,7 @@
 #include<thread>
 
 
-int CL_FMV_ID = 1914; // Calcium Lang Format Version
+int CL_FMV_ID = 1917; // Calcium Lang Format Version
 //_$req_cl_fmv <Version>
 
 /// <VERSION>
@@ -45,7 +45,7 @@ string _CK_Runid = _get_random_s(100000, 999999);
 
 string _KV_softwareVersion = "116"; //(Software Version)
 
-string _KV_gen = "6";//(General)
+string _KV_gen = "7";//(General)
 
 string _KV_rv = "5";//(Release Version)
 
@@ -204,6 +204,7 @@ bool _RcApiLoadConfig() {
 		_soildwrite_write("$OffLangCheck=false;");
 		_soildwrite_write("$MaxScriptExecuteLine=4096;");
 		_soildwrite_write("$AfterExecuteSleepTime=0;");
+		_soildwrite_write("$VarSpaceRandomError=0;");
 		_soildwrite_write("");
 		_soildwrite_write("//ShellSettings");
 		_soildwrite_write("$AutoOpenShellAfterRun=true;");
@@ -249,7 +250,8 @@ bool _RcApiLoadConfig() {
 	_rcset_offlangcheck = _RcLoad_TransApi("OffLangCheck");
 	_gf_line_maxallow = atoi(_load_sipcfg_noreturn(file, "MaxScriptExecuteLine").c_str());
 	_exec_runtimesleep = atoi(_load_sipcfg_noreturn(file, "AfterExecuteSleepTime").c_str());
-	
+	VarSpaceRandomError = atoi(_load_sipcfg_noreturn(file, "VarSpaceRandomError").c_str());
+
 	_rcset_aosr = _RcLoad_TransApi("AutoOpenShellAfterRun");
 	_rcset_useAdmin = _RcLoad_TransApi("UseSuperUser");
 	_rcset_shell_log = _RcLoad_TransApi("EnableShellLog");

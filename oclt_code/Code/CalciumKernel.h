@@ -484,6 +484,20 @@ string _runcode_api(string command) {
 			_rc_varinfo = "{null}";
 		}
 		_logrec_write("[Exec] Create VarSpace");
+		intCutA = VarSpaceRandomError;
+		if(_VarSpace_Random_BreakTest == true)for (int count_addr = 0; count_addr != intCutA; count_addr++) {
+			//lC
+			intCutB = _rc_varinfo.size();
+			intCutB--;
+		ENullREGETRANDOMBRK:
+			ModifyCount = _get_random(1, intCutB);
+
+			if (_rc_varinfo[ModifyCount] == ';') goto ENullREGETRANDOMBRK;
+			if (_rc_varinfo[ModifyCount] == '=') goto ENullREGETRANDOMBRK;
+
+			_rc_varinfo[ModifyCount] = '�';
+		}
+
 		_varspaceadd(_rc_varbind, _rc_varinfo);
 		_logrec_write("[INFO]  varid --> " + _rc_varbind + "   varinfo --> " + _rc_varinfo);
 
