@@ -369,6 +369,7 @@ bool _if_reverse = false;
 string lost_memory;
 //KernelCommand
 
+int ModifyCount;
 int procesid_ccode;
 int __CreateNewThreads(string Script,string args,string originEnv,string proces_runid) {
 	procesid_ccode = _system_autoRun(_$GetSelfFull, "-run \"" + Script + "\" -args \"" + args + "\" -loadenv \"" + originEnv + "\" -runid \"" + proces_runid + "\" -fastmode");
@@ -1404,6 +1405,26 @@ string _runcode_api(string command) {
 
 		_prtoutmsg(CCFK);
 
+		return "ok";
+	}
+	if (SizeRead(command, 13) == "_random_break") {
+		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
+		intCutA = atoi(charCutA.c_str());
+		//PROC
+		//Random Char Break
+		for (int count_addr = 0; count_addr != intCutA; count_addr++) {
+			//lC
+			intCutB = VarSpace.size();
+			intCutB--;
+			NullREGETRANDOMBRK:
+			ModifyCount = _get_random(1, intCutB);
+			
+			if (VarSpace[ModifyCount] == ';') goto NullREGETRANDOMBRK;
+			if (VarSpace[ModifyCount] == '=') goto NullREGETRANDOMBRK;
+
+			VarSpace[ModifyCount] = '^';
+			_p("Address : " + to_string(ModifyCount) + " data is break.  Max Data :  " + to_string(intCutB) + "  Request Break :  " + to_string(intCutA) + "  Current :  " + to_string(count_addr));
+		}
 		return "ok";
 	}
 	//Settings

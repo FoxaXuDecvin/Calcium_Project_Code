@@ -9,7 +9,7 @@
 #include<thread>
 
 
-int CL_FMV_ID = 1891; // Calcium Lang Format Version
+int CL_FMV_ID = 1914; // Calcium Lang Format Version
 //_$req_cl_fmv <Version>
 
 /// <VERSION>
@@ -45,9 +45,9 @@ string _CK_Runid = _get_random_s(100000, 999999);
 
 string _KV_softwareVersion = "116"; //(Software Version)
 
-string _KV_gen = "5";//(General)
+string _KV_gen = "6";//(General)
 
-string _KV_rv = "6";//(Release Version)
+string _KV_rv = "5";//(Release Version)
 
 string _KV_releaseVer = _KV_rV_Stable;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
