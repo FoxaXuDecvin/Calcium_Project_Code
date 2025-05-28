@@ -434,6 +434,19 @@ string _runcode_api(string command) {
 		return "false";
 	}
 
+	if (SizeRead(command,1) == "1") {
+		return "true";
+	}
+	if (SizeRead(command, 1) == "0") {
+		return "false";
+	}
+	if (SizeRead(command, 4) == "true") {
+		return "true";
+	}
+	if (SizeRead(command, 5) == "false") {
+		return "false";
+	}
+
 	if (SizeRead(command, 12) == "_$req_cl_fmv") {
 		//Request CL Format Version
 
@@ -1118,7 +1131,7 @@ string _runcode_api(string command) {
 		}
 
 		if (charCutB == _str_true) {
-			CharCutC = (PartRead(command, "|", "$FROMEND$", true));
+			CharCutC = (PartRead(oldcmd, "|", "$FROMEND$", true));
 
 			CharCutD = _runcode_api(CharCutC);
 
@@ -1478,7 +1491,16 @@ string _runcode_api(string command) {
 
 		return "ok";
 	}
+	if (SizeRead(command, 16) == "_$no_cstp_output") {
+		CstpOutput = false;
 
+		return "ok";
+	}
+	if (SizeRead(command, 18) == "_$open_cstp_output") {
+		CstpOutput = true;
+
+		return "ok";
+	}
 	//System
 	sysexecVid = "4.54";
 	if (SizeRead(command, 11) == "_file_exist") {

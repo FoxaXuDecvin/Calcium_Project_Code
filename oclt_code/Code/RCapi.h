@@ -9,7 +9,7 @@
 #include<thread>
 
 
-int CL_FMV_ID = 1917; // Calcium Lang Format Version
+int CL_FMV_ID = 1932; // Calcium Lang Format Version
 //_$req_cl_fmv <Version>
 
 /// <VERSION>
@@ -47,7 +47,7 @@ string _KV_softwareVersion = "116"; //(Software Version)
 
 string _KV_gen = "7";//(General)
 
-string _KV_rv = "5";//(Release Version)
+string _KV_rv = "6";//(Release Version)
 
 string _KV_releaseVer = _KV_rV_Stable;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
@@ -346,11 +346,11 @@ string verifyGet;
 string _cstp_file_write = "a.cstp";
 int readptr = 1;
 bool AntiDoubleCopy = false;
-
+bool CstpOutput = true;
 
 bool _$cstp_writeapiN(string file) {
 	if (!check_file_existence(file)) {
-		_pv("Cstp _$lang.loadfail :  _$lang.filenotfound");
+		if (CstpOutput)_pv("Cstp _$lang.loadfail :  _$lang.filenotfound");
 		return false;
 	}
 	cache_filepath = ReplaceChar(file, filiter_mfh, "");
@@ -359,7 +359,7 @@ bool _$cstp_writeapiN(string file) {
 	for (int readptr = 1; true; readptr++) {
 		cachecstp = LineReader(file, readptr);
 		if (cachecstp == "overline") {
-			_p("End LoadScript. Total :  " + to_string(readptr));
+			if(CstpOutput)_p("End LoadScript. Total :  " + to_string(readptr));
 			break;
 		}
 		if (cachecstp == "ReadFailed") {
@@ -381,7 +381,7 @@ bool _cstp_makerN(string make_file_header,string file) {
 	}
 	_soildwrite_open(_cstp_file_write);
 	if (!check_file_existence(make_file_header)) {
-		_pv("Cstp Make failed :   _$lang.filenotfound");
+		if (CstpOutput)_pv("Cstp Make failed :   _$lang.filenotfound");
 		return false;
 	}
 	_soildwrite_write("Calcium_Text_Pack_File  New Format");
@@ -394,7 +394,7 @@ bool _cstp_makerN(string make_file_header,string file) {
 		if (cachecstp == "ReadFailed") {
 			break;
 		}
-		_p("\r                                                             \r Add File :   " + cachecstp);
+		if (CstpOutput)_p("\r                                                             \r Add File :   " + cachecstp);
 		if (_$cstp_writeapiN(cachecstp)) {
 			//_pv("Cstp File :  " + getfile);
 		}
@@ -403,7 +403,7 @@ bool _cstp_makerN(string make_file_header,string file) {
 		}
 		continue;
 	}
-	_pv("cstp make _$lang.complete");
+	if (CstpOutput)_pv("cstp make _$lang.complete");
 	_fileapi_del("makedirmap.txt");
 	_fileapi_del("empty.txt");
 	return true;
@@ -412,7 +412,7 @@ bool _$cstp_unpackapiN(string file,string resourcefile,int startline,string extr
 
 	_dapi_create_full_path(extract_dir + "/" + file);
 	readptr++;
-	cout << "\r                                                             \r Extract File :  " + file;
+	if (CstpOutput)cout << "\r                                                             \r Extract File :  " + file;
 	if (check_file_existence(extract_dir + "/" + file)) {
 		_fileapi_del(extract_dir + "/" + file);
 	}
@@ -446,9 +446,9 @@ bool _$cstp_unpackapiN(string file,string resourcefile,int startline,string extr
 	return false;
 }
 bool _cstp_unpackN(string unpack_path, string file) {
-	_p("Extract Package " + file);
+	if (CstpOutput)_p("Extract Package " + file);
 	if (!check_file_existence(file)) {
-		_pv("Cstp Unpack failed :   _$lang.filenotfound " + file);
+		if (CstpOutput)_pv("Cstp Unpack failed :   _$lang.filenotfound " + file);
 		return false;
 	}
 	for (; true; readptr++) {
@@ -462,12 +462,12 @@ bool _cstp_unpackN(string unpack_path, string file) {
 			if (SizeRead(cachecstp, 31) == "$CSTP_FILE_RECORD_MARK_ID_START") {
 				getfile = PartReadA(cachecstp, "(", ")", 1);
 				if (!_$cstp_unpackapiN(getfile, file, readptr, unpack_path)) {
-					_pv("Failed :  " + getfile);
+					if (CstpOutput)_pv("Failed :  " + getfile);
 				}
 		}
 		continue;
 	}
-	_pv("cstp unpack _$lang.complete");
+	if (CstpOutput)_pv("cstp unpack _$lang.complete");
 	return true;
 }
 
@@ -500,7 +500,7 @@ bool _Legacy_cstp_maker(string make_file_header, string file) {
 	_cstp_file_write = file;
 	filiter_mfh = make_file_header;
 	make_file_header = "makedirmap.txt";
-	_p("Execute Pack Directory " + _cstp_file_write);
+	if (CstpOutput)_p("Execute Pack Directory " + _cstp_file_write);
 	if (check_file_existence(_cstp_file_write)) {
 		_fileapi_del(_cstp_file_write);
 	}
@@ -519,16 +519,16 @@ bool _Legacy_cstp_maker(string make_file_header, string file) {
 		if (cachecstp == "ReadFailed") {
 			break;
 		}
-		_p("Add File :   " + cachecstp);
+		if (CstpOutput)_p("Add File :   " + cachecstp);
 		if (_Legacy_$cstp_writeapi(cachecstp)) {
-			_pv("Cstp File :  " + getfile);
+			if (CstpOutput)_pv("Cstp File :  " + getfile);
 		}
 		else {
-			_pv("Failed :  " + getfile);
+			if (CstpOutput)_pv("Failed :  " + getfile);
 		}
 		continue;
 	}
-	_pv("cstp make _$lang.complete");
+	if (CstpOutput)_pv("cstp make _$lang.complete");
 	_fileapi_del("makedirmap.txt");
 	_fileapi_del("empty.txt");
 	return true;
@@ -536,7 +536,7 @@ bool _Legacy_cstp_maker(string make_file_header, string file) {
 bool _Legacy_$cstp_unpackapi(string file, string resourcefile, int startline, string extract_dir) {
 	_dapi_create_full_path(extract_dir + "/" + file);
 	readptr++;
-	cout << "\r                                                             \r Extract File :  " + file;
+	if (CstpOutput)cout << "\r                                                             \r Extract File :  " + file;
 	if (check_file_existence(extract_dir + "/" + file)) {
 		_fileapi_del(extract_dir + "/" + file);
 	}
@@ -567,7 +567,7 @@ bool _Legacy_$cstp_unpackapi(string file, string resourcefile, int startline, st
 	return false;
 }
 bool _Legacy_cstp_unpack(string unpack_path, string file) {
-	_p("Extract Package " + file);
+	if (CstpOutput)_p("Extract Package " + file);
 	if (!check_file_existence(file)) {
 		_pv("Cstp Unpack failed :   _$lang.filenotfound " + file);
 		return false;
