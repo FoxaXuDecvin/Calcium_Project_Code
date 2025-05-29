@@ -401,7 +401,9 @@ string _runcode_api(string command) {
 
 	_logrec_write("[Execute] Command :   " + command + "   Old :  " + oldcmd);
 	if (atoi(command.c_str()) != 0) {
-		return command;
+		if (atoi(command.c_str()) != 1) {
+			return command;
+		}
 	}
 	if (command == "") {
 		if (_debug_type_detected == true) {
