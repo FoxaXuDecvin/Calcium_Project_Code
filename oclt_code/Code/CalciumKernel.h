@@ -785,7 +785,8 @@ string _runcode_api(string command) {
 		return"ok";
 	}
 	if (SizeRead(command, 6) == "_sleep") {
-		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
+		charCutA = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1)));
+		if (charCutA == "true") charCutA = "1";
 		if (charCutA == "0") {
 			_pv("Error :  _sleep(0) _$lang.notNum");
 			return "ok";
@@ -801,7 +802,8 @@ string _runcode_api(string command) {
 		return "ok";
 	}
 	if (SizeRead(command, 9) == "_ms_sleep") {
-		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
+		charCutA = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1)));
+		if (charCutA == "true") charCutA = "1";
 		if (charCutA == "0") {
 			_pv("Error :  _sleep(0) _$lang.notNum");
 			return "ok";
