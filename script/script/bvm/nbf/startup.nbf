@@ -1,0 +1,84 @@
+_$directmode;
+_$nolog;
+
+//StartupExecute
+_var {BootVolume} = "script/ShellTemple";
+_var {rs_pathexec} = "script";
+_var bvm_bm = "true";
+
+_dir_remove "{BootVolume}";
+_dir_make "{BootVolume}";
+
+//Startup NBF Shell
+:ReloadMain;
+_clear;
+_cout "Launch file is Startup.nbf";
+_cout "Native NBF Shell";
+_cout "Choose file to startup or operate";
+
+:ShellConsole;
+_cout "";
+_prt "{rs_pathexec}/>" ;
+_var {ShellUserType} = _getline;
+
+//Process
+_if(_cp("{ShellUserType}","ls"))|_goto :ListFiles;
+_if(_cp("{ShellUserType}","reload"))|_goto :ReloadMain;
+_if(_cp("{ShellUserType}","cd"))|_goto :SetDir;
+_if(_cp("{ShellUserType}","exit"))|_return "$BackToBM";
+_if(_cp("{ShellUserType}","reboot"))|_return "$reboot";
+_if(_cp("{ShellUserType}","shutdown"))|_return "$shutdown";
+
+_if(_file_exist "{rs_pathexec}/{ShellUserType}")|_goto :StartupMode;
+
+_cout "{ShellUserType}  is not a file or command";
+_cout "NBF Shell Could not understand your mean";
+_goto :ShellConsole;
+
+
+
+:StartupMode
+_var {BootVolume} = "{rs_pathexec}";
+_var {oppexecute} = _script<"{rs_pathexec}/{ShellUserType}">;
+_return "{oppexecute}";
+
+:ListFiles
+_dir_list ("{BootVolume}/lstool.txt","{rs_pathexec}");
+
+_file_replace "{BootVolume}/lstool.txt" ("{rs_pathexec}","");    
+
+_cout "List tools Shell";
+_cout "";
+
+_textprint "{BootVolume}/lstool.txt";
+
+_file_del "{BootVolume}/lstool.txt";
+
+_cout "";
+_cout "List All File";
+_cout "Native Shell List";
+_cout "";
+
+_goto :ShellConsole;
+
+:SetDir;
+_cout "";
+_cout "Type Directory";
+_prts "{rs_pathexec}/>";
+_var {rs_pathexec_cache} = _getline;
+
+_if(!_dir_exist "{rs_pathexec_cache}")|_goto :TryAdvancedSet;
+_var {rs_pathexec} = "{rs_pathexec_cache}";
+_goto :ShellConsole;
+
+:TryAdvancedSet;
+_var {rs_pathexec_cache} = "{rs_pathexec}/{rs_pathexec_cache}";
+_if(!_dir_exist "{rs_pathexec_cache}")|_goto :NULLPATHSET;
+_var {rs_pathexec} = "{rs_pathexec_cache}";
+_goto :ShellConsole;
+
+:NULLPATHSET;
+_cout "";
+_cout "this directory is not exist or unable access";
+_cout "Could not set this path";
+_goto :ShellConsole;
