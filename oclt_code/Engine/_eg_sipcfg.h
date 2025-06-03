@@ -96,7 +96,7 @@ bool _spcfg_wiriteapi(string _sc_File, int _sc_Line, string _sc_header, string _
 	_sw_target_remove = false;
 	//Create New File
 
-	string _scnew_file = "sipcfg_newBenchMarkWorkFileWrite.tmp" + _get_random_s(1, 99999);
+	string _scnew_file = "sipcfg_newtemp-" + _get_random_s(1, 99999);
 
 
 	int n_readptr_ = 1;

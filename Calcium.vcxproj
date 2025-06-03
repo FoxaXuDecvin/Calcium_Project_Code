@@ -157,6 +157,7 @@
     <ClInclude Include="oclt_code\SourceHeader\_sh_time.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resource1.h" />
+    <ClInclude Include="resource2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="oclt_code\launch.cpp" />
@@ -170,7 +171,7 @@
     <ResourceCompile Include="Calcium.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\newlogo.ico" />
+    <Image Include="newlogo.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -105,6 +105,9 @@
     <ClInclude Include="resource1.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="resource2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="oclt_code\launch.cpp">
@@ -122,7 +125,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\newlogo.ico">
+    <Image Include="newlogo.ico">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>

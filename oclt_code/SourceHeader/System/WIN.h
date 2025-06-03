@@ -6,7 +6,6 @@
 #include <string>
 #include <vector>
 #include<ShlObj.h>
-#include <csignal>
 
 const string Win32_kernel = "Win32";
 const string Linux_kernel = "Linux";
@@ -209,6 +208,45 @@ void CreateFileMap_txt(string savefile,string dir) {
 
 	return;
 }
+void CreateDirMap_txt(string savefile, string dir) {
+	//在目录后面加上"\\*.*"进行第一次搜索
+	string newDir = dir + "\\*.*";
+	//用于查找的句柄
+	intptr_t handle;
+	struct _finddata_t fileinfo;
+	//第一次查找
+	handle = _findfirst(newDir.c_str(), &fileinfo);
+
+	if (handle == -1) {
+		//cout << "无文件" << endl;
+		return;
+	}
+
+	do
+	{
+		if (fileinfo.attrib & _A_SUBDIR) {//如果为文件夹，加上文件夹路径，再次遍历
+			if (strcmp(fileinfo.name, ".") == 0 || strcmp(fileinfo.name, "..") == 0)
+				continue;
+
+			// 在目录后面加上"\\"和搜索到的目录名进行下一次搜索
+			newDir = dir + "\\" + fileinfo.name;
+			//CreateFileMap_txt(savefile, newDir);//先遍历删除文件夹下的文件，再删除空的文件夹
+			_fileapi_write(savefile, ReplaceChar(newDir, "\\", "/") + "/");
+		}
+		else {
+			string file_path = dir + "\\" + fileinfo.name;
+			Process_cache = file_path;
+			Process_cache = ReplaceChar(Process_cache, p1_filepath, "");
+			//cout << file_path.c_str() << endl;
+			_fileapi_write(savefile, ReplaceChar(Process_cache, "\\", "/"));
+		}
+	} while (!_findnext(handle, &fileinfo));
+
+	_findclose(handle);
+
+	return;
+}
+
 
 char *envbuffer;
 string _SystemAPI_getenv(string Environment) {
@@ -225,13 +263,5 @@ bool _Execute_Admin(string File, string Args) {
 
 void sleepapi_ms(int secondsNum) {
 	Sleep(secondsNum);
-	return;
-}
-
-
-//System Only
-void regout_atexit(int TNum);
-void ProcessSIGONLY() {
-	signal(SIGBREAK, regout_atexit);  //WinCLEAN
 	return;
 }
