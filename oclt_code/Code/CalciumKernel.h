@@ -1682,8 +1682,8 @@ string _runcode_api(string command) {
 		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1)));
 		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));
 		CreateDirMap_txt(_rc_varid, _rc_varinfo);
-		cout << "Save File :    " << _rc_varid << endl;
-		cout << "DIRECTORY :   " << _rc_varinfo << endl;
+		//cout << "Save File :    " << _rc_varid << endl;
+		//cout << "DIRECTORY :   " << _rc_varinfo << endl;
 		return "true";
 	}
 	if (SizeRead(command, 9) == "_dir_full") {
