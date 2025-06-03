@@ -1878,6 +1878,14 @@ string _runcode_api(string command) {
 
 		return ReplaceCharA(_rc_varid, CharCutC, _rc_varinfo);
 	}
+	if (SizeRead(command, 6) == "_found") {
+		CharCutC = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1)));
+		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));
+
+		if (checkChar(CharCutC, _rc_varinfo))return "true";
+		else return "false";
+
+	}
 
 	//pack/unpack Tools
 	if (SizeRead(command, 10) == "_file_pack") {
