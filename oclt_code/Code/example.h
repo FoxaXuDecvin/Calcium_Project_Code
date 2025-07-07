@@ -10,9 +10,9 @@ bool PreLaunchLoad(void) {
 	//
 	
 	//Time Bomb
-	tbd_year = 2024;
-	tbd_month = 8;
-	tbd_day = 12;
+	tbd_year = 2025;
+	tbd_month = 7;
+	tbd_day = 15;
 
 
 	//PreLoad
@@ -302,11 +302,9 @@ int _HeadMainLoad() {
 		return 0;
 	}
 
-	if (check_file_existence(_$GetSelfPath + "/use-local-dir.txt")) {
-		//_p("Use local dir");
-		buildshell = _$GetSelfPath + "/calcium_settings.cfg";
-		ExecBackups = _$GetSelfFull;
-	}
+	//_p("Use local dir");
+	buildshell = _$GetSelfPath + "/calcium_settings.cfg";
+	ExecBackups = _$GetSelfFull;
 
 	if (!_dapi_ExistFolder_check(_$GetSelfPath)) {
 		_p("Unable to access the currently running directory");

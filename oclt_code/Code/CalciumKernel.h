@@ -378,7 +378,7 @@ int __CreateNewThreads(string Script,string args,string originEnv,string proces_
 }
 
 string _runcode_api(string command) {
-	
+	CommandSpeed_CountNum++;
 	sleepapi_ms(_exec_runtimesleep);
 
 	_logrec_write("[Reset] --------------------------------New Command---------------------------------------------------------");
@@ -1599,6 +1599,29 @@ string _runcode_api(string command) {
 
 		return "ok";
 	}
+	if (SizeRead(command, 20) == "_$enable_perf_record") {
+		if (is_TPC_already_Running == true) {
+			cout << "Performance Record Service is already running.  use _$disable_perf_record to stop this service" << endl;
+			return "ok";
+		}
+
+		PerfCNT_ID = _runcode_api(PartReadA(oldcmd, " ", PartRead_FMend, 1));
+		
+		if (PerfCNT_ID == "unknown.command")PerfCNT_ID = "Unnamed_" + _get_random_s(111111,999999);
+
+		thread monitor_pfr(Thread_PerfCurrentGet);
+		monitor_pfr.detach();
+
+		cout << "Service Start." <<endl;
+
+		return "ok";
+	}
+	if (SizeRead(command, 21) == "_$disable_perf_record") {
+		ProcessReqStop = true;
+		cout << "Service Stop." << endl;
+		return "ok";
+	}
+
 	//System
 	sysexecVid = "4.54";
 	if (SizeRead(command, 11) == "_file_exist") {

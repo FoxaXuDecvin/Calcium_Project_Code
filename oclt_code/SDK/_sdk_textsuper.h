@@ -332,7 +332,9 @@ string PartReadSize(string Info, int StartSize, int EndSize) {
 //
 //      LineReader(ExampleFile,3) return FOXAXU
 // Running on Linux / Windows warning
+int LRBuffer_Count = 0;
 string LineReader(string File, int line_number) {
+	LRBuffer_Count++;
 	if (check_file_existence(File)) {}
 	else {
 		return "FileNotExist";

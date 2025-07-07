@@ -43,13 +43,13 @@ string _kv_text_deluxe = "Deluxe";
 //RunIDs
 string _CK_Runid = _get_random_s(100000, 999999);
 
-string _KV_softwareVersion = "116"; //(Software Version)
+string _KV_softwareVersion = "117"; //(Software Version)
 
-string _KV_gen = "8";//(General)
+string _KV_gen = "1";//(General)
 
-string _KV_rv = "2";//(Release Version)
+string _KV_rv = "1";//(Release Version)
 
-string _KV_releaseVer = _KV_rV_Stable;//(Debug/Preview/preRelease/demo/Release  1 - 4)
+string _KV_releaseVer = _KV_rV_Release;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
 string _mk = ".";
 
@@ -72,8 +72,8 @@ const int _hex_cr = 00001101; // HEX 0D
 const int _hex_nl = 00001010; // HEX 0A
 
 //Build / Release / Prerelease   -  Release ID 
-const string _RCapi_Version = "E301";
-string buildshell = _Build_Path + "/" + _KernelVersion + "/calcium_settings.cfg";
+const string _RCapi_Version = "REV_DISUSE";
+string buildshell = "/calcium_settings.cfg";
 string ExecBackups = _Build_Path + "/" + _KernelVersion + "/calcium.exe";
 string _shellTitle = "Calcium Kernel  " + _KernelVersion + "   Shell Console>";
 
@@ -184,7 +184,7 @@ bool _api_request_clear_cache(string Address, string Save) {
 
 string file;
 bool _direct_read_script = false;
-int _gf_line_maxallow = 1024;
+int _gf_line_maxallow = 32768;
 bool _RcApiLoadConfig() {
 	//_p("Loading Config");
 	file = buildshell;
@@ -205,7 +205,7 @@ bool _RcApiLoadConfig() {
 		_soildwrite_write("$UseDirectRead=false;");
 		_soildwrite_write("$TrustedServerCheck=true;");
 		_soildwrite_write("$OffLangCheck=false;");
-		_soildwrite_write("$MaxScriptExecuteLine=4096;");
+		_soildwrite_write("$MaxScriptExecuteLine=32768;");
 		_soildwrite_write("$AfterExecuteSleepTime=0;");
 		_soildwrite_write("$VarSpaceRandomError=0;");
 		_soildwrite_write("");
@@ -963,4 +963,65 @@ int FileCmdProcessSpeedTest() {
 	TotalProcSize = TotalProcSize / 3;
 
 	return TotalProcSize;
+}
+
+
+
+int CommandSpeed_CountNum = 0;
+int LastCache_TPC = 0;
+int TotalCommandExec_TPC = 0;
+
+int LastCache_TPD = 0;
+int TotalCE_TPD = 0;
+
+int MAX_TPC, MAX_TPD;
+
+bool ProcessReqStop = false;
+bool is_TPC_already_Running = false;
+string PerfCNT_ID,PerfCNT_File;
+int Thread_PerfCurrentGet() {
+	//StartLE
+	LastCache_TPC = 0;
+	ProcessReqStop = false;
+	TotalCommandExec_TPC = 0;
+	CommandSpeed_CountNum = 0;
+	is_TPC_already_Running = true;
+
+	LastCache_TPD = 0;
+	TotalCE_TPD = 0;
+
+	MAX_TPC = 0;
+	MAX_TPD = 0;
+
+	while (1) {
+		sleepapi_ms(1000);
+		//CPU
+		LastCache_TPC = CommandSpeed_CountNum;
+		CommandSpeed_CountNum = 0;
+		TotalCommandExec_TPC = TotalCommandExec_TPC + LastCache_TPC;
+		if (MAX_TPC < LastCache_TPC)MAX_TPC = LastCache_TPC;
+
+		LastCache_TPD = LRBuffer_Count;
+		LRBuffer_Count = 0;
+		TotalCE_TPD = TotalCE_TPD + LastCache_TPD;
+		if (MAX_TPD < LastCache_TPD)MAX_TPD = LastCache_TPD;
+
+		PerfCNT_File = _$GetSelfPath + "/api_cpspeed_id " + PerfCNT_ID + ".txt";
+
+		_fileapi_del(PerfCNT_File);
+		_fileapi_write(PerfCNT_File, "Calcium Performance Record Tool");
+		_fileapi_write(PerfCNT_File, "Current Command Speed :   " + to_string(LastCache_TPC) + " / Every second     MaxSpeed:  " + to_string(MAX_TPC));
+		_fileapi_write(PerfCNT_File, "Total Execute Command :    " + to_string(TotalCommandExec_TPC));
+		_fileapi_write(PerfCNT_File, " ");
+		_fileapi_write(PerfCNT_File, "Disk IO :   " + to_string(LastCache_TPD) + " / Every second     MaxSpeed:  " + to_string(MAX_TPD));
+		_fileapi_write(PerfCNT_File, "Total Disk CR :    " + to_string(TotalCE_TPD));
+		if (ProcessReqStop == true) break;
+		
+		continue;
+	}
+
+	is_TPC_already_Running = false;
+	_fileapi_del(PerfCNT_File);
+	
+	return 0;
 }
