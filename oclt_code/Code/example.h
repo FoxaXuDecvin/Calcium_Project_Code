@@ -145,6 +145,11 @@ void argsApi(string args$api) {
 		return;
 	}
 
+	if (args$api == "-perfid") {
+		_setproces_perfid = true;
+		return;
+	}
+
 	//auto set args
 	if (_setnextargs_runscript == true) {
 		runscript = args$api;
@@ -180,6 +185,18 @@ void argsApi(string args$api) {
 		Reg_Proces_runid = args$api;
 		_setproces_runid = false;
 	}
+
+	if (_setproces_perfid == true) {
+		PerfCNT_ID = args$api;
+
+		if (PerfCNT_ID == "unknown.command")PerfCNT_ID = "Unnamed_" + _get_random_s(111111, 999999);
+
+		thread monitor_pfr(Thread_PerfCurrentGet);
+		monitor_pfr.detach();
+
+		_setproces_perfid = false;
+	}
+
 
 	return;
 }

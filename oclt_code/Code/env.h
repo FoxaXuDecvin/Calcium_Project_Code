@@ -12,7 +12,7 @@ bool _setnextargs_runscript = false;
 bool _setnextargs_addargs = false;
 bool _setnextargs_addo = false;
 bool _setproces_runid = false;
-
+bool _setproces_perfid = false;
 bool _debugMode = false;
 
 

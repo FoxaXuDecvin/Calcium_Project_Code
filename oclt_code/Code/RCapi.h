@@ -47,7 +47,7 @@ string _KV_softwareVersion = "117"; //(Software Version)
 
 string _KV_gen = "1";//(General)
 
-string _KV_rv = "1";//(Release Version)
+string _KV_rv = "2";//(Release Version)
 
 string _KV_releaseVer = _KV_rV_Release;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
@@ -992,6 +992,9 @@ int Thread_PerfCurrentGet() {
 
 	MAX_TPC = 0;
 	MAX_TPD = 0;
+
+	CommandSpeed_CountNum = 0;
+	LRBuffer_Count = 0;
 
 	while (1) {
 		sleepapi_ms(1000);
