@@ -1981,6 +1981,26 @@ string _runcode_api(string command) {
 		else return "false";
 
 	}
+	if (SizeRead(command, 13) == "_string_fetch") {
+		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1)));
+		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));
+		
+		intCutA = atoi(_rc_varinfo.c_str());
+		intCutB = _rc_varid.size();
+		//cout << "INFO " << intCutA << "MEM2 " << intCutB << endl;
+		if (intCutA >= intCutB) {
+			cout << "string fetch out of size" <<endl;
+			return "0";
+		}
+		if (intCutA < 0) {
+			cout << "string fetch below of size" << endl;
+			return "0";
+		}
+
+		charCutA = _rc_varid[intCutA];
+
+		return charCutA;
+	}
 
 	//pack/unpack Tools
 	if (SizeRead(command, 10) == "_file_pack") {
