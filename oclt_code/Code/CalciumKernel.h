@@ -361,6 +361,7 @@ string chartempA, chartempB, chartempC, chartempD;
 string _rc_varid, _rc_varinfo;
 int intCutA, intCutB, intCutC;
 int dbA, dbB, dbC, dbD;
+double HdbA, HdbB, HdbC, HdbD;
 bool sw_a, sw_b, sw_c;
 bool _debug_type_detected = false;
 bool _var_auto_void = false;
@@ -1416,6 +1417,69 @@ string _runcode_api(string command) {
 
 		charCutA = to_string(dbC);
 		_logrec_write("return result :  _" + charCutA);
+		return charCutA;
+	}
+
+	//Double Compute
+	if (SizeRead(command, 3) == "_d+") {
+		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+
+		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+
+		HdbA = stod(calc_A.c_str());
+		HdbB = stod(calc_B.c_str());
+
+		HdbC = HdbA + HdbB;
+
+		charCutA = to_string(HdbC);
+		return charCutA;
+	}
+	if (SizeRead(command, 3) == "_d-") {
+		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+
+		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+
+		HdbA = stod(calc_A.c_str());
+		HdbB = stod(calc_B.c_str());
+
+		HdbC = HdbA - HdbB;
+
+		charCutA = to_string(HdbC);
+		return charCutA;
+	}
+	if (SizeRead(command, 3) == "_d*") {
+		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+
+		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+
+		HdbA = stod(calc_A.c_str());
+		HdbB = stod(calc_B.c_str());
+
+		HdbC = HdbA * HdbB;
+
+		charCutA = to_string(HdbC);
+		return charCutA;
+	}
+	if (SizeRead(command, 3) == "_d/") {
+		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+
+		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+
+		HdbA = stod(calc_A.c_str());
+		HdbB = stod(calc_B.c_str());
+
+		if (HdbB == 0) {
+			_pv("_$lang.calc.zero");
+			return "NaN";
+		}
+
+		HdbC = HdbA / HdbB;
+
+		charCutA = to_string(HdbC);
 		return charCutA;
 	}
 
