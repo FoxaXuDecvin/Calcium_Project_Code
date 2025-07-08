@@ -1,6 +1,6 @@
 # Calcium
-Windows 用户请前往 Release 界面下载最新版本
-Linux 用户可前往 Action 下载最新版本
+Windows 用户请前往 Release 界面下载最新版本     
+Linux 用户可前往 Action 下载最新版本     
 
 Calcium新项目
 新的官网       https://calcium.foxaxu.com
