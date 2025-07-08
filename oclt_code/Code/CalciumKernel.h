@@ -219,6 +219,7 @@ string _api_result;
 bool _stop_exec_script = false;
 string _ckapi_scriptload(string load_Script,string Sargs) {
 	//_p("Load Main Kernel");
+	_logrec_write("This log will be disable no longer");
 	ifstream _SessionLock;
 	_SessionLock.open(load_Script);
 	if (!_language_mode) {
@@ -244,39 +245,29 @@ string _ckapi_scriptload(string load_Script,string Sargs) {
 	//Character Process ...
 	_api_result = "scriptloadfailed";
 
-	_logrec_write("[Start] PreCheck Script Run Environment");
-	_logrec_write("[Log] Log file is Bind :  " + _$logfile);
 	_gfL_reset();
-	_logrec_write("[Notice] Memory Address is Reset");
 
 	//_p("Speed check point 4");
 
 	if (_rcset_logrec == true) {
 		if (!check_file_existence(_$logfile)) {
-			_pv("_$lang.logfail " + _$logfile);
+			//_pv("_$lang.logfail " + _$logfile);
 		}
 	}
 
 	//_p("Speed check point 5");
 
 	while (true) {
-		_logrec_write("[Notice]Start to Execute script :  " + load_Script);
-		_logrec_write("[Exec] Execute Start on :  " + to_string(_gf_line) + "  size :  " + to_string(_gf_cg));
 		_global_scriptload = load_Script;
-		_logrec_write("[Exec]Complete Read Script   --> on :  " + to_string(_gf_line) + "  size :  " + to_string(_gf_cg));
 		//_p("Speed check point 6");
 		if (_direct_read_script == false) {
-			_logrec_write("[Script Read] Use Full Mode");
 			cmdbuffer = _get_fullLine(load_Script, ";");
 		}
 		else {
-			_logrec_write("[Script Read] Use Direct Mode");
 			cmdbuffer = _get_direct_read(load_Script);
 		}
-		_logrec_write("[Exec]Get Full Command :  -->  " + cmdbuffer + "  <-- on :  " + to_string(_gf_line) + "  size :  " + to_string(_gf_cg));
 		if (_gf_status == false) {
 			_pv("_$lang.stoprun.  Return status code :  " + cmdbuffer + "  . Args :  " + _global_scriptload + "   Line :  " + to_string(_gf_line) + " + " + to_string(_gf_cg));
-			_logrec_write("[ERROR]Kernel stop Running. address :  " + to_string(_gf_line) + " size :  " + to_string(_gf_cg) + "    on file: " + load_Script);
 			return "ok";
 		}
 
@@ -295,6 +286,9 @@ string _ckapi_scriptload(string load_Script,string Sargs) {
 		//Code Analysis
 		if (_stop_exec_script == true) {
 			_stop_exec_script = false;
+		}
+		if (is_TPC_already_Running == true) {
+			_fileapi_write(Address_TrackFile, "Step Track.  File :  " + _global_scriptload + " Line :  " + to_string(_gf_line) + "  breakpoint :  " + to_string(_gf_cg));
 		}
 		last_return = _api_result = _runcode_api(cmdbuffer);
 		//_p("Speed check point 8");
@@ -568,11 +562,17 @@ string _runcode_api(string command) {
 	}
 
 	if (SizeRead(command, 5) == "_exit") {
-		_logrec_write("[Shutdown] Execute _Exit");
+		ProcessReqStop = true;
+		while (!TPC_all_exit) {
+			cout << "Waiting TPC Service Exit" << endl;
+		}
 		return "runid.exit";
 	}
 	if (SizeRead(command, 4) == "exit") {
-		_logrec_write("[Shutdown] Execute _Exit");
+		ProcessReqStop = true;
+		while (!TPC_all_exit) {
+			cout << "Waiting TPC Service Exit" << endl;
+		}
 		return "runid.exit";
 	}
 	if (SizeRead(command, 7) == "_return") {

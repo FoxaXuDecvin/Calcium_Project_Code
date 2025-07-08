@@ -47,7 +47,7 @@ string _KV_softwareVersion = "117"; //(Software Version)
 
 string _KV_gen = "2";//(General)
 
-string _KV_rv = "2";//(Release Version)
+string _KV_rv = "4";//(Release Version)
 
 string _KV_releaseVer = _KV_rV_Release;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
@@ -978,10 +978,15 @@ int MAX_TPC, MAX_TPD;
 
 bool ProcessReqStop = false;
 bool is_TPC_already_Running = false;
-string PerfCNT_ID,PerfCNT_File;
+bool TPC_all_exit = true;
+string PerfCNT_ID,PerfCNT_File,Address_TrackFile;
 int Thread_PerfCurrentGet() {
 	//StartLE
+
+	Address_TrackFile = _$GetSelfPath + "/StepTrack " + PerfCNT_ID + ".txt";
+
 	LastCache_TPC = 0;
+	TPC_all_exit = false;
 	ProcessReqStop = false;
 	TotalCommandExec_TPC = 0;
 	CommandSpeed_CountNum = 0;
@@ -1018,6 +1023,8 @@ int Thread_PerfCurrentGet() {
 		_fileapi_write(PerfCNT_File, " ");
 		_fileapi_write(PerfCNT_File, "Disk IO :   " + to_string(LastCache_TPD) + " / Every second     MaxSpeed:  " + to_string(MAX_TPD));
 		_fileapi_write(PerfCNT_File, "Total Disk CR :    " + to_string(TotalCE_TPD));
+		_fileapi_write(PerfCNT_File, " ");
+		_fileapi_write(PerfCNT_File, "Processing address.  File :  " + _global_scriptload + " Line :  " + to_string(_gf_line) + "  breakpoint :  " + to_string(_gf_cg));
 		if (ProcessReqStop == true) break;
 		
 		continue;
@@ -1025,6 +1032,8 @@ int Thread_PerfCurrentGet() {
 
 	is_TPC_already_Running = false;
 	_fileapi_del(PerfCNT_File);
-	
+	_fileapi_del(Address_TrackFile);
+	TPC_all_exit = true;
+
 	return 0;
 }
