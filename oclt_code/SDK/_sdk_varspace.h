@@ -118,9 +118,10 @@ int _varspaceadd(string VarHead, string varinfo) {
 
 	varinfo = ReplaceCharA(varinfo, " ", "%sbar%");
 	varinfo = ReplaceCharA(varinfo, ";", "%selbar%");
-	varinfo = ReplaceCharA(varinfo, "%eqbar%", "=");
-	varinfo = ReplaceCharA(varinfo, "%mnbar%", "$");
-
+	varinfo = ReplaceCharA(varinfo, "=","%eqbar%");
+	varinfo = ReplaceCharA(varinfo, "$", "%mnbar%");
+	varinfo = ReplaceCharA(varinfo, "\\", "%B_SLASH%");
+	varinfo = ReplaceCharA(varinfo, "\n", "%$LineFeed%");
 	if (checkCharA(VarHead, ";") == 1) {
 		cout << "There is illegal text in the var" << endl;
 		return 1;
@@ -241,7 +242,9 @@ string _Old_VSAPI_TransVar(string Info) {
 		ReplaceCharX = ReplaceCharA(ReplaceCharX, "%selbar%", ";");
 		ReplaceCharX = ReplaceCharA(ReplaceCharX, "%eqbar%", "=");
 		ReplaceCharX = ReplaceCharA(ReplaceCharX, "%mnbar%", "$");
-
+		ReplaceCharX = ReplaceCharA(ReplaceCharX, "%B_SLASH%", "\\");
+		ReplaceCharX = ReplaceCharA(ReplaceCharX, "%$LineFeed%", "\n");
+		//cout << "Process Env :  " << startrollmax << "      RM :  " << readmark << endl;
 		int checkChar(string text, string chechchar);
 		backinfo = ReplaceCharA(backinfo, ResChar, ReplaceCharX);
 	}
@@ -264,6 +267,8 @@ string _getvarspace(string VarHead) {
 		ReplaceCharX = ReplaceCharA(ReplaceCharX, "%selbar%", ";");
 		ReplaceCharX = ReplaceCharA(ReplaceCharX, "%eqbar%", "=");
 		ReplaceCharX = ReplaceCharA(ReplaceCharX, "%mnbar%", "$");
+		ReplaceCharX = ReplaceCharA(ReplaceCharX, "%B_SLASH%", "\\");
+		ReplaceCharX = ReplaceCharA(ReplaceCharX, "%$LineFeed%", "\n");
 
 		int checkChar(string text, string chechchar);
 		backinfo = ReplaceCharA(backinfo, ResChar, ReplaceCharX);

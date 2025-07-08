@@ -261,15 +261,22 @@ string _ckapi_scriptload(string load_Script,string Sargs) {
 		_global_scriptload = load_Script;
 		//_p("Speed check point 6");
 		if (_direct_read_script == false) {
+			if (is_TPC_already_Running == true) {
+				_fileapi_write(Address_TrackFile, "Method :  Full Line Read.  File :  " + _global_scriptload + " Line :  " + to_string(_gf_line) + "  breakpoint :  " + to_string(_gf_cg));
+			}
 			cmdbuffer = _get_fullLine(load_Script, ";");
 		}
 		else {
+			if (is_TPC_already_Running == true) {
+				_fileapi_write(Address_TrackFile, "Method :  Direct Read.  File :  " + _global_scriptload + " Line :  " + to_string(_gf_line - 1) + "  breakpoint :  " + to_string(_gf_cg));
+			}
 			cmdbuffer = _get_direct_read(load_Script);
 		}
 		if (_gf_status == false) {
 			_pv("_$lang.stoprun.  Return status code :  " + cmdbuffer + "  . Args :  " + _global_scriptload + "   Line :  " + to_string(_gf_line) + " + " + to_string(_gf_cg));
 			return "ok";
 		}
+		
 
 		if (cmdbuffer == "badread") {
 			return "Error :   badread";
@@ -286,9 +293,6 @@ string _ckapi_scriptload(string load_Script,string Sargs) {
 		//Code Analysis
 		if (_stop_exec_script == true) {
 			_stop_exec_script = false;
-		}
-		if (is_TPC_already_Running == true) {
-			_fileapi_write(Address_TrackFile, "Step Track.  File :  " + _global_scriptload + " Line :  " + to_string(_gf_line) + "  breakpoint :  " + to_string(_gf_cg));
 		}
 		last_return = _api_result = _runcode_api(cmdbuffer);
 		//_p("Speed check point 8");
@@ -374,6 +378,7 @@ int __CreateNewThreads(string Script,string args,string originEnv,string proces_
 
 string _runcode_api(string command) {
 	CommandSpeed_CountNum++;
+	//cout << "Origin Execute Command :   " << command << endl;
 	sleepapi_ms(_exec_runtimesleep);
 
 	_logrec_write("[Reset] --------------------------------New Command---------------------------------------------------------");
@@ -479,20 +484,12 @@ string _runcode_api(string command) {
 		if (checkChar(command, "=")) {
 			//Detecd illegal char = 
 
-			if (charTotal(command, "=") == 2) {
-				_p("Detect illegal Character :   =");
-				_p("Varspace :  Access is Denied");
-				return "false";
-			}
+		
 
-			_rc_varbind = HeadSpaceCleanA(PartReadA(oldcmd, " ", "=", 1));
-			_rc_varinfo = _runcode_api(HeadSpaceCleanA(PartReadA(oldcmd, "=", "$FROMEND$", 1)));
+			_rc_varbind = HeadSpaceCleanA(PartRead(oldcmd, " ", "=", false));
+			_rc_varinfo = _runcode_api(HeadSpaceCleanA(PartRead(oldcmd, "=", "$FROMEND$",false)));
 
-			if (checkChar(_rc_varinfo, "=")) {
-				_p("Detect illegal Character :   =");
-				_p("Varspace :  Access is Denied");
-				return "false";
-			}
+			
 
 		}
 		else {
