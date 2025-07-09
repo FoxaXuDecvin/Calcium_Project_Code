@@ -370,6 +370,7 @@ string lost_memory;
 
 int ModifyCount;
 int procesid_ccode;
+char CK_ConvertTemp[1024];
 string Net_script_nameid;
 int __CreateNewThreads(string Script,string args,string originEnv,string proces_runid) {
 	procesid_ccode = _system_autoRun(_$GetSelfFull, "-run \"" + Script + "\" -args \"" + args + "\" -loadenv \"" + originEnv + "\" -runid \"" + proces_runid + "\" -fastmode");
@@ -1479,6 +1480,16 @@ string _runcode_api(string command) {
 		charCutA = to_string(HdbC);
 		return charCutA;
 	}
+	
+	//Other Compute
+	if (SizeRead(command, 6) == "_m_abs") {
+		charCutA = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ")", 1)));
+
+		intCutA = atoi(charCutA.c_str());
+		intCutA = abs(intCutA);
+
+		return to_string(intCutA);
+	}
 
 	//Get
 	gethookVid = "5.12";
@@ -1997,6 +2008,21 @@ string _runcode_api(string command) {
 		charCutA = _rc_varid[intCutA];
 
 		return charCutA;
+	}
+	if (SizeRead(command, 13) == "_string_edit ") {
+		CharCutC = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, " ", "(", 1))); //Modify Address
+		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1))); //Origin Data
+		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));  //Modify char
+
+		int intCutA = atoi(CharCutC.c_str());
+		if (_rc_varid.length() >= intCutA) {
+			_rc_varid[intCutA] = _rc_varinfo[0];
+		}
+		else {
+			return "length.out.of.edit";
+		}
+
+		return _rc_varid;
 	}
 
 	//pack/unpack Tools
