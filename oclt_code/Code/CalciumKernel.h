@@ -359,6 +359,8 @@ string chartempA, chartempB, chartempC, chartempD;
 string _rc_varid, _rc_varinfo;
 int intCutA, intCutB, intCutC;
 int dbA, dbB, dbC, dbD;
+long long LdbA, LdbB, LdbC, LdbD;
+float FdbA, FdbB, FdbC, FdbD;
 double HdbA, HdbB, HdbC, HdbD;
 bool sw_a, sw_b, sw_c;
 bool _debug_type_detected = false;
@@ -1335,7 +1337,7 @@ string _runcode_api(string command) {
 		return "FAIL";
 	}
 
-	//OldMath
+	//IntMath
 	if (SizeRead(command, 2) == "_+") {
 		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 		_logrec_write("Calculator Function +");
@@ -1407,7 +1409,7 @@ string _runcode_api(string command) {
 		dbB = atoi(calc_B.c_str());
 
 		if (dbB == 0) {
-			_pv("_$lang.calc.zero");
+			_p("Exception::Integer_division_by_zero");
 			return "0";
 		}
 
@@ -1415,6 +1417,126 @@ string _runcode_api(string command) {
 
 		charCutA = to_string(dbC);
 		_logrec_write("return result :  _" + charCutA);
+		return charCutA;
+	}
+
+	if (SizeRead(command, 3) == "_l+") {
+		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+
+		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+
+		LdbA = stoll(calc_A);
+		LdbB = stoll(calc_B);
+
+		LdbC = LdbA + LdbB;
+
+		charCutA = to_string(LdbC);
+		return charCutA;
+	}
+	if (SizeRead(command, 3) == "_l-") {
+		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+
+		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+
+		LdbA = stoll(calc_A);
+		LdbB = stoll(calc_B);
+
+		LdbC = LdbA - LdbB;
+
+		charCutA = to_string(LdbC);
+		return charCutA;
+	}
+	if (SizeRead(command, 3) == "_l*") {
+		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+
+		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+
+		LdbA = stoll(calc_A);
+		LdbB = stoll(calc_B);
+
+		LdbC = LdbA * LdbB;
+
+		charCutA = to_string(LdbC);
+		return charCutA;
+	}
+	if (SizeRead(command, 3) == "_l/") {
+		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+
+		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+
+		LdbA = stoll(calc_A);
+		LdbB = stoll(calc_B);
+
+		if (LdbB == 0) {
+			_p("Exception::Integer_division_by_zero");
+			return "0";
+		}
+
+		LdbC = LdbA / LdbB;
+
+		charCutA = to_string(LdbC);
+		return charCutA;
+	}
+
+	//Float Compute
+	if (SizeRead(command, 3) == "_f+") {
+		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+
+		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+
+		FdbA = stof(calc_A.c_str());
+		FdbB = stof(calc_B.c_str());
+
+		FdbC = FdbA + FdbB;
+
+		charCutA = to_string(FdbC);
+		return charCutA;
+	}
+	if (SizeRead(command, 3) == "_f-") {
+		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+
+		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+
+		FdbA = stof(calc_A.c_str());
+		FdbB = stof(calc_B.c_str());
+
+		FdbC = FdbA - FdbB;
+
+		charCutA = to_string(FdbC);
+		return charCutA;
+	}
+	if (SizeRead(command, 3) == "_f*") {
+		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+
+		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+
+		FdbA = stof(calc_A.c_str());
+		FdbB = stof(calc_B.c_str());
+
+		FdbC = FdbA * FdbB;
+
+		charCutA = to_string(FdbC);
+		return charCutA;
+	}
+	if (SizeRead(command, 3) == "_f/") {
+		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+
+		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+
+		FdbA = stof(calc_A.c_str());
+		FdbB = stof(calc_B.c_str());
+
+		FdbC = FdbA / FdbB;
+
+		charCutA = to_string(FdbC);
 		return charCutA;
 	}
 
@@ -1470,10 +1592,10 @@ string _runcode_api(string command) {
 		HdbA = stod(calc_A.c_str());
 		HdbB = stod(calc_B.c_str());
 
-		if (HdbB == 0) {
-			_pv("_$lang.calc.zero");
-			return "NaN";
-		}
+//		if (HdbB == 0) {
+//			_pv("_$lang.calc.zero");
+//			return "NaN";
+//		}
 
 		HdbC = HdbA / HdbB;
 
