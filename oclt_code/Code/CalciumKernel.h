@@ -1602,7 +1602,50 @@ string _runcode_api(string command) {
 		charCutA = to_string(HdbC);
 		return charCutA;
 	}
-	
+
+	//SRQT
+	if (SizeRead(command, 7) == "_d_sqrt") {
+		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+
+		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ")", false)));
+
+		HdbA = stod(calc_A.c_str());
+
+		//		if (HdbB == 0) {
+		//			_pv("_$lang.calc.zero");
+		//			return "NaN";
+		//		}
+
+		HdbB = sqrt(HdbA);
+
+		charCutA = to_string(HdbB);
+		return charCutA;
+	}
+	if (SizeRead(command, 7) == "_f_sqrt") {
+		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+
+		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ")", false)));
+
+		FdbA = stof(calc_A.c_str());
+
+		FdbB = sqrt(FdbA);
+
+		charCutA = to_string(FdbB);
+		return charCutA;
+	}
+	if (SizeRead(command, 7) == "_l_sqrt") {
+		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+
+		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ")", false)));
+
+		LdbA = stoll(calc_A);
+
+		LdbB = sqrt(LdbA);
+
+		charCutA = to_string(LdbB);
+		return charCutA;
+	}
+
 	//Other Compute
 	if (SizeRead(command, 6) == "_m_abs") {
 		charCutA = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ")", 1)));
