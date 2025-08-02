@@ -9,7 +9,7 @@
 #include<thread>
 
 
-int CL_FMV_ID = 2137; // Calcium Lang Format Version
+int CL_FMV_ID = 2203; // Calcium Lang Format Version
 //_$req_cl_fmv <Version>
 
 /// <VERSION>
@@ -45,7 +45,7 @@ string _CK_Runid = _get_random_s(100000, 999999);
 
 string _KV_softwareVersion = "117"; //(Software Version)
 
-string _KV_gen = "3";//(General)
+string _KV_gen = "4";//(General)
 
 string _KV_rv = "2";//(Release Version)
 
@@ -74,7 +74,6 @@ const int _hex_nl = 00001010; // HEX 0A
 //Build / Release / Prerelease   -  Release ID 
 const string _RCapi_Version = "REV_DISUSE";
 string buildshell = "/calcium_settings.cfg";
-string ExecBackups = _Build_Path + "/" + _KernelVersion + "/calcium.exe";
 string _shellTitle = "Calcium Kernel  " + _KernelVersion + "   Shell Console>";
 
 bool _isAdminOK_ = false;
@@ -84,7 +83,7 @@ bool _rcset_syscmd;
 bool _rcset_allowdiredit;
 bool _rcset_allowtp;
 bool _rcset_anticrash;
-bool _rcset_logrec;
+
 bool _rcset_directmode;
 bool _rcset_trustcheck;
 bool _rcset_offlangcheck;
@@ -97,12 +96,12 @@ bool _rcset_aosr;
 
 bool _rcset_useAdmin;
 
-bool _rcset_shell_log;
+
 
 bool _rcset_crash_reload;
 
 string _rcbind_pluginscript, _rcbind_pluginpath,_rcbind_thirdbind,_rcbind_autorun,_rcbind_autorunargs;
-string _rcbind_logrec;
+
 string _rcbind_langpath;
 string _rcset_lang;
 string _rcset_seclang;
@@ -128,7 +127,6 @@ void _pv(string info) {
 
 void _RcApi_vp_load(void) {
 	_varspaceadd("{path}", _$GetSelfPath);
-	_varspaceadd("{oclt_path}", _Build_Path);
 	_varspaceadd("{VersionID}", _KernelVersion);
 }
 
@@ -197,7 +195,6 @@ bool _RcApiLoadConfig() {
 		_soildwrite_write("$EnableSystemCommand=false;");
 		_soildwrite_write("$EnableAntiCrash=true;");
 		_soildwrite_write("$EnableCrashReload=true;");
-		_soildwrite_write("$EnableLogRecord=true;");
 		_soildwrite_write("$AllowDirectoryEdit=false;");
 		_soildwrite_write("$AllowThirdPartyPlugin=false;");
 		_soildwrite_write("$AllowShellEdit=true;");
@@ -212,7 +209,6 @@ bool _RcApiLoadConfig() {
 		_soildwrite_write("//ShellSettings");
 		_soildwrite_write("$AutoOpenShellAfterRun=true;");
 		_soildwrite_write("$UseSuperUser=false;");
-		_soildwrite_write("$EnableShellLog=true;");
 		_soildwrite_write("");
 		_soildwrite_write("//Bind");
 		_soildwrite_write("$AutoRun=null;");
@@ -221,7 +217,6 @@ bool _RcApiLoadConfig() {
 		_soildwrite_write("//PathBind");
 		_soildwrite_write("$DefaultPluginPath={path}/Plugin;");
 		_soildwrite_write("$DefaultPluginScript={path}/script;");
-		_soildwrite_write("$DefaultLogRecord={path}/logs;");
 		_soildwrite_write("$DefaultLanguagePath={path}/lang;");
 		_soildwrite_write("$PageFile=script/pagefile.catemp;");
 		_soildwrite_write("");
@@ -243,7 +238,6 @@ bool _RcApiLoadConfig() {
 	_rcset_syscmd = _RcLoad_TransApi("EnableSystemCommand");
 	_rcset_anticrash = _RcLoad_TransApi("EnableAntiCrash");
 	_rcset_crash_reload = _RcLoad_TransApi("EnableCrashReload");
-	_rcset_logrec = _RcLoad_TransApi("EnableLogRecord");
 	_rcset_allowdiredit = _RcLoad_TransApi("AllowDirectoryEdit");
 	_rcset_allowtp = _RcLoad_TransApi("AllowThirdPartyPlugin");
 	_rcset_shelledit = _RcLoad_TransApi("AllowShellEdit");
@@ -257,14 +251,12 @@ bool _RcApiLoadConfig() {
 
 	_rcset_aosr = _RcLoad_TransApi("AutoOpenShellAfterRun");
 	_rcset_useAdmin = _RcLoad_TransApi("UseSuperUser");
-	_rcset_shell_log = _RcLoad_TransApi("EnableShellLog");
 
 	//String
 	_rcbind_autorun = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "AutoRun"));
 	_rcbind_autorunargs = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "AutoRunArgs"));
 	_rcbind_pluginpath = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "DefaultPluginPath"));
 	_rcbind_pluginscript = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "DefaultPluginScript"));
-	_rcbind_logrec = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "DefaultLogRecord"));
 	_rcbind_langpath = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "DefaultLanguagePath"));
 	_pagefile_savedir = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "PageFile"));
 
@@ -278,17 +270,10 @@ bool _RcApiLoadConfig() {
 	_rc_exec_address = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "ExecuteFile"));
 
 	//Create Directory
-	if (!_dapi_ExistFolder_check(_rcbind_pluginpath)) {
-		_dapi_create_full_path(_rcbind_pluginpath + "/a.txt");
-	}
-	if (!_dapi_ExistFolder_check(_rcbind_pluginscript)) {
-		_dapi_create_full_path(_rcbind_pluginscript + "/a.txt");
-	}
-	if (!_dapi_ExistFolder_check(_rcbind_logrec)) {
-		_dapi_create_full_path(_rcbind_logrec + "/a.txt");
-	}
-	if (!_dapi_ExistFolder_check(_rcbind_langpath)) {
-		_dapi_create_full_path(_rcbind_langpath + "/a.txt");
+	if (!_rcset_offlangcheck) {
+		if (!_dapi_ExistFolder_check(_rcbind_langpath)) {
+			_dapi_create_full_path(_rcbind_langpath + "/a.txt");
+		}
 	}
 
 	//Auto Set
@@ -301,22 +286,6 @@ bool _RcApiLoadConfig() {
 	return true;
 }
 
-string _$logfile;
-string LogWriteCache;
-bool _logrec_write(string INFO) {
-	if (_rcset_logrec == false) {
-		return false;
-	}
-	if (!check_file_existence(_$logfile)) {
-		_fileapi_createmark(_$logfile, "//Calcium Kernel LogFile");
-		_fileapi_write(_$logfile, "//Log Record on :  " + __GetFullTime());
-	}
-
-	LogWriteCache = "[" + __GetFullClock() + "]" + INFO;
-	_fileapi_write(_$logfile,LogWriteCache);
-
-	return true;
-}
 
 string fitback,fitbuffer;
 string _Char_Filter_EndFileName(string fitchar) {
@@ -784,9 +753,6 @@ void _Create_Analysis_File(string savefile) {
 	_soildwrite_write("Script File :  " + _global_scriptload + " Line :  " + to_string(_gf_line) + "  breakpoint :  " + to_string(_gf_cg));
 	_soildwrite_write("---- End address----");
 	_soildwrite_write("");
-	_soildwrite_write("---- Log File ----");
-	_soildwrite_write(_$logfile);
-	_soildwrite_write("---- End Logfile ----");
 }
 
 int ExecCache;

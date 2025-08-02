@@ -203,19 +203,8 @@ void argsApi(string args$api) {
 
 string _user_typebuffer;
 bool CK_Shell_open(void) {
-	if (_rcset_shell_log == true) {
-		_rcset_logrec = true;
-	}
-	if (!_rcset_logrec) {
-		_$logfile = _rcbind_logrec + "/DisabledLogrec.log";
-	}
-	else {
-		_$logfile = _rcbind_logrec + "/ShellLog.log";
-	}
-	if (check_file_existence(_$logfile))_fileapi_del(_$logfile);
 	_global_scriptload = "{ShellMode}";
 	_CK_ShellMode = true;
-	_logrec_write("[Notice]Calcium Kernel is Running on Shell Mode :  ");
 	_pn();
 	_pn();
 	_p("----------------------------------------------------------");
@@ -248,12 +237,9 @@ bool CK_Shell_open(void) {
 		_prts(_shellTitle);
 		_user_typebuffer = _getline_type() + ";";
 
-		_logrec_write("[Exec]Get Full Command :  -->  " + _user_typebuffer);
 
-		_logrec_write("-start Running -------------------------------------------");
+
 		last_return = _api_result = _runcode_api(_user_typebuffer);
-		_logrec_write("Command Execute End, Result -->  " + _api_result);
-		_logrec_write("-end -----------------------------------------------------");
 
 		if (_api_result == "runid.exit") {
 			_pn();
@@ -263,6 +249,11 @@ bool CK_Shell_open(void) {
 
 		if (_api_result == "runid.entershell") {
 			_p("The current environment is in Shell Mode");
+		}
+
+		if (_api_result == "runid.crash.harddrv.error") {
+			_p("[Error] Unexpected Error. File Location was Broken");
+			_p("[Error] Please check your hard drive or file system.");
 		}
 
 		if (_stop_exec_script == true) {
@@ -321,7 +312,6 @@ int _HeadMainLoad() {
 
 	//_p("Use local dir");
 	buildshell = _$GetSelfPath + "/calcium_settings.cfg";
-	ExecBackups = _$GetSelfFull;
 
 	if (!_dapi_ExistFolder_check(_$GetSelfPath)) {
 		_p("Unable to access the currently running directory");
@@ -450,6 +440,9 @@ int _HeadMainLoad() {
 
 		if (_Time_Bomb_Detect(_KV_releaseVer)) return 661;
 		
+		if (_activate_request(_rc_activate_key) == false) {
+			_p("Activate Calcium");
+		}
 
 		if (_rcbind_autorun != "null") {
 			_runmode = _runmode_runscript;
@@ -568,6 +561,9 @@ int _HeadMainLoad() {
 	}
 	if (_runmode == _runmode_runscript) {
 		ckapi_result = _ckapi_scriptload(runscript, script_args);
+		if (ckapi_result == "runid.crash.harddrv.error") {
+			return 25581;
+		}
 		if (ckapi_result == "runid.entershell") {
 			_runmode = _runmode_openshell;
 		}
@@ -575,6 +571,7 @@ int _HeadMainLoad() {
 			_remove_sipcfg(Reg_Process_Map, Reg_Proces_runid);
 			return 0;
 		}
+		
 
 	}
 	if (_runmode == _runmode_openshell) {

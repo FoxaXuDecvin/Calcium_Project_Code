@@ -172,6 +172,11 @@ string _get_direct_read(string load_script) {;
 		_gf_getbuffer = LineReader(load_script, _gf_line);
 		//_p("DATA :   " + _gf_getbuffer + "    " + to_string(_gf_line));
 
+		if (_gf_line > _gf_line_maxallow) {
+			_gf_status = false;
+			return "Over Size";
+		}
+
 		if (_gf_getbuffer == "overline") {
 			_gf_status = false;
 			return "badread";
@@ -190,7 +195,6 @@ string _get_direct_read(string load_script) {;
 		}
 
 		if (_gf_getbuffer == "") {
-			_logrec_write("[Engine Direct] Find Empty Line --> on :  " + to_string(_gf_line) + "  size :  " + to_string(_gf_cg));
 			_gf_line++;
 			continue;
 		}
@@ -219,7 +223,6 @@ string _api_result;
 bool _stop_exec_script = false;
 string _ckapi_scriptload(string load_Script,string Sargs) {
 	//_p("Load Main Kernel");
-	_logrec_write("This log will be disable no longer");
 	ifstream _SessionLock;
 	_SessionLock.open(load_Script);
 	if (!_language_mode) {
@@ -233,9 +236,7 @@ string _ckapi_scriptload(string load_Script,string Sargs) {
 	//_p("Speed check point 1");
 	_global_scriptload = load_Script;
 	script_args = Sargs;
-	_$logfile = _rcbind_logrec + "/" + _Char_Filter_EndFileName(load_Script) + "_LogRec.log";
 	//_p("Speed check point 2");
-	if (check_file_existence(_$logfile))_fileapi_del(_$logfile);
 	if (!check_file_existence(load_Script)) {
 		_pv("_$lang.runfail");
 		_pv("Error :  _$lang.filenotfound");
@@ -246,16 +247,6 @@ string _ckapi_scriptload(string load_Script,string Sargs) {
 	_api_result = "scriptloadfailed";
 
 	_gfL_reset();
-
-	//_p("Speed check point 4");
-
-	if (_rcset_logrec == true) {
-		if (!check_file_existence(_$logfile)) {
-			//_pv("_$lang.logfail " + _$logfile);
-		}
-	}
-
-	//_p("Speed check point 5");
 
 	while (true) {
 		_global_scriptload = load_Script;
@@ -287,6 +278,11 @@ string _ckapi_scriptload(string load_Script,string Sargs) {
 		if (cmdbuffer == "badopen") {
 			return "Error :   badopen";
 		}
+
+		if (cmdbuffer == "badfound") {
+			return "runid.crash.harddrv.error";
+		}
+
 
 		//_p("Speed check point 7");
 
@@ -333,6 +329,7 @@ void _gfL_reset(void) {
 }
 string langfile;
 string seclangfile;
+string Pre_Script_args;
 bool _skipcheck_language = false;
 bool LanguageLoad() {
 	langfile = _rcbind_langpath + "/" + _rcset_lang;
@@ -340,14 +337,19 @@ bool LanguageLoad() {
 	if (!check_file_existence(langfile)) {
 		return false;
 	}
-	_logrec_write("Loading  Language :   " + langfile);
 	_language_mode = true;
+
+	Pre_Script_args = script_args;
+
 	_ckapi_scriptload(seclangfile, "langmode");
 	_gfL_reset();
 	_ckapi_scriptload(langfile, "langmode");
 	_gfL_reset();
 	_ckapi_scriptload(_rcbind_langpath + "/errcode_list.txt", "langmode");
 	_gfL_reset();
+
+	script_args = Pre_Script_args;
+
 	_language_mode = false;
 	_stop_exec_script = false;
 	return true;
@@ -384,13 +386,11 @@ string _runcode_api(string command) {
 	//cout << "Origin Execute Command :   " << command << endl;
 	sleepapi_ms(_exec_runtimesleep);
 
-	_logrec_write("[Reset] --------------------------------New Command---------------------------------------------------------");
 	if (_gf_hsc == true) {
 		command = HeadSpaceCleanA(command);
 	}
 	string oldcmd = command;
 	command = _Old_VSAPI_TransVar(command);
-	//_logrec_write("[INFO] _var api :   --> " + oldcmd + " | to |  " + command);
 	if (oldcmd == command) {
 		_var_auto_void = false;
 	}
@@ -403,7 +403,6 @@ string _runcode_api(string command) {
 	}
 	//Command Process
 
-	_logrec_write("[Execute] Command :   " + command + "   Old :  " + oldcmd);
 	if (atoi(command.c_str()) != 0) {
 		if (atoi(command.c_str()) != 1) {
 			return command;
@@ -476,7 +475,7 @@ string _runcode_api(string command) {
 	}
 
 	//Memory Control
-	kernelenvVid = "3.21";
+	kernelenvVid = "4.01";
 	if (SizeRead(command, 23) == "_enable_var_randombreak") {
 		_VarSpace_Random_BreakTest = true;
 		_p("Var Space Random Error is True");
@@ -499,7 +498,6 @@ string _runcode_api(string command) {
 			_rc_varbind = HeadSpaceCleanA(PartReadA(command, " ", "$FROMEND$", 1));
 			_rc_varinfo = "{null}";
 		}
-		_logrec_write("[Exec] Create VarSpace");
 		intCutA = _get_random(0, _rc_varinfo.size());
 		if(_VarSpace_Random_BreakTest == true)for (int count_addr = 0; count_addr != intCutA; count_addr++) {
 			//Need Break ?
@@ -518,7 +516,6 @@ string _runcode_api(string command) {
 		}
 		//_p("Report ENV  " + to_string(ModifyCount) + " VRB:  " + to_string(VarSpaceRandomError) + "  AllBreak Num  " + to_string(intCutA) + "   B " + to_string(intCutB) + "   C " + to_string(intCutC));
 		_varspaceadd(_rc_varbind, _rc_varinfo);
-		_logrec_write("[INFO]  varid --> " + _rc_varbind + "   varinfo --> " + _rc_varinfo);
 
 		return "ok";
 	}
@@ -530,34 +527,29 @@ string _runcode_api(string command) {
 	if (SizeRead(command, 6) == "_free ") {
 		_rc_varid = HeadSpaceCleanA(PartReadA(oldcmd, " ", "$FROMEND$", 1));
 		_varspacedelete(_rc_varid);
-		_logrec_write("VarSpace Delete  --> " + _rc_varid);
 
 		return "ok";
 	}
 	if (SizeRead(command, 1) == "\"") {
 		if (charTotal(command, "\"") < 2) {
 			_p("[ERROR]  Quotation Format illegal  --> " + command);
-			_logrec_write("[ERROR]  Quotation Format illegal-- > " + command);
 			return "illegal_format";
 		}
 		charCutA = PartReadA(command, "\"", "\"", 1);
 		//
 		charCutA = CharFilter_(charCutA);
 		//
-		_logrec_write("[INFO] Return char" + _$quo + charCutA + _$quo);
 		return charCutA;
 	}
 	if (SizeRead(command, 1) == "\'") {
 		if (charTotal(oldcmd, "\'") < 2) {
 			_p("[ERROR]  Quotation Format illegal  --> " + oldcmd);
-			_logrec_write("[ERROR]  Quotation Format illegal-- > " + oldcmd);
 			return "illegal_format";
 		}
 		charCutA = PartReadA(oldcmd, "\'", "\'", 1);
 
 		charCutA = CharFilter_(charCutA);
 
-		_logrec_write("[INFO] (No Var ) Return char " + _$quo + charCutA + _$quo);
 		return charCutA;
 	}
 
@@ -578,7 +570,6 @@ string _runcode_api(string command) {
 	if (SizeRead(command, 7) == "_return") {
 		charCutA = _runcode_api(PartReadA(oldcmd, " ", PartRead_FMend, 1));
 
-		_logrec_write("_Exec Return Data :  " + charCutA);
 		_stop_exec_script = true;
 		return charCutA;
 	}
@@ -586,7 +577,6 @@ string _runcode_api(string command) {
 	//CONFIG
 	if (SizeRead(command, 8) == "_envsave") {
 		charCutA = PartReadA(oldcmd, " ", PartRead_FMend, 1);
-		_logrec_write("[EnvSave] Save :  -->  " + charCutA);
 		charCutB = _runcode_api(charCutA);
 
 		if (check_file_existence(charCutB))_fileapi_del(charCutB);
@@ -599,7 +589,6 @@ string _runcode_api(string command) {
 	}
 	if (SizeRead(command, 8) == "_envload") {
 		charCutA = PartReadA(oldcmd, " ", PartRead_FMend, 1);
-		_logrec_write("[EnvSave] Load :  -->  " + charCutA);
 		charCutB = _runcode_api(charCutA);
 
 		if (!check_file_existence(charCutB)) {
@@ -614,14 +603,12 @@ string _runcode_api(string command) {
 		return "ok.save";
 	}
 	if (SizeRead(command, 9) == "_cfgedit ") {
-		_logrec_write("[KernelManager] CFGEDIT");
 
 		if (_CK_ShellMode == false) {
 			//ScriptMode
 			if (_rcset_scriptedit == false) {
 				_pv("_$lang.sys.t1  " + buildshell);
 				_p("Please set AllowScriptEdit  == true");
-				_logrec_write("[KernelManager][WARNING] Access is Denied");
 				return "denied";
 			}
 		}
@@ -630,7 +617,6 @@ string _runcode_api(string command) {
 			if (_rcset_shelledit == false) {
 				_pv("_$lang.sys.t1  " + buildshell);
 				_p("Please set AllowShellEdit  == true");
-				_logrec_write("[KernelManager][WARNING] Access is Denied");
 				return "denied";
 			}
 		}
@@ -641,7 +627,6 @@ string _runcode_api(string command) {
 			_rc_varinfo = ReplaceChar(_rc_varinfo, ";", "");
 
 			_write_sipcfg(buildshell, _rc_varid, _rc_varinfo);
-			_logrec_write("[KernelManager] Set :  " + _rc_varid + " = " + _rc_varinfo);
 			_pv("_$lang.cfgedit.r");
 			return "ok";
 		}
@@ -653,14 +638,12 @@ string _runcode_api(string command) {
 		return "falseproblem";
 	}
 	if (SizeRead(command, 9) == "_cfgread ") {
-		_logrec_write("[KernelManager] Config Read");
 
 		if (_CK_ShellMode == false) {
 			//ScriptMode
 			if (_rcset_scriptedit == false) {
 				_pv("_$lang.sys.t1  " + buildshell);
 				_p("Please set AllowScriptEdit  == true");
-				_logrec_write("[KernelManager][WARNING] Access is Denied");
 				return "denied";
 			}
 		}
@@ -669,18 +652,14 @@ string _runcode_api(string command) {
 			if (_rcset_shelledit == false) {
 				_pv("_$lang.sys.t1  " + buildshell);
 				_p("Please set AllowShellEdit  == true");
-				_logrec_write("[KernelManager][WARNING] Access is Denied");
 				return "denied";
 			}
 		}
 		_rc_varid = HeadSpaceCleanA(PartReadA(command, " ", "$FROMEND$", 1));
-		_logrec_write("[KernelManager] Read Settings :  " + _rc_varid);
 		charCutA = _load_sipcfg(buildshell, _rc_varid);
-		_logrec_write("[KernelManager] Return Value -->  " + charCutA);
 		return charCutA;
 	}
 	if (SizeRead(command, 7) == "_reload") {
-		_logrec_write("[KernelManager] RCapi Reload");
 		_pv("_$lang.reloading");
 		_gf_cg = 0;
 		_gf_cgmax = 1;
@@ -744,24 +723,19 @@ string _runcode_api(string command) {
 	//Open Command
 	//oldcmd = command;
 
-	kernelcmdVid = "5.13";
-	_logrec_write("[Execute] Full : " + oldcmd);
+	kernelcmdVid = "5.51";
 	if (SizeRead(command, 4) == "_prt") {
 		charCutA = PartReadA(oldcmd, " ", PartRead_FMend, 1);
-		_logrec_write("[Output Exec] Command :  -->  " + charCutA);
 		charCutB = _runcode_api(charCutA);
 
-		_logrec_write("[Exec] PRINT :  " + _$quo + charCutB + _$quo);
 
 		_prts(charCutB);
 		return "ok.print:<" + charCutB + ">";
 	}
 	if (SizeRead(command, 5) == "_cout") {
 		charCutA = PartReadA(oldcmd, " ", PartRead_FMend, 1);
-		_logrec_write("[Output Exec] Command :  -->  " + charCutA);
 		charCutB = _runcode_api(charCutA);
 
-		_logrec_write("[Exec] COUT :  " + _$quo + charCutB + _$quo);
 		_p(charCutB);
 		return "ok.print:<" + charCutB + ">";
 	}
@@ -770,13 +744,11 @@ string _runcode_api(string command) {
 			_pv("_$lang.sys.t1  " + buildshell);
 			_pv("_$lang.sys.t2");
 			_pv("_$lang.sys.t3 :   _cfgedit EnableSystemCommand = true;");
-			_logrec_write("[WARNING] System Command Disabled");
 
 			return "denied";
 		}
 		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
 		charCutB = _runcode_api(charCutA);
-		_logrec_write("[Exec] Run System Command   --> " + charCutB);
 		_str_system(charCutB);
 
 		return "ok";
@@ -799,7 +771,6 @@ string _runcode_api(string command) {
 			return "ok";
 		}
 
-		_logrec_write("_Program Sleep " + charCutA);
 		sleepapi(intCutA);
 		return "ok";
 	}
@@ -816,7 +787,6 @@ string _runcode_api(string command) {
 			return "ok";
 		}
 
-		_logrec_write("_Program Sleep " + charCutA);
 		sleepapi_ms(intCutA);
 		return "ok";
 	}
@@ -834,7 +804,6 @@ string _runcode_api(string command) {
 				return "filenotfound";
 			}
 		}
-		_logrec_write("[Exec] Run Application :   " + _rc_varid + "  Argument :  " + _rc_varinfo);
 		intCutA = _system_autoRun(_rc_varid, _rc_varinfo);
 
 		return to_string(intCutA);
@@ -905,9 +874,7 @@ string _runcode_api(string command) {
 		int _old$_gf_cgmax = _gf_cgmax;
 		int _old$_gf_line = _gf_line;
 		bool _old$_direct_read_script = _direct_read_script;
-		bool _old$_rcset_logrec = _rcset_logrec;
 		string _old$_args = script_args;
-		string _old$_logfile = _$logfile;
 		bool _old$_CK_ShellMode = _CK_ShellMode;
 		string _old$_global_scriptload = _global_scriptload;
 
@@ -943,8 +910,6 @@ string _runcode_api(string command) {
 		_gf_charget = "";
 		script_args = _old$_args;
 		_direct_read_script = _old$_direct_read_script;
-		_rcset_logrec = _old$_rcset_logrec;
-		_$logfile = _old$_logfile;
 		_CK_ShellMode = _old$_CK_ShellMode;
 		_global_scriptload = _old$_global_scriptload;
 
@@ -996,9 +961,7 @@ string _runcode_api(string command) {
 		int _old$_gf_cgmax = _gf_cgmax;
 		int _old$_gf_line = _gf_line;
 		bool _old$_direct_read_script = _direct_read_script;
-		bool _old$_rcset_logrec = _rcset_logrec;
 		string _old$_args = script_args;
-		string _old$_logfile = _$logfile;
 		bool _old$_CK_ShellMode = _CK_ShellMode;
 		string _old$_global_scriptload = _global_scriptload;
 
@@ -1035,8 +998,6 @@ string _runcode_api(string command) {
 		_gf_charget = "";
 		script_args = _old$_args;
 		_direct_read_script = _old$_direct_read_script;
-		_rcset_logrec = _old$_rcset_logrec;
-		_$logfile = _old$_logfile;
 		_CK_ShellMode = _old$_CK_ShellMode;
 		_global_scriptload = _old$_global_scriptload;
 
@@ -1159,9 +1120,7 @@ string _runcode_api(string command) {
 		int _old$_gf_cgmax = _gf_cgmax;
 		int _old$_gf_line = _gf_line;
 		bool _old$_direct_read_script = _direct_read_script;
-		bool _old$_rcset_logrec = _rcset_logrec;
 		string _old$_args = script_args;
-		string _old$_logfile = _$logfile;
 		bool _old$_CK_ShellMode = _CK_ShellMode;
 		string _old$_global_scriptload = _global_scriptload;
 
@@ -1189,8 +1148,6 @@ string _runcode_api(string command) {
 		_gf_charget = "";
 		script_args = _old$_args;
 		_direct_read_script = _old$_direct_read_script;
-		_rcset_logrec = _old$_rcset_logrec;
-		_$logfile = _old$_logfile;
 		_CK_ShellMode = _old$_CK_ShellMode;
 		_global_scriptload = _old$_global_scriptload;
 
@@ -1252,8 +1209,6 @@ string _runcode_api(string command) {
 
 		_rc_varinfo = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", ",", ")", 1)));
 
-		_logrec_write("[CP]1 = " + _rc_varid);
-		_logrec_write("[CP]2 = " + _rc_varinfo);
 
 		if (_rc_varid == _rc_varinfo) {
 			return "true";
@@ -1270,8 +1225,6 @@ string _runcode_api(string command) {
 
 		_rc_varinfo = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", ",", ")", 1)));
 
-		_logrec_write("[CP <]1 = " + _rc_varid);
-		_logrec_write("[CP <]2 = " + _rc_varinfo);
 
 		if (atoi(_rc_varid.c_str()) < atoi(_rc_varinfo.c_str())) {
 			return "true";
@@ -1288,8 +1241,6 @@ string _runcode_api(string command) {
 
 		_rc_varinfo = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", ",", ")", 1)));
 
-		_logrec_write("[CP <=]1 = " + _rc_varid);
-		_logrec_write("[CP <=]2 = " + _rc_varinfo);
 
 		if (atoi(_rc_varid.c_str()) <= atoi(_rc_varinfo.c_str())) {
 			return "true";
@@ -1306,8 +1257,6 @@ string _runcode_api(string command) {
 
 		_rc_varinfo = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", ",", ")", 1)));
 
-		_logrec_write("[CP >]1 = " + _rc_varid);
-		_logrec_write("[CP >]2 = " + _rc_varinfo);
 
 		if (atoi(_rc_varid.c_str()) > atoi(_rc_varinfo.c_str())) {
 			return "true";
@@ -1324,8 +1273,6 @@ string _runcode_api(string command) {
 
 		_rc_varinfo = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", ",", ")", 1)));
 
-		_logrec_write("[CP >=]1 = " + _rc_varid);
-		_logrec_write("[CP >=]2 = " + _rc_varinfo);
 
 		if (atoi(_rc_varid.c_str()) >= atoi(_rc_varinfo.c_str())) {
 			return "true";
@@ -1340,13 +1287,9 @@ string _runcode_api(string command) {
 	//IntMath
 	if (SizeRead(command, 2) == "_+") {
 		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
-		_logrec_write("Calculator Function +");
-		_logrec_write("full line data:  -->   " + tempbase);
 
 		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		_logrec_write("Get Part A :   " + calc_A);
 		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
-		_logrec_write("Get Part B :   " + calc_B);
 
 		dbA = atoi(calc_A.c_str());
 		dbB = atoi(calc_B.c_str());
@@ -1354,18 +1297,13 @@ string _runcode_api(string command) {
 		dbC = dbA + dbB;
 
 		charCutA = to_string(dbC);
-		_logrec_write("return result :  _" + charCutA);
 		return charCutA;
 	}
 	if (SizeRead(command, 2) == "_-") {
 		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
-		_logrec_write("Calculator Function -");
-		_logrec_write("full line data:  -->   " + tempbase);
 
 		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		_logrec_write("Get Part A :   " + calc_A);
 		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
-		_logrec_write("Get Part B :   " + calc_B);
 
 		dbA = atoi(calc_A.c_str());
 		dbB = atoi(calc_B.c_str());
@@ -1373,18 +1311,13 @@ string _runcode_api(string command) {
 		dbC = dbA - dbB;
 
 		charCutA = to_string(dbC);
-		_logrec_write("return result :  _" + charCutA);
 		return charCutA;
 	}
 	if (SizeRead(command, 2) == "_*") {
 		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
-		_logrec_write("Calculator Function *");
-		_logrec_write("full line data:  -->   " + tempbase);
 
 		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		_logrec_write("Get Part A :   " + calc_A);
 		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
-		_logrec_write("Get Part B :   " + calc_B);
 
 		dbA = atoi(calc_A.c_str());
 		dbB = atoi(calc_B.c_str());
@@ -1392,18 +1325,13 @@ string _runcode_api(string command) {
 		dbC = dbA * dbB;
 
 		charCutA = to_string(dbC);
-		_logrec_write("return result :  _" + charCutA);
 		return charCutA;
 	}
 	if (SizeRead(command, 2) == "_/") {
 		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
-		_logrec_write("Calculator Function /");
-		_logrec_write("full line data:  -->   " + tempbase);
 
 		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		_logrec_write("Get Part A :   " + calc_A);
 		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
-		_logrec_write("Get Part B :   " + calc_B);
 
 		dbA = atoi(calc_A.c_str());
 		dbB = atoi(calc_B.c_str());
@@ -1416,7 +1344,6 @@ string _runcode_api(string command) {
 		dbC = dbA / dbB;
 
 		charCutA = to_string(dbC);
-		_logrec_write("return result :  _" + charCutA);
 		return charCutA;
 	}
 	if (SizeRead(command, 2) == "_%") {
@@ -1436,7 +1363,6 @@ string _runcode_api(string command) {
 		dbC = dbA % dbB;
 
 		charCutA = to_string(dbC);
-		_logrec_write("return result :  _" + charCutA);
 		return charCutA;
 	}
 
@@ -1696,7 +1622,7 @@ string _runcode_api(string command) {
 	}
 
 	//Get
-	gethookVid = "5.12";
+	gethookVid = "6.02";
 	if (SizeRead(command, 7) == "_getenv") {
 		charCutA = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1)));
 		return _SystemAPI_getenv(charCutA);
@@ -1759,13 +1685,10 @@ string _runcode_api(string command) {
 	isGetVid = "5.11";
 	if (SizeRead(command, 7) == "_isNum ") {
 		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
-		_logrec_write("[IsGet] _is Num  :  -->  " + charCutA);
 		if (atoi(_runcode_api(charCutA).c_str()) != 0) {
-			_logrec_write("[IsGet] Num is True   " + charCutA);
 			return _rc_true;
 		}
 		else {
-			_logrec_write("[IsGet] Num is False   " + charCutA);
 			return _rc_false;
 		}
 
@@ -1796,14 +1719,12 @@ string _runcode_api(string command) {
 	}
 	if (SizeRead(command, 11) == "_shelltitle") {
 		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
-		_logrec_write("[Output Exec] Command :  -->  " + charCutA);
 		charCutB = _runcode_api(charCutA);
 
 		_shellTitle = charCutB;
 		return "ok";
 	}
 	if (SizeRead(command, 9) == "_pathlist") {
-		_logrec_write("[Debug] List Path");
 
 		_p("PluginPath =   " + _rcbind_pluginpath);
 		_p("PluginScript = " + _rcbind_pluginscript);
@@ -1838,14 +1759,10 @@ string _runcode_api(string command) {
 	}
 	//Settings
 	if (SizeRead(command, 12) == "_$directmode") {
-		_logrec_write("[Settings] Script using direct mode to read");
 		_direct_read_script = true;
 		return "ok";
 	}
 	if (SizeRead(command, 7) == "_$nolog") {
-		_logrec_write("[Close] Script Closed Log Record");
-		_logrec_write("-----------------------------------------------Closed");
-		_rcset_logrec = false;
 		return "ok";
 	}
 	if (SizeRead(command, 15) == "_$no_err_report") {
@@ -1902,9 +1819,7 @@ string _runcode_api(string command) {
 	sysexecVid = "4.54";
 	if (SizeRead(command, 11) == "_file_exist") {
 		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
-		_logrec_write("[File] Check File Exist..  command -->  " + charCutA);
 		charCutB = _runcode_api(charCutA);
-		_logrec_write("[File] check file :  " + charCutB);
 
 		if (check_file_existence(charCutB)) {
 			return "true";
@@ -1934,9 +1849,7 @@ string _runcode_api(string command) {
 	}
 	if (SizeRead(command, 9) == "_dir_make") {
 		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
-		_logrec_write("[Dir] Create Directory ..  command -->  " + charCutA);
 		charCutB = _runcode_api(charCutA);
-		_logrec_write("[Dir] Directory :  " + charCutB);
 
 		if (_dapi_mkdir(charCutB)) {
 			return "true";
@@ -1947,9 +1860,7 @@ string _runcode_api(string command) {
 	}
 	if (SizeRead(command, 11) == "_dir_remove") {
 		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
-		_logrec_write("[Dir] Remove Directory ..  command -->  " + charCutA);
 		charCutB = _runcode_api(charCutA);
-		_logrec_write("[Dir] Directory :  " + charCutB);
 
 		if (_dapi_rmdir(charCutB)) {
 			return "true";
@@ -1960,9 +1871,7 @@ string _runcode_api(string command) {
 	}
 	if (SizeRead(command, 10) == "_dir_exist") {
 		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
-		_logrec_write("[Dir] Check Directory Exist..  command -->  " + charCutA);
 		charCutB = _runcode_api(charCutA);
-		_logrec_write("[Dir] check directory :  " + charCutB);
 
 		if (_dapi_ExistFolder_check(charCutB)) {
 			return "true";
@@ -2033,7 +1942,6 @@ string _runcode_api(string command) {
 	}
 	if (SizeRead(command, 11) == "_file_open ") {
 		_rc_varid = _runcode_api(PartReadA(oldcmd, " ", PartRead_FMend, 1));
-		_logrec_write("[FileWrite] SoildWrite is Open :  " + _rc_varid);
 		_soildwrite_open(_rc_varid);
 		return "ok";
 	}
@@ -2060,16 +1968,14 @@ string _runcode_api(string command) {
 
 
 	//Toolkit
-	ThirdExecVid = "4.13";
+	ThirdExecVid = "6.01";
 	if (SizeRead(command, 10) == "_file_read") {
 		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1)));
 		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));
 
-		_logrec_write("[API] File Read :   " + _rc_varid + "  Line :  " + _rc_varinfo);
 
 		charCutA = _fileapi_textread(_rc_varid, atoi(_rc_varinfo.c_str()));
 
-		_logrec_write("[API] File Read Return :   " + charCutA);
 
 		return charCutA;
 	}
@@ -2077,7 +1983,6 @@ string _runcode_api(string command) {
 		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
 		charCutB = _runcode_api(charCutA);
 
-		_logrec_write("[Exec] Print Text File   " + charCutB);
 
 		if (!check_file_existenceA(charCutB)) {
 			_pv("_$lang.filenotfound   " + charCutB);
@@ -2092,7 +1997,6 @@ string _runcode_api(string command) {
 		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
 		charCutB = _runcode_api(charCutA);
 
-		_logrec_write("[Exec] Print Text File   " + charCutB);
 
 		if (!check_file_existenceA(charCutB)) {
 			_pv("_$lang.filenotfound   " + charCutB);
@@ -2107,17 +2011,12 @@ string _runcode_api(string command) {
 		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1)));
 		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));
 
-		_logrec_write("[Internet] Request _url_get");
-		_logrec_write("[Internet] URL :  " + _rc_varid);
-		_logrec_write("[Internet] Save Path :  " + _rc_varinfo);
 
 		if (!_urldown_api_nocache(_rc_varid, _rc_varinfo)) {
-			_logrec_write("[ERROR] Get url failed");
 			_p("_URL_GET failed access url :  " + _rc_varid);
 			return "false";
 		}
 		if (!check_file_existence(_rc_varinfo)) {
-			_logrec_write("[ERROR] Save file failed");
 			_p("_url_get save file failed :  " + _rc_varid);
 			return "false";
 		}
@@ -2147,7 +2046,6 @@ string _runcode_api(string command) {
 	}
 	if (SizeRead(command, 8) == "_url_msg") {
 		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
-		_logrec_write("[GetHttp] GET URL -->  " + charCutA);
 		charCutB = _runcode_api(charCutA);
 
 		CharCutD = _get_random_s(111111, 999999);
@@ -2167,9 +2065,6 @@ string _runcode_api(string command) {
 		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1)));
 		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));
 
-		_logrec_write("[FileCP] FileCompare");
-		_logrec_write("[FileCP] A :  " + _rc_varid);
-		_logrec_write("[FileCP] B :  " + _rc_varinfo);
 
 		sw_a = FileCompare_(_rc_varid, _rc_varinfo);
 
@@ -2306,7 +2201,6 @@ string _runcode_api(string command) {
 	//SipCfg Native
 	if (SizeRead(command, 13) == "_sipcfg.open ") {
 		charCutA = _Old_VSAPI_TransVar(PartReadA(oldcmd, " ", PartRead_FMend, 1));
-		_logrec_write("[Output Exec] Command :  -->  " + charCutA);
 		charCutB = _runcode_api(charCutA);
 
 		if (!check_file_existenceA(charCutB)) {
@@ -2318,16 +2212,13 @@ string _runcode_api(string command) {
 		return "ok";
 	}
 	if (SizeRead(command, 15) == "_sipcfg.remove ") {
-		_logrec_write("[SipCfg] Native SipCfg");
 		_rc_varinfo = _Old_VSAPI_TransVar(HeadSpaceCleanA(PartReadA(command, " ", PartRead_FMend, 1)));
 		_rc_varinfo = ReplaceChar(_rc_varinfo, ";", "");
 
 		_remove_sipcfg(nt_sipcfg_open, _rc_varinfo);
-		_logrec_write("[SipCfg] Sipcfg Remove :  " + _rc_varinfo + "");
 		return "ok";
 	}
 	if (SizeRead(command, 8) == "_sipcfg ") {
-		_logrec_write("[SipCfg] Native SipCfg");
 
 		if (checkChar(command, "=")) {
 			_rc_varid = _Old_VSAPI_TransVar(HeadSpaceCleanA(PartReadA(command, " ", "=", 1)));
@@ -2337,7 +2228,6 @@ string _runcode_api(string command) {
 			_rc_varinfo = _runcode_api(_rc_varinfo);
 
 			_write_sipcfg(nt_sipcfg_open, _rc_varid, _rc_varinfo);
-			_logrec_write("[SipCfg] Sipcfg Set :  " + _rc_varid + " = " + _rc_varinfo);
 			return "ok";
 		}
 		else {
@@ -2412,10 +2302,8 @@ string _runcode_api(string command) {
 	}
 
 	if (_var_auto_void == true) {
-		_logrec_write("[WARNING] Return Value :  -->  " + command);
 		return command;
 	}
-	_logrec_write("[ERROR]Unknown COMMAND   " + command);
 	_pv("_$lang.nullcmd   :  <" + _global_scriptload + ">  Line " + to_string(_gf_line) + "  INFO --> " + command + "    (Resource -->  " + oldcmd + ")");
 	return "unknown.command";
 }
