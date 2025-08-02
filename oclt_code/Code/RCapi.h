@@ -9,7 +9,7 @@
 #include<thread>
 
 
-int CL_FMV_ID = 2203; // Calcium Lang Format Version
+int CL_FMV_ID = 2206; // Calcium Lang Format Version
 //_$req_cl_fmv <Version>
 
 /// <VERSION>
@@ -47,7 +47,7 @@ string _KV_softwareVersion = "117"; //(Software Version)
 
 string _KV_gen = "4";//(General)
 
-string _KV_rv = "2";//(Release Version)
+string _KV_rv = "3";//(Release Version)
 
 string _KV_releaseVer = _KV_rV_Release;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
@@ -96,12 +96,13 @@ bool _rcset_aosr;
 
 bool _rcset_useAdmin;
 
+bool _rcset_netwk_confirm;
+
 
 
 bool _rcset_crash_reload;
 
 string _rcbind_pluginscript, _rcbind_pluginpath,_rcbind_thirdbind,_rcbind_autorun,_rcbind_autorunargs;
-
 string _rcbind_langpath;
 string _rcset_lang;
 string _rcset_seclang;
@@ -205,6 +206,7 @@ bool _RcApiLoadConfig() {
 		_soildwrite_write("$MaxScriptExecuteLine=32768;");
 		_soildwrite_write("$AfterExecuteSleepTime=0;");
 		_soildwrite_write("$VarSpaceRandomError=0;");
+		_soildwrite_write("$NoNetWorkConfirm=false;");
 		_soildwrite_write("");
 		_soildwrite_write("//ShellSettings");
 		_soildwrite_write("$AutoOpenShellAfterRun=true;");
@@ -248,6 +250,7 @@ bool _RcApiLoadConfig() {
 	_gf_line_maxallow = atoi(_load_sipcfg_noreturn(file, "MaxScriptExecuteLine").c_str());
 	_exec_runtimesleep = atoi(_load_sipcfg_noreturn(file, "AfterExecuteSleepTime").c_str());
 	VarSpaceRandomError = atoi(_load_sipcfg_noreturn(file, "VarSpaceRandomError").c_str());
+	_rcset_netwk_confirm = _RcLoad_TransApi("NoNetWorkConfirm");
 
 	_rcset_aosr = _RcLoad_TransApi("AutoOpenShellAfterRun");
 	_rcset_useAdmin = _RcLoad_TransApi("UseSuperUser");
