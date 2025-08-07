@@ -9,7 +9,7 @@
 #include<thread>
 
 
-int CL_FMV_ID = 2203; // Calcium Lang Format Version
+int CL_FMV_ID = 2204; // Calcium Lang Format Version
 //_$req_cl_fmv <Version>
 
 /// <VERSION>
@@ -47,7 +47,7 @@ string _KV_softwareVersion = "117"; //(Software Version)
 
 string _KV_gen = "4";//(General)
 
-string _KV_rv = "2";//(Release Version)
+string _KV_rv = "5";//(Release Version)
 
 string _KV_releaseVer = _KV_rV_Release;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
@@ -945,11 +945,12 @@ int MAX_TPC, MAX_TPD;
 bool ProcessReqStop = false;
 bool is_TPC_already_Running = false;
 bool TPC_all_exit = true;
-string PerfCNT_ID,PerfCNT_File,Address_TrackFile;
+string PerfCNT_ID,PerfCNT_File,Address_TrackFile,Error_TrackFile;
 int Thread_PerfCurrentGet() {
 	//StartLE
 
 	Address_TrackFile = _$GetSelfPath + "/StepTrack " + PerfCNT_ID + ".txt";
+	Error_TrackFile = _$GetSelfPath + "/TotalErrorHappend " + PerfCNT_ID + ".txt";
 
 	LastCache_TPC = 0;
 	TPC_all_exit = false;
@@ -999,6 +1000,7 @@ int Thread_PerfCurrentGet() {
 	is_TPC_already_Running = false;
 	_fileapi_del(PerfCNT_File);
 	_fileapi_del(Address_TrackFile);
+	_fileapi_del(Error_TrackFile);
 	TPC_all_exit = true;
 
 	return 0;

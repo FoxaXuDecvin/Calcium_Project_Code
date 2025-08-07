@@ -1610,6 +1610,18 @@ string _runcode_api(string command) {
 		charCutA = to_string(LdbB);
 		return charCutA;
 	}
+	if (SizeRead(command, 7) == "_i_sqrt") {
+		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+
+		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ")", false)));
+
+		dbA = stoll(calc_A);
+
+		dbB = sqrt(dbA);
+
+		charCutA = to_string(dbB);
+		return charCutA;
+	}
 
 	//Other Compute
 	if (SizeRead(command, 6) == "_m_abs") {
@@ -2305,5 +2317,8 @@ string _runcode_api(string command) {
 		return command;
 	}
 	_pv("_$lang.nullcmd   :  <" + _global_scriptload + ">  Line " + to_string(_gf_line) + "  INFO --> " + command + "    (Resource -->  " + oldcmd + ")");
+	if (is_TPC_already_Running == true) {
+		_fileapi_write(Error_TrackFile, "Calcium Error, execute. On  Full Line Read.  File :  " + _global_scriptload + " Line :  " + to_string(_gf_line) + "  Command --> " + command + "    (Resource -->  " + oldcmd + ")");
+	}
 	return "unknown.command";
 }
