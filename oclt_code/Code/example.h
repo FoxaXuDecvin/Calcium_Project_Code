@@ -341,65 +341,6 @@ int _HeadMainLoad() {
 		else {
 			if (_skipcheck_language == false) {
 				if (!LanguageLoad()) {
-					if (!_rcset_netwk_confirm) {
-						_p("Language Service want initiate a internet connection.");
-						_p("If you allow this connection to be initiate, type Y/y");
-						_p("");
-						_p("Request File :  Language file pack");
-						netwk_confirm = _getline_type();
-						if (netwk_confirm == "y") {
-							langpackfile = _$GetSelfPath + "/" + "temp_languagepack.pack";
-							_p("Download Language files");
-
-							if (_Run_SysKernel == Linux_kernel) {
-								_p("Use Linux Language");
-								if (!_api_request_download("lang/linux.txt", langpackfile)) {
-									_p("Install Failed");
-								}
-							}
-							if (_Run_SysKernel == Win32_kernel) {
-								_p("Use Windows Language");
-								if (!_api_request_download("lang/win.txt", langpackfile)) {
-									_p("Install Failed");
-								}
-							}
-							_system_autoRun(_$GetSelfFull, "-nolang -unpack \"" + langpackfile + "\" -to \"" + _rcbind_langpath + "\"");
-							_p("Complete Install Language");
-							_fileapi_del(langpackfile);
-							sleepapi(1);
-							cleanConsole();
-
-							LanguageLoad();
-						}
-						if (netwk_confirm == "Y") {
-							langpackfile = _$GetSelfPath + "/" + "temp_languagepack.pack";
-							_p("Download Language files");
-
-							if (_Run_SysKernel == Linux_kernel) {
-								_p("Use Linux Language");
-								if (!_api_request_download("lang/linux.txt", langpackfile)) {
-									_p("Install Failed");
-								}
-							}
-							if (_Run_SysKernel == Win32_kernel) {
-								_p("Use Windows Language");
-								if (!_api_request_download("lang/win.txt", langpackfile)) {
-									_p("Install Failed");
-								}
-							}
-							_system_autoRun(_$GetSelfFull, "-nolang -unpack \"" + langpackfile + "\" -to \"" + _rcbind_langpath + "\"");
-							_p("Complete Install Language");
-							_fileapi_del(langpackfile);
-							sleepapi(1);
-							cleanConsole();
-
-							LanguageLoad();
-
-
-
-						}
-					}
-					else {
 						langpackfile = _$GetSelfPath + "/" + "temp_languagepack.pack";
 						_p("Download Language files");
 
@@ -422,7 +363,6 @@ int _HeadMainLoad() {
 						cleanConsole();
 
 						LanguageLoad();
-					}
 				}
 			}
 		}

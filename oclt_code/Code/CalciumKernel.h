@@ -930,20 +930,6 @@ string _runcode_api(string command) {
 
 		//Download Script
 
-		if (!_rcset_netwk_confirm) {
-			_p("A task want initiate a internet connection.");
-			_p("If you allow this connection to be initiate, type Y/y");
-			_p("");
-			_p("Request URL:  " + charCutB);
-			_p("On " + _global_scriptload + "   line " + to_string(_gf_line));
-			netwk_confirm = _getline_type();
-			if (netwk_confirm == "y") goto allowedInternetRequest_URLSCRIPT;
-			if (netwk_confirm == "Y") goto allowedInternetRequest_URLSCRIPT;
-			return "false";
-		}
-
-		allowedInternetRequest_URLSCRIPT:
-
 		if (!_dapi_ExistFolder_check(_rcbind_pluginscript)) {
 			_dapi_create_full_path(_rcbind_pluginscript + "/a.txt");
 		}
@@ -2042,19 +2028,6 @@ string _runcode_api(string command) {
 		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1)));
 		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));
 
-		if (!_rcset_netwk_confirm) {
-			_p("A task want initiate a internet connection.");
-			_p("If you allow this connection to be initiate, type Y/y");
-			_p("");
-			_p("Request URL:  " + _rc_varid + "   Save on:  " + _rc_varinfo);
-			_p("On " + _global_scriptload + "   line " + to_string(_gf_line));
-			netwk_confirm = _getline_type();
-			if (netwk_confirm == "y") goto allowedInternetRequest_URLGET;
-			if (netwk_confirm == "Y") goto allowedInternetRequest_URLGET;
-			return "false";
-		}
-
-	allowedInternetRequest_URLGET:
 		if (!_urldown_api_nocache(_rc_varid, _rc_varinfo)) {
 			_p("_URL_GET failed access url :  " + _rc_varid);
 			return "false";
@@ -2092,20 +2065,6 @@ string _runcode_api(string command) {
 		charCutB = _runcode_api(charCutA);
 
 		CharCutD = _get_random_s(111111, 999999);
-
-		if (!_rcset_netwk_confirm) {
-			_p("A task want initiate a internet connection.");
-			_p("If you allow this connection to be initiate, type Y/y");
-			_p("");
-			_p("Request URL:  " + charCutB);
-			_p("On " + _global_scriptload + "   line " + to_string(_gf_line));
-			netwk_confirm = _getline_type();
-			if (netwk_confirm == "y") goto allowedInternetRequest_URLMSG;
-			if (netwk_confirm == "Y") goto allowedInternetRequest_URLMSG;
-			return "false";
-		}
-
-	allowedInternetRequest_URLMSG:
 
 		if (!_urldown_api_nocache(charCutB, CharCutD)) {
 			_p("[GetHttp] Fail Get URL " + charCutB);
