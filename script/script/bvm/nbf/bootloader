@@ -1,4 +1,0 @@
-// BVM Boot Loader 
-$boot=script/vdisk/nbf/nbfload;
-$bootvolume=script/vdisk/nbf;
-$oem=fdl_openbvmcore;

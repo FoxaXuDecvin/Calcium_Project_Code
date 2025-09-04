@@ -1,2 +1,0 @@
-9
-varspace;{path}=E:\CPPDEV\Calcium\Release;{oclt_path}=C:\Users\lzx13/.OpenCppLangTab;{VersionID}=116.7.8.6;_$lang.pause=Press%sbar%Enter...;{BootUIA}=%sbar%%sbar%%sbar%%sbar%%sbar%%sbar%%sbar%%sbar%FDL%sbar%Build%sbar%Platform;{BootUIB}=%sbar%%sbar%%sbar%%sbar%%sbar%%sbar%The%sbar%Best%sbar%Open%sbar%BVM%sbar%Core;{BootUIC}=%sbar%%sbar%%sbar%%sbar%%sbar%%sbar%%sbar%%sbar%%sbar%%sbar%%sbar%Biato%sbar%Core;{SESSION_TOKEN}=TRUE;{CalciumL_FMV}=1936;
