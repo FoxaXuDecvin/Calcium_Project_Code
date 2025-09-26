@@ -443,7 +443,7 @@ int _HeadMainLoad() {
 			_p(" [TBD]  Current product is not activated");
 		}
 		else {
-			_p(" [TBD]  Current product activate Succeed");
+			//_p(" [TBD]  Current product activate Succeed");
 		}
 
 		if (_rcbind_autorun != "null") {
@@ -480,8 +480,8 @@ int _HeadMainLoad() {
 
 	//Register Session Dialogue
 	
-	Reg_Process_Map = _$GetSelfPath + "/session_map.txt";
-	
+	Reg_Process_Map = _OriginWorkDir + "/session_map.txt";
+
 	if (!check_file_existence(Reg_Process_Map)) {
 		_fileapi_write(Reg_Process_Map, "//  Calcium Dialogue Register");
 	}

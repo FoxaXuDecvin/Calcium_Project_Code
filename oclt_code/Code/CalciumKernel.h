@@ -378,9 +378,9 @@ char CK_ConvertTemp[1024];
 string _RunSuperMaker,_WorkDIRECTORY_FOLDER;
 string Net_script_nameid;
 int __CreateNewThreads(string Script,string args,string originEnv,string proces_runid) {
-	
-	procesid_ccode = _system_autoRun(_RunSuperMaker, "-run \"" + Script + "\" -args \"" + args + "\" -loadenv \"" + originEnv + "\" -runid \"" + proces_runid + "\" -fastmode");
-	_fileapi_del (_RunSuperMaker);
+	string CurrentRSM = _RunSuperMaker;
+	procesid_ccode = _system_autoRun_A(CurrentRSM, "-run \"" + Script + "\" -args \"" + args + "\" -loadenv \"" + originEnv + "\" -runid \"" + proces_runid + "\" -fastmode",true);
+	_fileapi_del (CurrentRSM);
 	return procesid_ccode;
 }
 
@@ -1081,6 +1081,11 @@ string _runcode_api(string command) {
 		_RunSuperMaker = _$GetSelfPath + "/" + "Thread_LiveNameFolder/CLT_" + chartempC + "_.exe"; // Copy Calcium Core file to LiveName Folder
 		_WorkDIRECTORY_FOLDER = _$GetSelfPath + "/" + "Thread_LiveNameFolder";
 		_dapi_mkdir(_$GetSelfPath + "/" + "Thread_LiveNameFolder");
+		while (1) {
+			_fileapi_del(_WorkDIRECTORY_FOLDER + "/calcium_settings.cfg");
+			if (!check_file_existence(_WorkDIRECTORY_FOLDER + "/calcium_settings.cfg"))break;
+			sleepapi_ms(50);
+		 }
 		_fileapi_CpFile(_$GetSelfPath + "/calcium_settings.cfg", _WorkDIRECTORY_FOLDER + "/calcium_settings.cfg");
 		_write_sipcfg(_WorkDIRECTORY_FOLDER + "/calcium_settings.cfg", "ExecuteFile", "voidcheck");
 
@@ -1100,6 +1105,13 @@ string _runcode_api(string command) {
 
 		thread sec(__CreateNewThreads, charCutB, chartempA, _pagefile_savedir,chartempC);
 		sec.detach();
+		
+		//_p("Wait " + Reg_Process_Map + "  To Callback :  " + chartempC);
+ 		while (1) {
+			__settings_throwErrorMode = false;
+			if (_load_sipcfg(Reg_Process_Map, chartempC) == "alive")break;
+			sleepapi_ms(50);
+		}
 
 		return "ok";
 	}

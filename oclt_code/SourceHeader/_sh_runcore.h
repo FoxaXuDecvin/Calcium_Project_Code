@@ -31,6 +31,27 @@ int _system_autoRun(string file, string arguments) {
 
 	return resultCode;
 }
+string _sa_makeCache;
+int _system_autoRun_A(string file, string arguments,bool SetFileLinuxChmod777) {
+	if (!check_file_existenceA(file)) return -1001;
+
+	if (_Run_SysKernel == Win32_kernel) {
+		file = ReplaceChar(file, "/", "\\");
+		araBuffer = $quomark + $quomark + file + $quomark + " " + arguments + $quomark;
+		resultCode = system(araBuffer.c_str());
+	}
+
+	if (_Run_SysKernel == Linux_kernel) {
+		file = ReplaceChar(file, "\\", "/");
+		_sa_makeCache = "chmod 777 " + $sqmark + file + $sqmark;
+		if (SetFileLinuxChmod777 == true)system(_sa_makeCache.c_str());
+		araBuffer = $sqmark + file + $sqmark + " " + arguments;
+		resultCode = system(araBuffer.c_str());
+	}
+
+	return resultCode;
+}
+
 
 int _system_autoRun_admin(string file, string arguments) {
 	if (!check_file_existenceA(file)) return -1001;

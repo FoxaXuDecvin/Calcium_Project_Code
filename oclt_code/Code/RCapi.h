@@ -47,9 +47,9 @@ string _KV_softwareVersion = "117"; //(Software Version)
 
 string _KV_gen = "5";//(General)
 
-string _KV_rv = "1";//(Release Version)
+string _KV_rv = "2";//(Release Version)
 
-string _KV_releaseVer = _KV_rV_Debug;//(Debug/Preview/preRelease/demo/Release  1 - 4)
+string _KV_releaseVer = _KV_rV_Release;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
 string _mk = ".";
 
@@ -109,7 +109,7 @@ string _rcbind_serverapi;
 string _rc_activate_key;
 string _rc_exec_address;
 string _pagefile_savedir;
-
+string _OriginWorkDir;
 int _exec_runtimesleep = 1;
 
 bool _VarSpace_Random_BreakTest = false;
@@ -218,7 +218,8 @@ bool _RcApiLoadConfig() {
 		_soildwrite_write("$DefaultPluginPath={path}/Plugin;");
 		_soildwrite_write("$DefaultPluginScript={path}/script;");
 		_soildwrite_write("$DefaultLanguagePath={path}/lang;");
-		_soildwrite_write("$PageFile=script/pagefile.catemp;");
+		_soildwrite_write("$PageFile=envswap.tmp;");
+		_soildwrite_write("$OriginWorkDir=" + _$GetSelfPath + ";");
 		_soildwrite_write("");
 		_soildwrite_write("//Display Settings");
 		_soildwrite_write("$Language=en-us;");
@@ -259,6 +260,7 @@ bool _RcApiLoadConfig() {
 	_rcbind_pluginscript = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "DefaultPluginScript"));
 	_rcbind_langpath = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "DefaultLanguagePath"));
 	_pagefile_savedir = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "PageFile"));
+	_OriginWorkDir = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "OriginWorkDir"));
 
 	_rcset_lang = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "Language"));
 	_rcset_seclang = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "SecondLanguage"));
