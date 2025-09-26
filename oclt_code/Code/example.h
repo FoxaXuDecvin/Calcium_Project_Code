@@ -294,7 +294,60 @@ string ckapi_result;
 string langpackfile;
 string AC_FAILCODE = "{Null}";
 //Put Code Here
+string listen_id_tm_manager;
+int ReturnResultCode;
+bool _TaskLiveDetect;
+
+int _ThreadManager_HeadMainLoad();
+int ftLoadMainCodeCpp();
+bool _void_ToAntiCrash;
 int _HeadMainLoad() {
+	listen_id_tm_manager = "wait_to_set" + _get_random_s(10000000,99999999);
+	_TaskLiveDetect = true;
+	thread taskmain(_ThreadManager_HeadMainLoad);
+	taskmain.detach();
+	//Thread Manager
+	//Wait Init
+	__settings_throwErrorMode = false;
+
+	while(1) {
+		if (_TaskLiveDetect == false) {
+			return ReturnResultCode;
+		}
+		if (_load_sipcfg(Reg_Process_Map, listen_id_tm_manager) == "alive") {
+			break;
+		}
+		//Resync ID
+		listen_id_tm_manager = Reg_Proces_runid;
+		sleepapi_ms(100);
+	}
+
+	//Thread Load Succeed
+	while (1) {
+		if (_TaskLiveDetect == false) {
+			_remove_sipcfg(Reg_Process_Map, listen_id_tm_manager);
+			return ReturnResultCode;
+		}
+		if (_load_sipcfg(Reg_Process_Map, listen_id_tm_manager) != "alive") {
+			_remove_sipcfg(Reg_Process_Map, listen_id_tm_manager);
+			break;
+		}
+
+		//Resync ID
+		listen_id_tm_manager = Reg_Proces_runid;
+		sleepapi_ms(300);
+	}
+	return ReturnResultCode;
+}
+
+int ftLoadMainCodeCpp() {
+	ReturnResultCode = _ThreadManager_HeadMainLoad();
+	_TaskLiveDetect = false;
+	_p("Calcium Thread Manager :   task close program");
+	return 0;
+}
+
+int _ThreadManager_HeadMainLoad() {
 	//CopyVersion
 	if (SizeRead(_$GetSelfPath, 2) == "\\\\") {
 		_p("Network Drive Not Support");
@@ -397,8 +450,10 @@ int _HeadMainLoad() {
 		if (_rcset_anticrash == true) {
 			if (_anticrash_services == false) {
 			Crash_Reload_service:
+				_void_ToAntiCrash = true;
 				AntiCrash_Return_Code = _system_autoRun(_$GetSelfFull, native_argument + " \"-anticrash_ok\"");
 				if (AntiCrash_Return_Code == 0) {
+					_TaskLiveDetect = false;
 					return 0;
 				}
 
@@ -429,6 +484,7 @@ int _HeadMainLoad() {
 					goto Crash_Reload_service;
 				}
 				else {
+					_TaskLiveDetect = false;
 					return 0;
 				}
 			}
@@ -481,13 +537,15 @@ int _HeadMainLoad() {
 	//Register Session Dialogue
 	
 	Reg_Process_Map = _OriginWorkDir + "/session_map.txt";
+	_$GetSelfPath = _OriginWorkDir;
+	_varspaceadd("{path}", _OriginWorkDir);
 
 	if (!check_file_existence(Reg_Process_Map)) {
 		_fileapi_write(Reg_Process_Map, "//  Calcium Dialogue Register");
 	}
 
 	_write_sipcfg(Reg_Process_Map, Reg_Proces_runid, "alive");
-
+	//_p("Register on " + Reg_Process_Map + "   ID " + Reg_Proces_runid);
 	//Config at process Exit 
 	// 
 	

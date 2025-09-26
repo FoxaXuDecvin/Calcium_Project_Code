@@ -1127,6 +1127,17 @@ string _runcode_api(string command) {
 
 		return "status Error : Report this bugs";
 	}
+	if (SizeRead(command, 12) == "_thread_kill") {
+		charCutA = _runcode_api(PartReadA(oldcmd, " ", PartRead_FMend, 1)); //GET Task id
+
+		__settings_throwErrorMode = false;
+
+		if (_load_sipcfg(Reg_Process_Map, charCutA) != "alive") return "No This Process"; //Check Thread Exist ?
+
+		_write_sipcfg(Reg_Process_Map, charCutA, "killed");
+
+		return "status Error : Report this bugs";
+	}
 	if (SizeRead(command, 13) == "_set_pagefile") {
 		charCutA = PartReadA(oldcmd, " ", PartRead_FMend, 1);
 		charCutB = _runcode_api(charCutA);
