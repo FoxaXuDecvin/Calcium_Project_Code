@@ -375,9 +375,12 @@ string lost_memory;
 int ModifyCount;
 int procesid_ccode;
 char CK_ConvertTemp[1024];
+string _RunSuperMaker,_WorkDIRECTORY_FOLDER;
 string Net_script_nameid;
 int __CreateNewThreads(string Script,string args,string originEnv,string proces_runid) {
-	procesid_ccode = _system_autoRun(_$GetSelfFull, "-run \"" + Script + "\" -args \"" + args + "\" -loadenv \"" + originEnv + "\" -runid \"" + proces_runid + "\" -fastmode");
+	
+	procesid_ccode = _system_autoRun(_RunSuperMaker, "-run \"" + Script + "\" -args \"" + args + "\" -loadenv \"" + originEnv + "\" -runid \"" + proces_runid + "\" -fastmode");
+	_fileapi_del (_RunSuperMaker);
 	return procesid_ccode;
 }
 
@@ -713,10 +716,12 @@ string _runcode_api(string command) {
 			return "ok";
 		}
 		if (_rc_exec_address != _$GetSelfFull) {
-			_pv("_$lang.activateModified");
-			_pv("_$lang.activateRe");
-			_kernel_activate = false;
-			return "ok";
+			if (_rc_exec_address != "voidcheck") {
+				_pv("_$lang.activateModified");
+				_pv("_$lang.activateRe");
+				_kernel_activate = false;
+				return "ok";
+			}
 		}
 	}
 
@@ -1068,11 +1073,31 @@ string _runcode_api(string command) {
 		//Create New Page File
 
 		_fileapi_del(_pagefile_savedir);
-
+		_dapi_create_full_path(_pagefile_savedir);
 		_fileapi_write(_pagefile_savedir, to_string(VarSpaceMax));
 		_fileapi_write(_pagefile_savedir, VarSpace);
 
 		//Add New Threads
+		_RunSuperMaker = _$GetSelfPath + "/" + "Thread_LiveNameFolder/CLT_" + chartempC + "_.exe"; // Copy Calcium Core file to LiveName Folder
+		_WorkDIRECTORY_FOLDER = _$GetSelfPath + "/" + "Thread_LiveNameFolder";
+		_dapi_mkdir(_$GetSelfPath + "/" + "Thread_LiveNameFolder");
+		_fileapi_CpFile(_$GetSelfPath + "/calcium_settings.cfg", _WorkDIRECTORY_FOLDER + "/calcium_settings.cfg");
+		_write_sipcfg(_WorkDIRECTORY_FOLDER + "/calcium_settings.cfg", "ExecuteFile", "voidcheck");
+
+		if (check_file_existence(_RunSuperMaker)) {
+			_p("[CalciumThreadManager] A Exist same name thread is running");
+			_p("[CalciumThreadManager] Failed to Create Threads");
+			return "fail";
+		}
+
+		_fileapi_CpFile(_$GetSelfFull, _RunSuperMaker);
+
+		if (!check_file_existence(_RunSuperMaker)) {
+			_p ("[CalciumThreadManager] Thread Create Failed");
+			_p ("[CalciumThreadManager] Failed to Create Threads");
+			return "fail";
+		}
+
 		thread sec(__CreateNewThreads, charCutB, chartempA, _pagefile_savedir,chartempC);
 		sec.detach();
 

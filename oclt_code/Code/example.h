@@ -11,8 +11,8 @@ bool PreLaunchLoad(void) {
 	
 	//Time Bomb
 	tbd_year = 2025;
-	tbd_month = 7;
-	tbd_day = 15;
+	tbd_month = 10;
+	tbd_day = 26;
 
 
 	//PreLoad
@@ -440,7 +440,10 @@ int _HeadMainLoad() {
 		if (_Time_Bomb_Detect(_KV_releaseVer)) return 661;
 		
 		if (_activate_request(_rc_activate_key) == false) {
-			_p("Activate Calcium");
+			_p(" [TBD]  Current product is not activated");
+		}
+		else {
+			_p(" [TBD]  Current product activate Succeed");
 		}
 
 		if (_rcbind_autorun != "null") {
