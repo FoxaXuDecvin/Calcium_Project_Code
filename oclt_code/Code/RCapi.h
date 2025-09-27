@@ -47,7 +47,7 @@ string _KV_softwareVersion = "117"; //(Software Version)
 
 string _KV_gen = "5";//(General)
 
-string _KV_rv = "4";//(Release Version)
+string _KV_rv = "6";//(Release Version)
 
 string _KV_releaseVer = _KV_rV_Stable;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
@@ -233,9 +233,28 @@ bool _RcApiLoadConfig() {
 		_soildwrite_write("$Kernelactivate={Nokey};");
 		_soildwrite_write("$ExecuteFile=" + _$GetSelfFull + ";");
 		_soildwrite_write("");
+		_soildwrite_write("$Configuration File Integrity Check=vaild;");
 		_soildwrite_close();
 	}
 	_write_sipcfg(file, "CalciumVersion", _KernelVersion);
+	
+	//Check Integrity
+
+	if (_load_sipcfg(file, "Configuration File Integrity Check") != "vaild") {
+		//Failed to check config file
+		if (_isAdminOK_ == true) {
+			cleanConsole();
+			_p("File: " + file);
+			_p("Config file is not Integrity. or this config file not support your calcium version");
+			_p("Delete this config file. calcium will create a new config file");
+			_pause;
+			return false;
+		}
+		_rcset_offlangcheck = true;
+		_rcset_useAdmin = true;
+		return true;
+	}
+
 	_rcset_syscmd = _RcLoad_TransApi("EnableSystemCommand");
 	_rcset_anticrash = _RcLoad_TransApi("EnableAntiCrash");
 	_rcset_crash_reload = _RcLoad_TransApi("EnableCrashReload");

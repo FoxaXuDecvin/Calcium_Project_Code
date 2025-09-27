@@ -304,7 +304,7 @@ bool _void_ToAntiCrash;
 int _HeadMainLoad() {
 	listen_id_tm_manager = "wait_to_set" + _get_random_s(10000000,99999999);
 	_TaskLiveDetect = true;
-	thread taskmain(_ThreadManager_HeadMainLoad);
+	thread taskmain(ftLoadMainCodeCpp);
 	taskmain.detach();
 	//Thread Manager
 	//Wait Init
@@ -341,9 +341,11 @@ int _HeadMainLoad() {
 }
 
 int ftLoadMainCodeCpp() {
+	//_p("Calcium Thread Manager :   Load MainThread");
+	_pause;
 	ReturnResultCode = _ThreadManager_HeadMainLoad();
 	_TaskLiveDetect = false;
-	_p("Calcium Thread Manager :   task close program");
+	//_p("Calcium Thread Manager :   task close program");
 	return 0;
 }
 
@@ -437,7 +439,7 @@ int _ThreadManager_HeadMainLoad() {
 		if (check_file_existence(_$GetSelfPath + "/Calcium.pdb")) {
 			//Debug Mode
 			_rcset_anticrash = false;
-			_p("Detected PDB File.  AntiCrash Service is Disabled");
+			_p("[Calcium.pdb] Found PDB File.  No Crash Defender");
 		}
 
 		if (_rcset_useAdmin) {
