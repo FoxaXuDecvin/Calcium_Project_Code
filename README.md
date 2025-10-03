@@ -2,7 +2,7 @@
 Windows 用户请前往 Release 界面下载最新版本     
 Linux 用户可前往 Action 下载最新版本     
 
-Windows 默认提供64位版本  
+Windows 默认提供32位版本  
 Linux 默认提供64位版本  
 如需其他特殊版本请自行编译  
 
