@@ -2,30 +2,31 @@
 
 #pragma once
 #include"../shload.h"
-using namespace std;
+
 #define _CRT_SECURE_NO_WARNINGS
 //PUBLIC API
 
 //HEAD
-string _Old_VSAPI_TransVar(string Info);
+std::string _Old_VSAPI_TransVar(std::string Info);
 
 //
-string VarSpace = "varspace;";
+std::string VarSpace = "varspace;";
 int VarSpaceMax;
 
-string readvar;
-string varhead;
-string varset;
+std::string readvar;
+std::string varhead;
+std::string varset;
 
-string getfullLine;
-string ResChar;
-string ReplaceCharX;
-string backinfo;
+std::string getfullLine;
+std::string ResChar;
+std::string ReplaceCharX;
+std::string backinfo;
 
-int checkCharA(string text, string chechchar) {
+int checkCharA(std::string text, std::string chechchar) {
+	using namespace std;
 	const char* c = chechchar.c_str();
 
-	if (text.find(c) != string::npos) {
+	if (text.find(c) != std::string::npos) {
 		return 1;
 	}
 	else {
@@ -33,7 +34,8 @@ int checkCharA(string text, string chechchar) {
 	}
 }
 
-string ReplaceCharA(string info, string replaceword, string nword) {
+std::string ReplaceCharA(std::string info, std::string replaceword, std::string nword) {
+	using namespace std;
 	//cout << "New Replace :  _" << info << "_  _" << replaceword << "_  _" << nword << "_" << endl;
 	int checkanti = checkCharA(info, replaceword);
 	if (checkanti == 1) {
@@ -52,8 +54,9 @@ string ReplaceCharA(string info, string replaceword, string nword) {
 	}
 }
 
-string cutlineblockB(string lines, string cutmark, int line) {
-	string backapi;
+std::string cutlineblockB(std::string lines, std::string cutmark, int line) {
+	using namespace std;
+	std::string backapi;
 
 	if (checkCharA(lines, cutmark) == 0) {
 		return "NUL";
@@ -99,7 +102,8 @@ NextRollCR:
 
 // 0 - OK
 // 1 - Error
-int _varspaceadd(string VarHead, string varinfo) {
+int _varspaceadd(std::string VarHead, std::string varinfo) {
+	using namespace std;
 	//cout << "GET " << endl;
 	VarHead = ReplaceCharA(VarHead, " ", "");
 	//cout << "START VAR" << endl;
@@ -141,7 +145,7 @@ int _varspaceadd(string VarHead, string varinfo) {
 
 BackFoundOldLine:
 	//%var Mark Reader
-	//cout << "readvar Head :  " << VarSpace << ".  " << VarHead << "_  " << to_string(startReadVar) << "_." << endl;
+	//cout << "readvar Head :  " << VarSpace << ".  " << VarHead << "_  " << to_std::string(startReadVar) << "_." << endl;
 	readvar = cutlineblockB(VarSpace, ";", startReadVar);
 	//cout << "readvar : " << readvar << endl;
 	readvar = ReplaceCharA(readvar, ";", "");
@@ -155,18 +159,18 @@ BackFoundOldLine:
 		//cout << "Varhead : _" << varhead << "_. Select :  _" << VarHead << "_" << endl;
 		varset = cutlineblockB(readvar, "=", 2);
 		//cout << "Var Set :  _" << varset << "_" << endl;
-		string delvars = varhead + "=" + varset + ";";
-		string newvars = varhead + "=" + varinfo + ";";
+		std::string delvars = varhead + "=" + varset + ";";
+		std::string newvars = varhead + "=" + varinfo + ";";
 		//cout << "Sort Delete Info :  _" << delvars << "_ .  ResData :  _" << VarSpace << "_" << endl;
 		VarSpace = ReplaceCharA(VarSpace, delvars, newvars);
 		//cout << "After CUT :  _" << VarSpace << "_" << endl;
-		//cout << "After VarMAX :  _" << to_string(VarSpaceMax) << "_" << endl;
-		//cout << "Var Space is Update.  Max : " << to_string(VarSpaceMax) << " . Message:   " << VarSpace << endl;
+		//cout << "After VarMAX :  _" << to_std::string(VarSpaceMax) << "_" << endl;
+		//cout << "Var Space is Update.  Max : " << to_std::string(VarSpaceMax) << " . Message:   " << VarSpace << endl;
 		return 0;
 	}
 
 	startReadVar--;
-	//cout << "IF Command :  _" << to_string(startReadVar) << "_  . VMAX :  _" << to_string(VarSpaceMax) << "_" << endl;
+	//cout << "IF Command :  _" << to_std::string(startReadVar) << "_  . VMAX :  _" << to_std::string(VarSpaceMax) << "_" << endl;
 	if (startReadVar == VarSpaceMax) {
 
 		VarSpace = VarSpace + VarHead + "=" + varinfo + ";";
@@ -181,7 +185,8 @@ BackFoundOldLine:
 	goto BackFoundOldLine;
 }
 
-void _varspacedelete(string VarHead) {
+void _varspacedelete(std::string VarHead) {
+	using namespace std;
 	//cout << "Delete Var Space :  _" << VarHead << "_" << endl;
 
 	if (VarSpaceMax == 0) {
@@ -192,7 +197,7 @@ void _varspacedelete(string VarHead) {
 
 BackFoundLine:
 	//%var Mark Reader
-	//cout << "readvar Head :  _" << VarSpace << "_.  _" << VarHead << "_  _" << to_string(startReadVar) << "_." << endl;
+	//cout << "readvar Head :  _" << VarSpace << "_.  _" << VarHead << "_  _" << to_std::string(startReadVar) << "_." << endl;
 	readvar = cutlineblockB(VarSpace, ";", startReadVar);
 	//cout << "readvar : " << readvar << endl;
 	readvar = ReplaceCharA(readvar, ";", "");
@@ -206,18 +211,18 @@ BackFoundLine:
 		//cout << "Varhead : _" << varhead << "_. Select :  _" << VarHead << "_" << endl;
 		varset = cutlineblockB(readvar, "=", 2);
 		//cout << "Var Set :  _" << varset << "_" << endl;
-		string delvars = varhead + "=" + varset + ";";
+		std::string delvars = varhead + "=" + varset + ";";
 		//cout << "Sort Delete Info :  _" << delvars << "_ .  ResData :  _" << VarSpace << "_" << endl;
 		VarSpace = ReplaceCharA(VarSpace, delvars, "");
 		//cout << "After CUT :  _" << VarSpace << "_" << endl;
 		VarSpaceMax--;
-		//cout << "After VarMAX :  _" << to_string(VarSpaceMax) << "_" << endl;
-		//cout << "Var Space is Update.  Max : " << to_string(VarSpaceMax) << " . Message:   " << VarSpace << endl;
+		//cout << "After VarMAX :  _" << to_std::string(VarSpaceMax) << "_" << endl;
+		//cout << "Var Space is Update.  Max : " << to_std::string(VarSpaceMax) << " . Message:   " << VarSpace << endl;
 		return;
 	}
 
 	startReadVar--;
-	//cout << "IF Command :  _" << to_string(startReadVar) << "_  . VMAX :  _" << to_string(VarSpaceMax) << "_" << endl;
+	//cout << "IF Command :  _" << to_std::string(startReadVar) << "_  . VMAX :  _" << to_std::string(VarSpaceMax) << "_" << endl;
 	if (startReadVar == VarSpaceMax) {
 		return;
 	}
@@ -227,7 +232,8 @@ BackFoundLine:
 	goto BackFoundLine;
 }
 
-string _Old_VSAPI_TransVar(string Info) {
+std::string _Old_VSAPI_TransVar(std::string Info) {
+	using namespace std;
 	backinfo = Info;
 
 	if (VarSpaceMax == 0) {
@@ -245,14 +251,15 @@ string _Old_VSAPI_TransVar(string Info) {
 		ReplaceCharX = ReplaceCharA(ReplaceCharX, "%B_SLASH%", "\\");
 		ReplaceCharX = ReplaceCharA(ReplaceCharX, "%$LineFeed%", "\n");
 		//cout << "Process Env :  " << startrollmax << "      RM :  " << readmark << endl;
-		int checkChar(string text, string chechchar);
+		int checkChar(std::string text, std::string chechchar);
 		backinfo = ReplaceCharA(backinfo, ResChar, ReplaceCharX);
 	}
 
 	return backinfo;
 }
 
-string _getvarspace(string VarHead) {
+std::string _getvarspace(std::string VarHead) {
+	using namespace std;
 	backinfo = VarHead;
 
 	if (VarSpaceMax == 0) {
@@ -270,7 +277,7 @@ string _getvarspace(string VarHead) {
 		ReplaceCharX = ReplaceCharA(ReplaceCharX, "%B_SLASH%", "\\");
 		ReplaceCharX = ReplaceCharA(ReplaceCharX, "%$LineFeed%", "\n");
 
-		int checkChar(string text, string chechchar);
+		int checkChar(std::string text, std::string chechchar);
 		backinfo = ReplaceCharA(backinfo, ResChar, ReplaceCharX);
 	}
 
@@ -278,6 +285,7 @@ string _getvarspace(string VarHead) {
 }
 
 void _clear_varspace(void) {
+	using namespace std;
 	VarSpace = "varspace;";
 	VarSpaceMax = 0;
 }

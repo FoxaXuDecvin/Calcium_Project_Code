@@ -20,7 +20,7 @@ bool __settings_throwErrorMode = true;
 // or false to disabled output all error info
 
 //EFC Protocol File
-string efc_Monitor = "empty.null.efc.socket";
+std::string efc_Monitor = "empty.null.efc.socket";
 bool _efc_settings$void_protocol_version_check = false;
 //if true
 // efc will not check the protocol version

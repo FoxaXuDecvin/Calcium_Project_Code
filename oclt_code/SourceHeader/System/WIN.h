@@ -7,13 +7,13 @@
 #include <vector>
 #include<ShlObj.h>
 
-const string Win32_kernel = "Win32";
-const string Linux_kernel = "Linux";
-string _windows_userprofile = getenv("userprofile");
-const string _Build_Path = _windows_userprofile + "/.OpenCppLangTab";
+const std::string Win32_kernel = "Win32";
+const std::string Linux_kernel = "Linux";
+std::string _windows_userprofile = getenv("userprofile");
+const std::string _Build_Path = _windows_userprofile + "/.OpenCppLangTab";
 
 char* stringtochar;
-char* StringToCharX(string tomessage) {
+char* stringToCharX(std::string tomessage) {
 
 	const int len = tomessage.length();
 
@@ -26,8 +26,8 @@ char* StringToCharX(string tomessage) {
 
 //Design For Windows
 const std::string pathsign = "\\";
-string RunPlatfom = "Windows (MSVC 64Bit)";//Must Include Windows/Linux one
-string _Run_SysKernel = Win32_kernel;
+std::string RunPlatfom = "Windows (MSVC 64Bit)";//Must Include Windows/Linux one
+std::string _Run_SysKernel = Win32_kernel;
 //Linux s   Windows  ms
 //Default Use s
 void sleepapi(int num) {
@@ -40,7 +40,7 @@ void cleanConsole() {
 	system("cls");
 }
 
-void foldercreateapi(string dir) {
+void foldercreateapi(std::string dir) {
 	_mkdir(dir.c_str());
 }
 
@@ -58,9 +58,10 @@ bool check_file_existenceA(const std::string& filename) {
 //Use Windows API  <URLMON.DLL>
 #include<urlmon.h>
 #pragma comment(lib,"URlmon.lib")
-using namespace std;
-LPCWSTR stringToLPCWSTR(string orig)
+
+LPCWSTR stringToLPCWSTR(std::string orig)
 {
+	using namespace std;
 	size_t origsize = orig.length() + 1;
 	const size_t newsize = 100;
 	size_t convertedChars = 0;
@@ -71,7 +72,8 @@ LPCWSTR stringToLPCWSTR(string orig)
 
 //0-FAILED
 //1-TRUE
-bool URLDown(string URL, string Save) {
+bool URLDown(std::string URL, std::string Save) {
+	using namespace std;
 	remove(Save.c_str());
 
 	LPCWSTR LcDsp = stringToLPCWSTR(Save);
@@ -94,7 +96,8 @@ bool URLDown(string URL, string Save) {
 
 //GetFilePath
 // Resource File
-string GetFilePath(void) {
+std::string GetFilePath(void) {
+	using namespace std;
 	char szFilePath[MAX_PATH + 1] = { 0 };
 	GetModuleFileNameA(NULL, szFilePath, MAX_PATH);
 	/*
@@ -103,11 +106,12 @@ string GetFilePath(void) {
 	使用这个地址返回从最后一个字符c到str末尾的字符串。
 	*/
 	(strrchr(szFilePath, '\\'))[0] = 0; // 删除文件名，只获得路径字串//
-	string path = szFilePath;
+	std::string path = szFilePath;
 	return path;
 }
 
-string GetFileName(void) {
+std::string GetFileName(void) {
+	using namespace std;
 	char szFilePath[MAX_PATH + 1] = { 0 };
 	GetModuleFileNameA(NULL, szFilePath, MAX_PATH);
 	/*
@@ -115,13 +119,14 @@ string GetFileName(void) {
 	并返回这个位置的地址。如果未能找到指定字符，那么函数将返回NULL。
 	使用这个地址返回从最后一个字符c到str末尾的字符串。
 	*/
-	string path = szFilePath;
+	std::string path = szFilePath;
 	return path;
 }
 
-void removeDirectoryAPIX(string dir) {
+int removeDirectoryAPIX(std::string dir) {
+	using namespace std;
 	//在目录后面加上"\\*.*"进行第一次搜索
-	string newDir = dir + "\\*.*";
+	std::string newDir = dir + "\\*.*";
 	//用于查找的句柄
 	intptr_t handle;
 	struct _finddata_t fileinfo;
@@ -130,7 +135,7 @@ void removeDirectoryAPIX(string dir) {
 
 	if (handle == -1) {
 		//cout << "无文件" << endl;
-		return;
+		return 1;
 	}
 
 	do
@@ -151,7 +156,7 @@ void removeDirectoryAPIX(string dir) {
 			}
 		}
 		else {
-			string file_path = dir + "\\" + fileinfo.name;
+			std::string file_path = dir + "\\" + fileinfo.name;
 			//cout << file_path.c_str() << endl;
 			if (remove(file_path.c_str()) == 0) {//删除文件
 				//cout << "delete file success" << endl;
@@ -165,15 +170,16 @@ void removeDirectoryAPIX(string dir) {
 	_findclose(handle);
 
 	_rmdir(dir.c_str());
-	return;
+	return 1;
 }
 
-string Process_cache;
-void _fileapi_write(string _fa_file, string _fa_info);
-string p1_filepath = GetFilePath();
-void CreateFileMap_txt(string savefile,string dir) {
+std::string Process_cache;
+void _fileapi_write(std::string _fa_file, std::string _fa_info);
+std::string p1_filepath = GetFilePath();
+void CreateFileMap_txt(std::string savefile,std::string dir) {
+	using namespace std;
 	//在目录后面加上"\\*.*"进行第一次搜索
-	string newDir = dir + "\\*.*";
+	std::string newDir = dir + "\\*.*";
 	//用于查找的句柄
 	intptr_t handle;
 	struct _finddata_t fileinfo;
@@ -196,7 +202,7 @@ void CreateFileMap_txt(string savefile,string dir) {
 			CreateFileMap_txt(savefile,newDir);//先遍历删除文件夹下的文件，再删除空的文件夹
 		}
 		else {
-			string file_path = dir + "\\" + fileinfo.name;
+			std::string file_path = dir + "\\" + fileinfo.name;
 			Process_cache = file_path;
 			Process_cache = ReplaceChar(Process_cache, p1_filepath, "");
 			//cout << file_path.c_str() << endl;
@@ -208,9 +214,10 @@ void CreateFileMap_txt(string savefile,string dir) {
 
 	return;
 }
-void CreateDirMap_txt(string savefile, string dir) {
+void CreateDirMap_txt(std::string savefile, std::string dir) {
+	using namespace std;
 	//在目录后面加上"\\*.*"进行第一次搜索
-	string newDir = dir + "\\*.*";
+	std::string newDir = dir + "\\*.*";
 	//用于查找的句柄
 	intptr_t handle;
 	struct _finddata_t fileinfo;
@@ -234,7 +241,7 @@ void CreateDirMap_txt(string savefile, string dir) {
 			_fileapi_write(savefile, ReplaceChar(newDir, "\\", "/") + "/");
 		}
 		else {
-			string file_path = dir + "\\" + fileinfo.name;
+			std::string file_path = dir + "\\" + fileinfo.name;
 			Process_cache = file_path;
 			Process_cache = ReplaceChar(Process_cache, p1_filepath, "");
 			//cout << file_path.c_str() << endl;
@@ -249,7 +256,8 @@ void CreateDirMap_txt(string savefile, string dir) {
 
 
 char *envbuffer;
-string _SystemAPI_getenv(string Environment) {
+std::string _SystemAPI_getenv(std::string Environment) {
+	using namespace std;
 	envbuffer = getenv(Environment.c_str());
 	if (envbuffer == NULL) {
 		return "Null.SystemAPI.getenv --> NullEnv";
@@ -257,11 +265,13 @@ string _SystemAPI_getenv(string Environment) {
 	return envbuffer;
 }
 
-bool _Execute_Admin(string File, string Args) {
+bool _Execute_Admin(std::string File, std::string Args) {
+	using namespace std;
 	return ShellExecute(0, "runas", File.c_str(), Args.c_str(), 0, SW_SHOW);
 }
 
 void sleepapi_ms(int secondsNum) {
+	using namespace std;
 	Sleep(secondsNum);
 	return;
 }

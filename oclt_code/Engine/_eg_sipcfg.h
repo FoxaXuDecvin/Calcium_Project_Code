@@ -4,13 +4,14 @@
 
 #include"../shload.h"
 #define _CRT_SECURE_NO_WARNINGS
-string tempreadbuffEr_;
+std::string tempreadbuffEr_;
 
 //Design On Calcium Project
-string tempptr, readcacheA;
+std::string tempptr, readcacheA;
 int readptr_glo = 0;
 
-string _load_sipcfg(string _sc_File, string _sc_ID) {
+std::string _load_sipcfg(std::string _sc_File, std::string _sc_ID) {
+	using namespace std;
 	int readptr = 0;
 	if (check_file_existenceA(_sc_File)) {
 		while (true) {
@@ -48,7 +49,8 @@ string _load_sipcfg(string _sc_File, string _sc_ID) {
 	}
 }
 
-string _load_sipcfg_noreturn(string _sc_File, string _sc_ID) {
+std::string _load_sipcfg_noreturn(std::string _sc_File, std::string _sc_ID) {
+	using namespace std;
 	if (check_file_existenceA(_sc_File)) {
 		while (true) {
 			readptr_glo++;
@@ -91,12 +93,12 @@ void _sipcfg_reset(void) {
 }
 
 bool _sw_target_remove;
-bool _spcfg_wiriteapi(string _sc_File, int _sc_Line, string _sc_header, string _sc_winfo) {
+bool _spcfg_wiriteapi(std::string _sc_File, int _sc_Line, std::string _sc_header, std::string _sc_winfo) {
 	//Simple Config Write
 	_sw_target_remove = false;
 	//Create New File
 
-	string _scnew_file = "sipcfg_newtemp-" + _get_random_s(1, 99999);
+	std::string _scnew_file = "sipcfg_newtemp-" + _get_random_s(1, 99999);
 
 
 	int n_readptr_ = 1;
@@ -147,13 +149,14 @@ bool _spcfg_wiriteapi(string _sc_File, int _sc_Line, string _sc_header, string _
 	return false;
 }
 
-bool _write_sipcfg(string _sc_File, string _sc_ID, string _sc_writeINFO) {
-	string readbufferA;
+bool _write_sipcfg(std::string _sc_File, std::string _sc_ID, std::string _sc_writeINFO) {
+	using namespace std;
+	std::string readbufferA;
 	int readptr = 0;
 	if (check_file_existenceA(_sc_File)) {
 		while (true) {
 			readptr++;
-			string tempptr = _fileapi_textread(_sc_File, readptr);
+			std::string tempptr = _fileapi_textread(_sc_File, readptr);
 			if (tempptr == "") {
 				continue;
 			}
@@ -187,14 +190,15 @@ bool _write_sipcfg(string _sc_File, string _sc_ID, string _sc_writeINFO) {
 }
 
 //New Remove API
-string rs_buf;
-bool _remove_sipcfg(string _sc_File, string _sc_ID) {
-	string readbufferA;
+std::string rs_buf;
+bool _remove_sipcfg(std::string _sc_File, std::string _sc_ID) {
+	using namespace std;
+	std::string readbufferA;
 	int readptr = 0;
 	if (check_file_existenceA(_sc_File)) {
 		while (true) {
 			readptr++;
-			string tempptr = _fileapi_textread(_sc_File, readptr);
+			std::string tempptr = _fileapi_textread(_sc_File, readptr);
 			if (tempptr == "") {
 				continue;
 			}

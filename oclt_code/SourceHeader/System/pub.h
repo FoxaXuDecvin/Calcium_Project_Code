@@ -6,13 +6,14 @@
 #include<stdio.h>
 #include<random>
 
-using namespace std;
+
 //MAIN
 
-int checkChar(string text, string chechchar) {
+int checkChar(std::string text, std::string chechchar) {
+	using namespace std;
 	const char* c = chechchar.c_str();
 
-	if (text.find(c) != string::npos) {
+	if (text.find(c) != std::string::npos) {
 		return 1;
 	}
 	else {
@@ -21,7 +22,8 @@ int checkChar(string text, string chechchar) {
 }
 
 //Replace Char
-string ReplaceChar(string info, string replaceword, string nword) {
+std::string ReplaceChar(std::string info, std::string replaceword, std::string nword) {
+	using namespace std;
 	//cout << "New Replace :  _" << info << "_  _" << replaceword << "_  _" << nword << "_" << endl;
 	int checkanti = checkChar(info, replaceword);
 	if (checkanti == 1) {
@@ -40,17 +42,19 @@ string ReplaceChar(string info, string replaceword, string nword) {
 	}
 }
 
-void _api_prtmsg(string msg) {
+void _api_prtmsg(std::string msg) {
+	using namespace std;
 	printf(msg.c_str());
 	return;
 }
 
 //Calcium Copy
 //Read Env NEW
-string _api_PartRead(string Info, string StartMark, string EndMark) {
+std::string _api_PartRead(std::string Info, std::string StartMark, std::string EndMark) {
+	using namespace std;
 	int MaxInfoSize = Info.size();
 	int startmarkadd, endmarkadd, readptr;
-	string readbufferPR;
+	std::string readbufferPR;
 	readptr = 0;
 
 	if (StartMark == "$FROMSTART$") {
@@ -100,6 +104,7 @@ skipENDGET:
 	return readbufferPR;
 }
 
-int _str_system(string msg) {
+int _str_system(std::string msg) {
+	using namespace std;
 	return system(msg.c_str());
 }

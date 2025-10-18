@@ -40,7 +40,7 @@ void TypeHelpMenu() {
 
 
 //Args API
-void argsApi(string args$api) {
+void argsApi(std::string args$api) {
 
 	//if (argsSetExit) set true
 	//Process will close after args run
@@ -136,8 +136,8 @@ void argsApi(string args$api) {
 
 	if (args$api == "--perf-test") {
 
-		_p("Disk Performance Test Result is :  " + to_string(FileWriteSpeedTest()));
-		_p("Command Performance Test Result is :  " + to_string(FileCmdProcessSpeedTest()));
+		_p("Disk Performance Test Result is :  " + std::to_string(FileWriteSpeedTest()));
+		_p("Command Performance Test Result is :  " + std::to_string(FileCmdProcessSpeedTest()));
 		_p("Benchmark Version :  " + _KernelVersion + "    Platform :  " + _Run_SysKernel);
 
 		argsSetExit = true;
@@ -191,7 +191,7 @@ void argsApi(string args$api) {
 
 		if (PerfCNT_ID == "unknown.command")PerfCNT_ID = "Unnamed_" + _get_random_s(111111, 999999);
 
-		thread monitor_pfr(Thread_PerfCurrentGet);
+		std::thread monitor_pfr(Thread_PerfCurrentGet);
 		monitor_pfr.detach();
 
 		_setproces_perfid = false;
@@ -201,7 +201,7 @@ void argsApi(string args$api) {
 	return;
 }
 
-string _user_typebuffer;
+std::string _user_typebuffer;
 bool CK_Shell_open(void) {
 	_global_scriptload = "{ShellMode}";
 	_CK_ShellMode = true;
@@ -290,11 +290,11 @@ void regout_atexit(int TNum) {
 
 
 int AntiCrash_Return_Code;
-string ckapi_result;
-string langpackfile;
-string AC_FAILCODE = "{Null}";
+std::string ckapi_result;
+std::string langpackfile;
+std::string AC_FAILCODE = "{Null}";
 //Put Code Here
-string listen_id_tm_manager;
+std::string listen_id_tm_manager;
 int ReturnResultCode;
 bool _TaskLiveDetect;
 
@@ -304,7 +304,7 @@ bool _void_ToAntiCrash;
 int _HeadMainLoad() {
 	listen_id_tm_manager = "wait_to_set" + _get_random_s(10000000,99999999);
 	_TaskLiveDetect = true;
-	thread taskmain(ftLoadMainCodeCpp);
+	std::thread taskmain(ftLoadMainCodeCpp);
 	taskmain.detach();
 	//Thread Manager
 	//Wait Init
@@ -459,9 +459,9 @@ int _ThreadManager_HeadMainLoad() {
 					return 0;
 				}
 
-				AC_FAILCODE = _Old_VSAPI_TransVar("_erc_" + to_string(AntiCrash_Return_Code));
+				AC_FAILCODE = _Old_VSAPI_TransVar("_erc_" + std::to_string(AntiCrash_Return_Code));
 
-				if (AC_FAILCODE == "_erc_" + to_string(AntiCrash_Return_Code)) {
+				if (AC_FAILCODE == "_erc_" + std::to_string(AntiCrash_Return_Code)) {
 					AC_FAILCODE = "UNKNOWN_KERNEL_STATUS";
 				}
 
@@ -473,7 +473,7 @@ int _ThreadManager_HeadMainLoad() {
 				_pv("       _$lang.crash.t2");
 				_pv("       _$lang.crash.t3");
 				_pv("       _$lang.crash.errcode --> " + AC_FAILCODE);
-				_pv("       _$lang.crash.kcode :  " + to_string(AntiCrash_Return_Code));
+				_pv("       _$lang.crash.kcode :  " + std::to_string(AntiCrash_Return_Code));
 				_pv("     _$lang.runargs :  " + native_argument);
 				_pn();
 				_pv("  _$lang.presskey");

@@ -4,13 +4,14 @@
 #include "../SourceHeader/include.h"
 #define _CRT_SECURE_NO_WARNINGS
 //DEF
-bool _fileapi_createmark(string File, string info);
+bool _fileapi_createmark(std::string File, std::string info);
 int _get_random(int min, int max);
 
 
 //MAIN
-bool _dapi_ExistFolder_check(string dir) {
-	string tmpDoct = dir + pathsign + "test~" + to_string(_get_random(1, 999999)) + "~.mark";
+bool _dapi_ExistFolder_check(std::string dir) {
+	using namespace std;
+	std::string tmpDoct = dir + pathsign + "test~" + std::to_string(_get_random(1, 999999)) + "~.mark";
 
 	if (_fileapi_createmark(tmpDoct, "nWn")) {
 		remove(tmpDoct.c_str());
@@ -22,7 +23,8 @@ bool _dapi_ExistFolder_check(string dir) {
 	}
 }
 
-bool _dapi_rmdir(string dir) {
+bool _dapi_rmdir(std::string dir) {
+	using namespace std;
 	dir = ReplaceChar(dir, "\\", "/");
 
 	removeDirectoryAPIX(dir.c_str());
@@ -37,7 +39,8 @@ bool _dapi_rmdir(string dir) {
 	}
 }
 
-bool _dapi_mkdir(string dir) {
+bool _dapi_mkdir(std::string dir) {
+	using namespace std;
 	if (_Run_SysKernel == Win32_kernel) {
 		dir = ReplaceChar(dir, "/", "\\");
 	}
@@ -59,8 +62,9 @@ bool _dapi_mkdir(string dir) {
 }
 
 bool cp_true = false;
-bool _dapi_create_full_path(string fileaddress) {
-	string tempdata, outdata;
+bool _dapi_create_full_path(std::string fileaddress) {
+	using namespace std;
+	std::string tempdata, outdata;
 
 	if (checkChar(fileaddress, "/")) cp_true = true;
 	if (checkChar(fileaddress, "\\")) cp_true = true;

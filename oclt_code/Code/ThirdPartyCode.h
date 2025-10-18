@@ -4,7 +4,7 @@
 //Here
 #include"../shload.h"
 
-bool creatpath(string fileaddress) {
+bool creatpath(std::string fileaddress) {
 
 
 	//For Windows System
@@ -14,7 +14,7 @@ bool creatpath(string fileaddress) {
 		}
 	}
 
-	string tempdata, outdata;
+	std::string tempdata, outdata;
 
 	if (checkChar(fileaddress, "/")) cp_true = true;
 	if (checkChar(fileaddress, "\\")) cp_true = true;

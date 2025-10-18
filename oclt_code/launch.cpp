@@ -12,9 +12,8 @@
 //Use #pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
 
 
-using namespace std;
-
 void printmsgoclt() {
+    using namespace std;
     cleanConsole();
     _pn();
     _p("OpenCppLangTab Version :  " + $version_code_str + "  (" + $codename + ")");
@@ -32,6 +31,7 @@ void printmsgoclt() {
 }
 
 int main(int argc, char* argv[]) {
+    using namespace std;
     if (!_dapi_ExistFolder_check(_Build_Path)) {
         _dapi_mkdir(_Build_Path);
     }

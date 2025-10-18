@@ -5,7 +5,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 int _get_random(int min, int max) {
-
+	using namespace std;
 	string minb, maxb;
 	minb = to_string(min);
 	maxb = to_string(max);
@@ -24,7 +24,8 @@ int _get_random(int min, int max) {
 	return dis(gen);
 }
 
-string _get_random_s(int min, int max) {
+std::string _get_random_s(int min, int max) {
+	using namespace std;
 	return to_string(_get_random(min, max));
 }
 

@@ -4,17 +4,17 @@
 #include "../SourceHeader/include.h"
 #define _CRT_SECURE_NO_WARNINGS
 //Define
-string PartReadA(string Info, string StartMark, string EndMark, int RPartSizeA);
+std::string PartReadA(std::string Info, std::string StartMark, std::string EndMark, int RPartSizeA);
 
-string araBuffer;
-string $quomark = "\"";
-string $sqmark = "\'";
+std::string araBuffer;
+std::string $quomark = "\"";
+std::string $sqmark = "\'";
 
 //Run any program in any system
 //    _system_autoRun("C:\Windows\Notepad.exe","Example.txt");
 //    _system_autoRun("./home/desktop/app.run","example");
 int resultCode;
-int _system_autoRun(string file, string arguments) {
+int _system_autoRun(std::string file, std::string arguments) {
 	if (!check_file_existenceA(file)) return -1001;
 
 	if (_Run_SysKernel == Win32_kernel) {
@@ -31,8 +31,8 @@ int _system_autoRun(string file, string arguments) {
 
 	return resultCode;
 }
-string _sa_makeCache;
-int _system_autoRun_A(string file, string arguments,bool SetFileLinuxChmod777) {
+std::string _sa_makeCache;
+int _system_autoRun_A(std::string file, std::string arguments,bool SetFileLinuxChmod777) {
 	if (!check_file_existenceA(file)) return -1001;
 
 	if (_Run_SysKernel == Win32_kernel) {
@@ -53,7 +53,7 @@ int _system_autoRun_A(string file, string arguments,bool SetFileLinuxChmod777) {
 }
 
 
-int _system_autoRun_admin(string file, string arguments) {
+int _system_autoRun_admin(std::string file, std::string arguments) {
 	if (!check_file_existenceA(file)) return -1001;
 
 	_Execute_Admin(file, arguments);
@@ -62,6 +62,6 @@ int _system_autoRun_admin(string file, string arguments) {
 }
 
 
-string _get_argslonger(void) {
-	return to_string(_argslonger);
+std::string _get_argslonger(void) {
+	return std::to_string(_argslonger);
 }

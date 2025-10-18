@@ -6,8 +6,9 @@
 #include"../shload.h"
 #define _CRT_SECURE_NO_WARNINGS
 int maxread = 1;
-string ReadNULLCheck;
-int _textapi_getdocmax(string file) {
+std::string ReadNULLCheck;
+int _textapi_getdocmax(std::string file) {
+	using namespace std;
 	if (!check_file_existence(file)) {
 		cout << "Textapi.filemissing.getdocmax" << endl;
 		return 0;
@@ -27,7 +28,8 @@ int _textapi_getdocmax(string file) {
 }
 
 int maxdocsize;
-void _textapi_typetext(string file) {
+void _textapi_typetext(std::string file) {
+	using namespace std;
 	if (check_file_existence(file)) {
 		maxdocsize = getdocmax(file);
 

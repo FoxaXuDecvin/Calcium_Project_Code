@@ -2,18 +2,19 @@
 
 #pragma once
 #include "../../SourceHeader/include.h"
+#include <string>
 #define _CRT_SECURE_NO_WARNINGS
-using namespace std;
 
-string $version_title = "OCLT _ 5 (Release)";
-string $version_msg = "Release 3";
 
-string $codename = "Tangerine Pie";
+std::string $version_title = "OCLT _ 6 (Release)";
+std::string $version_msg = "Release 1";
 
-int $version_code = 4231;
+std::string $codename = "Sunlight";
 
-string $buildtime = "2025/9/26/19:29";
+int $version_code = 5002;
 
-string $version_code_str = to_string($version_code);
+std::string $buildtime = "2025/10/18/17:45";
+
+std::string $version_code_str = std::to_string($version_code);
 
 //END

@@ -4,10 +4,10 @@
 #pragma once
 #include"../shload.h"
 #define _CRT_SECURE_NO_WARNINGS
-using namespace std;
+
 //TEXT READ
 
-string readbufferA, readbufferB, readbufferC, readbufferD;
+std::string readbufferA, readbufferB, readbufferC, readbufferD;
 int numbuffer;
 
 //COPYRIGHT FOXAXU SOFTWARE TEAM
@@ -17,6 +17,7 @@ int numbuffer;
 
 //Only Support Read 1 Char Size,Read Size A"B$C "+$ = B
 bool check_file_existence(const std::string& filename) {
+	using namespace std;
 	std::ifstream file(filename);
 	if (file.is_open()) {
 		return true;
@@ -27,13 +28,14 @@ bool check_file_existence(const std::string& filename) {
 }
 
 //Read Env NEW
-const string PartRead_FMstart = "$FROMSTART$";
-const string PartRead_FMend = "$FROMEND$";
-string PartRead(string Info, string StartMark, string EndMark,bool EndSearch) {
-	//_p("EndSearch is " + to_string(EndSearch) + "  info :  " + Info );
+const std::string PartRead_FMstart = "$FROMSTART$";
+const std::string PartRead_FMend = "$FROMEND$";
+std::string PartRead(std::string Info, std::string StartMark, std::string EndMark,bool EndSearch) {
+	using namespace std;
+	//_p("EndSearch is " + to_std::string(EndSearch) + "  info :  " + Info );
 	int MaxInfoSize = Info.size();
 	int startmarkadd, endmarkadd, readptr;
-	string readbufferPR;
+	std::string readbufferPR;
 	readptr = 0;
 
 	if (StartMark == "$FROMSTART$") {
@@ -100,7 +102,8 @@ skipENDGET:
 int PartSizeA;
 //Read Env NEW PART
 //Use StartMark
-string PartReadA(string Info, string StartMark, string EndMark, int RPartSizeA) {
+std::string PartReadA(std::string Info, std::string StartMark, std::string EndMark, int RPartSizeA) {
+	using namespace std;
 	//Anti Search All
 	if (RPartSizeA == 1) {
 		return PartRead(Info, StartMark, EndMark,true);
@@ -172,7 +175,8 @@ string PartReadA(string Info, string StartMark, string EndMark, int RPartSizeA) 
 
 }
 
-string PartRead_A(string Info, string StartMark, string EndMark, int RPartSizeA) {
+std::string PartRead_A(std::string Info, std::string StartMark, std::string EndMark, int RPartSizeA) {
+	using namespace std;
 	//Anti Search All
 	if (RPartSizeA == 1) {
 		return PartRead(Info, StartMark, EndMark, false);
@@ -247,9 +251,10 @@ string PartRead_A(string Info, string StartMark, string EndMark, int RPartSizeA)
 //ReadSize
 // FoxaXu good work 3 = Fox
 //No Error Report
-string SizeRead(string Info, int Size) {
+std::string SizeRead(std::string Info, int Size) {
+	using namespace std;
 
-	string TempInfo;
+	std::string TempInfo;
 	for (int ReadCharSize = 0; ReadCharSize != Size; ReadCharSize++) {
 		TempInfo = TempInfo + Info[ReadCharSize];
 	}
@@ -259,13 +264,14 @@ string SizeRead(string Info, int Size) {
 
 //Read Size from End
 // This is FoxaXu 4=xaXu
-string EndSizeRead(string Info, int LateSize) {
+std::string EndSizeRead(std::string Info, int LateSize) {
+	using namespace std;
 	int InfoSize = Info.size();
 	int EndAddress = InfoSize - LateSize;
 	if (EndAddress < 0) {
 		return "EndSizeRead.LateSizeOverSmall";
 	}
-	string TempInfo, ReadChar;
+	std::string TempInfo, ReadChar;
 
 	for (int LateRead = InfoSize; LateRead != EndAddress; LateRead--) {
 		ReadChar = Info[LateRead];
@@ -277,11 +283,12 @@ string EndSizeRead(string Info, int LateSize) {
 
 //Get Char Address int
 // ABC$DEFG$
-int TextGetSizeAddress(string Info, string MarkSize, int NumBit) {
+int TextGetSizeAddress(std::string Info, std::string MarkSize, int NumBit) {
+	using namespace std;
 	int MaxSizeInfo = Info.size();
 	int CurrentNumBit = 0;
 	int StartRead = 0;
-	string TempInfo, charRead;
+	std::string TempInfo, charRead;
 
 	while (CurrentNumBit != NumBit) {
 		for (; charRead != MarkSize; StartRead++) {
@@ -295,7 +302,8 @@ int TextGetSizeAddress(string Info, string MarkSize, int NumBit) {
 
 //Char Size Read
 //Example ABCDEFG S=C E=F DE
-string PartReadSize(string Info, int StartSize, int EndSize) {
+std::string PartReadSize(std::string Info, int StartSize, int EndSize) {
+	using namespace std;
 	StartSize--; EndSize--;
 	int MaxInfoSize = Info.size();
 	if (StartSize > EndSize) {
@@ -309,7 +317,7 @@ string PartReadSize(string Info, int StartSize, int EndSize) {
 	}
 	int CurrentSize = StartSize;
 
-	string TempInfo, charRead;
+	std::string TempInfo, charRead;
 	while (CurrentSize <= EndSize) {
 		charRead = Info[CurrentSize];
 		TempInfo = TempInfo + charRead;
@@ -333,14 +341,15 @@ string PartReadSize(string Info, int StartSize, int EndSize) {
 //      LineReader(ExampleFile,3) return FOXAXU
 // Running on Linux / Windows warning
 int LRBuffer_Count = 0;
-string LineReader(string File, int line_number) {
+std::string LineReader(std::string File, int line_number) {
+	using namespace std;
 	LRBuffer_Count++;
 	if (check_file_existence(File)) {}
 	else {
 		return "FileNotExist";
 	}
 	int lines, i = 0;
-	string temp;
+	std::string temp;
 	fstream file;
 	file.open(File.c_str());
 	lines = CountLines(File);
@@ -368,13 +377,14 @@ string LineReader(string File, int line_number) {
 }
 
 //NoError
-string LineReader_noerror(string File, int line_number) {
+std::string LineReader_noerror(std::string File, int line_number) {
+	using namespace std;
 	if (check_file_existence(File)) {}
 	else {
 		return "FileNotExist";
 	}
 	int lines, i = 0;
-	string temp;
+	std::string temp;
 	fstream file;
 	file.open(File.c_str());
 	lines = CountLines(File);
@@ -399,8 +409,9 @@ string LineReader_noerror(string File, int line_number) {
 	return temp;
 }
 
-string cutlineblockA(string lines, string cutmark, int line) {
-	string backapi;
+std::string cutlineblockA(std::string lines, std::string cutmark, int line) {
+	using namespace std;
+	std::string backapi;
 
 	if (checkChar(lines, cutmark) == 0) {
 		return "NUL";
@@ -443,8 +454,9 @@ NextRollCR:
 	goto NextRollCR;
 }
 
-string readMCS, tempInfo;
-string HeadSpaceClean(string Info) {
+std::string readMCS, tempInfo;
+std::string HeadSpaceClean(std::string Info) {
+	using namespace std;
 	readMCS = tempInfo = "";
 	int maxCSize = Info.size();
 	int currentFit;
@@ -469,11 +481,12 @@ string HeadSpaceClean(string Info) {
 }
 
 //This api include clean end space
-string fullread, tempget;
+std::string fullread, tempget;
 int finget;
 //var
-string getendchar(string infos);
-string HeadSpaceCleanA(string Info) {
+std::string getendchar(std::string infos);
+std::string HeadSpaceCleanA(std::string Info) {
+	using namespace std;
 	tempget = fullread = "";
 	//_p("HSC Input :  " + Info);
 	Info = HeadSpaceClean(Info);
@@ -489,7 +502,7 @@ string HeadSpaceCleanA(string Info) {
 
 	finget++;
 
-	//_p("finget size ;  " + to_string(finget));
+	//_p("finget size ;  " + to_std::string(finget));
 
 	for (int rp_temp = 0; rp_temp != finget; rp_temp++) {
 		fullread = fullread + Info[rp_temp];
@@ -501,7 +514,8 @@ string HeadSpaceCleanA(string Info) {
 	return fullread;
 }
 
-string HeadSpaceClean_NoSEM(string Info) {
+std::string HeadSpaceClean_NoSEM(std::string Info) {
+	using namespace std;
 	tempget = fullread = "";
 	//_p("HSC Input :  " + Info);
 	Info = HeadSpaceClean(Info);
@@ -517,7 +531,7 @@ string HeadSpaceClean_NoSEM(string Info) {
 
 	finget++;
 
-	//_p("finget size ;  " + to_string(finget));
+	//_p("finget size ;  " + to_std::string(finget));
 
 	for (int rp_temp = 0; rp_temp != finget; rp_temp++) {
 		fullread = fullread + Info[rp_temp];
@@ -530,7 +544,8 @@ string HeadSpaceClean_NoSEM(string Info) {
 }
 
 
-int charTotal(string info, string markchar) {
+int charTotal(std::string info, std::string markchar) {
+	using namespace std;
 	int charsize = info.size();
 	int totalget = 0;
 	for (int readsize = 0; charsize != readsize; readsize++) {
@@ -547,12 +562,12 @@ int charTotal(string info, string markchar) {
 }
 
 int SpawnRandomNum(int min, int max) {
+	using namespace std;
+	std::string minb, maxb;
+	minb = std::to_string(min);
+	maxb = std::to_string(max);
 
-	string minb, maxb;
-	minb = to_string(min);
-	maxb = to_string(max);
-
-	//string chars = "Min :  " + minb + "   Max :   " + maxb + "  Bug Report";
+	//std::string chars = "Min :  " + minb + "   Max :   " + maxb + "  Bug Report";
 	//MessageBox(0, chars.c_str(), "MXBug Report", MB_OK);
 
 	std::random_device rd;
@@ -560,14 +575,15 @@ int SpawnRandomNum(int min, int max) {
 	std::uniform_int_distribution<> dis(min, max); // Missing
 	int outdata = dis(gen);
 
-	//string dis_str = to_string(dis(gen));
+	//std::string dis_str = to_std::string(dis(gen));
 	//MessageBox(0,dis_str.c_str(),"Bug check",MB_OK);
 
 	return dis(gen);
 }
 
 // -4 == Not Found
-int FindCharLine(int startline, string file, string charData) {
+int FindCharLine(int startline, std::string file, std::string charData) {
+	using namespace std;
 	//cout << "GoRoll. in " << startline << endl;
 	while (true) {
 		//cout << "A" << endl;
@@ -596,7 +612,8 @@ int FindCharLine(int startline, string file, string charData) {
 
 // -4 == Not Found
 // Add SkipLine
-int FindCharLineA(int startline, int skipline, string file, string charData) {
+int FindCharLineA(int startline, int skipline, std::string file, std::string charData) {
+	using namespace std;
 	//cout << "GoRoll. in " << startline << endl;
 	while (true) {
 		//cout << "A" << endl;
@@ -625,11 +642,12 @@ int FindCharLineA(int startline, int skipline, string file, string charData) {
 	}
 }
 
-string readbufferCMDVAR;
+std::string readbufferCMDVAR;
 
-string GetURLCode(string URL) {
+std::string GetURLCode(std::string URL) {
+	using namespace std;
 	//SpawnRandNum
-	string tempcreatefile = "geturlcode~" + to_string(SpawnRandomNum(1, 10000)) + ".tmp";
+	std::string tempcreatefile = "geturlcode~" + std::to_string(SpawnRandomNum(1, 10000)) + ".tmp";
 	bool tmp = URLDown(URL, tempcreatefile);
 	readbufferCMDVAR = LineReader(tempcreatefile, 1);
 	//cout << "Remove :  " << tempcreatefile << endl;
@@ -645,13 +663,15 @@ string GetURLCode(string URL) {
 	}
 }
 
-string getendchar(string infos) {
+std::string getendchar(std::string infos) {
+	using namespace std;
 	numbuffer = infos.size();
 	readbuffer = infos[numbuffer];
 	return readbuffer;
 }
 
-string cutendchar(string infos) {
+std::string cutendchar(std::string infos) {
+	using namespace std;
 	numbuffer = infos.size();
 	if (numbuffer == 0) {
 		return "FAILED";
@@ -664,7 +684,8 @@ string cutendchar(string infos) {
 	return readbuffer;
 }
 
-bool createmark(string File, string info) {
+bool createmark(std::string File, std::string info) {
+	using namespace std;
 	ofstream CMark;
 	CMark.open(File);
 	CMark << info << endl;
@@ -679,15 +700,17 @@ bool createmark(string File, string info) {
 }
 
 void autopause(void) {
+	using namespace std;
 	cout << "Press Enter key to Next ...  ";
 	getchar();
 	return;
 }
 
 
-string LPcache, LPTransfCache;
-string LPTempFile;
-bool BatchFileReplace_(string File, string RPChar, string NChar) {
+std::string LPcache, LPTransfCache;
+std::string LPTempFile;
+bool BatchFileReplace_(std::string File, std::string RPChar, std::string NChar) {
+	using namespace std;
 	//Exist FIle
 
 	if (!check_file_existence(File))return false;

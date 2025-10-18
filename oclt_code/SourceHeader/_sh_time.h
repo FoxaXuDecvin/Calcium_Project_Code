@@ -18,8 +18,8 @@ const std::string __Time_Sec = "TIMESEC";
 //_SH_TIME_H
 //Get Current Time API
 int tmcache;
-string tmscache;
-std::string __GetCurrentTimeAPI(string __TimeMode, bool return_RAW) {
+std::string tmscache;
+std::string __GetCurrentTimeAPI(std::string __TimeMode, bool return_RAW) {
 	time_t now = time(NULL);
 	tm* tm_t = localtime(&now);
 
@@ -51,7 +51,7 @@ std::string __GetCurrentTimeAPI(string __TimeMode, bool return_RAW) {
 		tmcache = tm_t->tm_sec;
 	}
 
-	tmscache = to_string(tmcache);
+	tmscache = std::to_string(tmcache);
 
 	if (!return_RAW) {
 		if (tmscache.size() == 1) {
@@ -98,6 +98,6 @@ std::string __GetFullDate(void) {
 //_SH_TIME_H
 //Get Current Time API
 //Return Int Number
-int _GetCurrentTimeAPI(string __TimeMode, bool return_RAW) {
+int _GetCurrentTimeAPI(std::string __TimeMode, bool return_RAW) {
 	return atoi(__GetCurrentTimeAPI(__TimeMode, return_RAW).c_str());
 }

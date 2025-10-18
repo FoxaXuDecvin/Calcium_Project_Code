@@ -16,17 +16,17 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
-const string Win32_kernel = "Win32";
-const string Linux_kernel = "Linux";
-string _linux_userprofile = getenv("USER");
-const string _Build_Path = "/home/" + _linux_userprofile + "/.OpenCppLangTab";
+const std::string Win32_kernel = "Win32";
+const std::string Linux_kernel = "Linux";
+std::string _linux_userprofile = getenv("USER");
+const std::string _Build_Path = "/home/" + _linux_userprofile + "/.OpenCppLangTab";
 
 const std::string pathsign = "/";
-string RunPlatfom = "Linux (GCC 64Bit)";//Must Include Windows/Linux one
-string _Run_SysKernel = Linux_kernel;
+std::string RunPlatfom = "Linux (GCC 64Bit)";//Must Include Windows/Linux one
+std::string _Run_SysKernel = Linux_kernel;
 
 char* stringtochar;
-char* StringToCharX(string tomessage) {
+char* stringToCharX(std::string tomessage) {
 
 	const int len = tomessage.length();
 
@@ -47,7 +47,7 @@ void cleanConsole() {
 	system("clear");
 }
 
-void foldercreateapi(string dir) {
+void foldercreateapi(std::string dir) {
 	mkdir(dir.c_str(), 0755);
 }
 
@@ -136,17 +136,17 @@ CURLcode dl_curl_get_req(const std::string& url, std::string filename)
 }
 
 //TOOLS
-int checkCharN(string text, string chechchar) {
+int checkCharN(std::string text, std::string chechchar) {
 	const char* c = chechchar.c_str();
 
-	if (text.find(c) != string::npos) {
+	if (text.find(c) != std::string::npos) {
 		return 1;
 	}
 	else {
 		return 0;
 	}
 }
-string ReplaceCharN(string info, string replaceword, string nword) {
+std::string ReplaceCharN(std::string info, std::string replaceword, std::string nword) {
 	//cout << "New Replace :  _" << info << "_  _" << replaceword << "_  _" << nword << "_" << endl;
 	int checkanti = checkCharN(info, replaceword);
 	if (checkanti == 1) {
@@ -168,7 +168,7 @@ string ReplaceCharN(string info, string replaceword, string nword) {
 //------------------------------
 //0-FAILED
 //1-TRUE
-bool URLDown(string URL, string Save) {
+bool URLDown(std::string URL, std::string Save) {
 	Save = ReplaceCharN(Save, "\\", "/");
 
 	dl_curl_get_req(URL, Save);
@@ -183,7 +183,7 @@ bool URLDown(string URL, string Save) {
 
 //GetFilePath
 // Resource File
-string GetFilePath(void) {
+std::string GetFilePath(void) {
 	char szBuf[250];
 	char szPath[250];
 
@@ -197,10 +197,10 @@ string GetFilePath(void) {
 	//printf("ret:%d\n", ret);
 	//printf("path:%s\n", szPath);
 
-	string ReplaceChar(string info, string replaceword, string nword);
-	string DATA = ReplaceChar(szPath, "\\", "/");
+	std::string ReplaceChar(std::string info, std::string replaceword, std::string nword);
+	std::string DATA = ReplaceChar(szPath, "\\", "/");
 
-	string tempdata, outdata;
+	std::string tempdata, outdata;
 	int numbuffer = DATA.size();
 	int baseNum = -1;
 
@@ -218,7 +218,7 @@ string GetFilePath(void) {
 	return outdata;
 }
 
-string GetFileName(void) {
+std::string GetFileName(void) {
 	char szBuf[250];
 	char szPath[250];
 
@@ -232,8 +232,8 @@ string GetFileName(void) {
 	//printf("ret:%d\n", ret);
 	//printf("path:%s\n", szPath);
 
-	string ReplaceChar(string info, string replaceword, string nword);
-	string DATA = ReplaceChar(szPath, "\\", "/");
+	std::string ReplaceChar(std::string info, std::string replaceword, std::string nword);
+	std::string DATA = ReplaceChar(szPath, "\\", "/");
 
 
 	return DATA;
@@ -284,7 +284,7 @@ bool removeDirectoryAPIX(const char* path) {
 	return rdapi;
 }
 
-bool CopyFile(string FileName, string CopyPath, int antiformatunsupport) {
+bool CopyFile(std::string FileName, std::string CopyPath, int antiformatunsupport) {
 	//打开文件
 	int fdStr = open(FileName.c_str(), O_RDONLY, 0666);  //原始文件
 	if (-1 == fdStr) return false;
@@ -311,11 +311,11 @@ bool CopyFile(string FileName, string CopyPath, int antiformatunsupport) {
 	return true;
 }
 
-string Process_cache;
-void _fileapi_write(string _fa_file, string _fa_info);
-string p1_filepath = GetFilePath();
-void CreateFileMap_txt(string savefile, string path_str) {
-	const char* path = StringToCharX(path_str);
+std::string Process_cache;
+void _fileapi_write(std::string _fa_file, std::string _fa_info);
+std::string p1_filepath = GetFilePath();
+void CreateFileMap_txt(std::string savefile, std::string path_str) {
+	const char* path = stringToCharX(path_str);
 	DIR* dir;
 	struct dirent* dirinfo;
 	struct stat statbuf;
@@ -344,8 +344,8 @@ void CreateFileMap_txt(string savefile, string path_str) {
 	}
 	return;
 }
-void CreateDirMap_txt(string savefile, string path_str) {
-	const char* path = StringToCharX(path_str);
+void CreateDirMap_txt(std::string savefile, std::string path_str) {
+	const char* path = stringToCharX(path_str);
 	DIR* dir;
 	struct dirent* dirinfo;
 	struct stat statbuf;
@@ -377,7 +377,7 @@ void CreateDirMap_txt(string savefile, string path_str) {
 }
 
 char* envbuffer;
-string _SystemAPI_getenv(string Environment) {
+std::string _SystemAPI_getenv(std::string Environment) {
 	envbuffer = getenv(Environment.c_str());
 	if (envbuffer == NULL) {
 		return "Null.SystemAPI.getenv --> NullEnv";
@@ -385,7 +385,7 @@ string _SystemAPI_getenv(string Environment) {
 	return envbuffer;
 }
 
-bool _Execute_Admin(string File, string Args) {
+bool _Execute_Admin(std::string File, std::string Args) {
 	Process_cache = "sudo " + File + " " + Args;
 	return system(Process_cache.c_str());
 }

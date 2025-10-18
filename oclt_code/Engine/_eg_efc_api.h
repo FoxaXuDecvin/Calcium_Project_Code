@@ -10,10 +10,10 @@
 // Use File monitor
 //Based on SipCfg(_eg_sipcfg.h)
 
-string efc_ver = "r10.1.1.1";
+std::string efc_ver = "r10.1.1.1";
 
 //initialize efc
-bool _efc_prep(string Create_EFC_File,string socketid) {
+bool _efc_prep(std::string Create_EFC_File,std::string socketid) {
 	efc_Monitor = Create_EFC_File;
 
 	if (check_file_existenceA(efc_Monitor)) {
@@ -37,7 +37,7 @@ bool _efc_prep(string Create_EFC_File,string socketid) {
 	return true;
 }
 
-bool _efc_create_port(string portid) {
+bool _efc_create_port(std::string portid) {
 	if (!check_file_existenceA(efc_Monitor)) {
 		_sh_throw_error("efcapi_error_port.not.initialize");
 		return false;
@@ -57,7 +57,7 @@ bool _efc_create_port(string portid) {
 
 //Status ID
 //Default :   ready
-bool _efc_setstatus_port(string portid, string status) {
+bool _efc_setstatus_port(std::string portid, std::string status) {
 	if (!check_file_existenceA(efc_Monitor)) {
 		_sh_throw_error("efcapi_error_port.not.initialize");
 		return false;
@@ -73,7 +73,7 @@ bool _efc_setstatus_port(string portid, string status) {
 	return true;
 }
 
-string _efc_getstatus_port(string portid) {
+std::string _efc_getstatus_port(std::string portid) {
 	if (!check_file_existenceA(efc_Monitor)) {
 		_sh_throw_error("efcapi_error_port.not.initialize");
 		return "_efc_error";

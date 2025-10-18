@@ -14,46 +14,46 @@ int CL_FMV_ID = 2501; // Calcium Lang Format Version
 
 /// <VERSION>
 //releaseVerKnd
-const string _KV_rV_Debug = "1";
-const string _KV_rV_Preview = "2";
-const string _KV_rV_preRelease = "3";
-const string _KV_rV_Demo = "4";
-const string _KV_rV_Release = "5";
-const string _KV_rV_Stable = "6";
+const std::string _KV_rV_Debug = "1";
+const std::string _KV_rV_Preview = "2";
+const std::string _KV_rV_preRelease = "3";
+const std::string _KV_rV_Demo = "4";
+const std::string _KV_rV_Release = "5";
+const std::string _KV_rV_Stable = "6";
 
 //Other Version
-const string _KV_rV_Custom = "7";
-const string _KV_rV_Embed = "8";
-const string _KV_rV_Deluxe = "9";
+const std::string _KV_rV_Custom = "7";
+const std::string _KV_rV_Embed = "8";
+const std::string _KV_rV_Deluxe = "9";
 
 //Main Char
-string _kv_text_debug = "Debug";
-string _kv_text_preview = "Preview";
-string _kv_text_prerelease = "Prerelease";
-string _kv_text_demo = "Demo";
-string _kv_text_release = "Release";
-string _kv_text_stable = "stable";
+std::string _kv_text_debug = "Debug";
+std::string _kv_text_preview = "Preview";
+std::string _kv_text_prerelease = "Prerelease";
+std::string _kv_text_demo = "Demo";
+std::string _kv_text_release = "Release";
+std::string _kv_text_stable = "stable";
 
 //OV
-string _kv_text_custom = "Custom";
-string _kv_text_embed = "Embed";
-string _kv_text_deluxe = "Deluxe";
+std::string _kv_text_custom = "Custom";
+std::string _kv_text_embed = "Embed";
+std::string _kv_text_deluxe = "Deluxe";
 //rVK END
 
 //RunIDs
-string _CK_Runid = _get_random_s(100000, 999999);
+std::string _CK_Runid = _get_random_s(100000, 999999);
 
-string _KV_softwareVersion = "117"; //(Software Version)
+std::string _KV_softwareVersion = "117"; //(Software Version)
 
-string _KV_gen = "5";//(General)
+std::string _KV_gen = "5";//(General)
 
-string _KV_rv = "6";//(Release Version)
+std::string _KV_rv = "6";//(Release Version)
 
-string _KV_releaseVer = _KV_rV_Stable;//(Debug/Preview/preRelease/demo/Release  1 - 4)
+std::string _KV_releaseVer = _KV_rV_Stable;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
-string _mk = ".";
+std::string _mk = ".";
 
-string _KernelVersion = _KV_softwareVersion + _mk + _KV_gen + _mk + _KV_rv + _mk + _KV_releaseVer;
+std::string _KernelVersion = _KV_softwareVersion + _mk + _KV_gen + _mk + _KV_rv + _mk + _KV_releaseVer;
 
 //DEFINE
 /// </VERSION>
@@ -62,8 +62,8 @@ string _KernelVersion = _KV_softwareVersion + _mk + _KV_gen + _mk + _KV_rv + _mk
 void _KernelVersion_LoadText(void);
 //Define
 
-const string _rc_false = "false";
-const string _rc_true = "true";
+const std::string _rc_false = "false";
+const std::string _rc_true = "true";
 
 //carrige return,
 const int _hex_cr = 00001101; // HEX 0D
@@ -72,9 +72,9 @@ const int _hex_cr = 00001101; // HEX 0D
 const int _hex_nl = 00001010; // HEX 0A
 
 //Build / Release / Prerelease   -  Release ID 
-const string _RCapi_Version = "REV_DISUSE";
-string buildshell = "/calcium_settings.cfg";
-string _shellTitle = "Calcium Kernel  " + _KernelVersion + "   Shell Console>";
+const std::string _RCapi_Version = "REV_DISUSE";
+std::string buildshell = "/calcium_settings.cfg";
+std::string _shellTitle = "Calcium Kernel  " + _KernelVersion + "   Shell Console>";
 
 bool _isAdminOK_ = false;
 
@@ -100,16 +100,16 @@ bool _rcset_useAdmin;
 
 bool _rcset_crash_reload;
 
-string _rcbind_pluginscript, _rcbind_pluginpath,_rcbind_thirdbind,_rcbind_autorun,_rcbind_autorunargs;
+std::string _rcbind_pluginscript, _rcbind_pluginpath,_rcbind_thirdbind,_rcbind_autorun,_rcbind_autorunargs;
 
-string _rcbind_langpath;
-string _rcset_lang;
-string _rcset_seclang;
-string _rcbind_serverapi;
-string _rc_activate_key;
-string _rc_exec_address;
-string _pagefile_savedir;
-string _OriginWorkDir;
+std::string _rcbind_langpath;
+std::string _rcset_lang;
+std::string _rcset_seclang;
+std::string _rcbind_serverapi;
+std::string _rc_activate_key;
+std::string _rc_exec_address;
+std::string _pagefile_savedir;
+std::string _OriginWorkDir;
 int _exec_runtimesleep = 1;
 
 bool _VarSpace_Random_BreakTest = false;
@@ -120,7 +120,7 @@ bool New_thread_auto_join = false;
 bool Thread_Env = false;
 std::thread AddNewScript;
 
-void _pv(string info) {
+void _pv(std::string info) {
 	_p(_Old_VSAPI_TransVar(info));
 	return;
 }
@@ -130,8 +130,8 @@ void _RcApi_vp_load(void) {
 	_varspaceadd("{VersionID}", _KernelVersion);
 }
 
-string _RcApi_TapiBuffer;
-bool _RcLoad_TransApi(string _Rc_ID) {
+std::string _RcApi_TapiBuffer;
+bool _RcLoad_TransApi(std::string _Rc_ID) {
 	_RcApi_TapiBuffer = _load_sipcfg_noreturn(buildshell, _Rc_ID);
 	//_p("tapi Buffer :  " + _Rc_ID + "  " + _RcApi_TapiBuffer);
 	if (_RcApi_TapiBuffer == _rc_true) {
@@ -150,8 +150,8 @@ bool _RcLoad_TransApi(string _Rc_ID) {
 	return false;
 }
 
-string url_cache;
-bool _api_request_download(string Address,string Save) {
+std::string url_cache;
+bool _api_request_download(std::string Address,std::string Save) {
 	url_cache = _rcbind_serverapi + "/" + Address;
 	_p("api server :  " + _rcbind_serverapi);
 	_p("request some files...   please wait");
@@ -163,7 +163,7 @@ bool _api_request_download(string Address,string Save) {
 	return true;
 }
 
-bool _api_request_clear(string Address, string Save) {
+bool _api_request_clear(std::string Address, std::string Save) {
 	url_cache = _rcbind_serverapi + "/" + Address;
 	if (!_urldown_api_nocache(url_cache, Save)) {
 		return false;
@@ -171,7 +171,7 @@ bool _api_request_clear(string Address, string Save) {
 	return true;
 }
 
-bool _api_request_clear_cache(string Address, string Save) {
+bool _api_request_clear_cache(std::string Address, std::string Save) {
 	url_cache = _rcbind_serverapi + "/" + Address;
 	if (!_urldown_api(url_cache, Save)) {
 		return false;
@@ -180,7 +180,7 @@ bool _api_request_clear_cache(string Address, string Save) {
 }
 
 
-string file;
+std::string file;
 bool _direct_read_script = false;
 int _gf_line_maxallow = 32768;
 bool _RcApiLoadConfig() {
@@ -272,7 +272,7 @@ bool _RcApiLoadConfig() {
 	_rcset_aosr = _RcLoad_TransApi("AutoOpenShellAfterRun");
 	_rcset_useAdmin = _RcLoad_TransApi("UseSuperUser");
 
-	//String
+	//std::string
 	_rcbind_autorun = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "AutoRun"));
 	_rcbind_autorunargs = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "AutoRunArgs"));
 	_rcbind_pluginpath = _Old_VSAPI_TransVar(_load_sipcfg_noreturn(file, "DefaultPluginPath"));
@@ -308,8 +308,8 @@ bool _RcApiLoadConfig() {
 }
 
 
-string fitback,fitbuffer;
-string _Char_Filter_EndFileName(string fitchar) {
+std::string fitback,fitbuffer;
+std::string _Char_Filter_EndFileName(std::string fitchar) {
 	fitchar = ReplaceChar(fitchar, "\\", "/");
 	fitback = "";
 
@@ -328,17 +328,17 @@ string _Char_Filter_EndFileName(string fitchar) {
 }
 
 
-string cachecstp;
-string filiter_mfh;
-string cache_filepath;
-string getfile;
-string verifyGet;
-string _cstp_file_write = "a.cstp";
+std::string cachecstp;
+std::string filiter_mfh;
+std::string cache_filepath;
+std::string getfile;
+std::string verifyGet;
+std::string _cstp_file_write = "a.cstp";
 int readptr = 1;
 bool AntiDoubleCopy = false;
 bool CstpOutput = true;
 
-bool _$cstp_writeapiN(string file) {
+bool _$cstp_writeapiN(std::string file) {
 	if (!check_file_existence(file)) {
 		if (CstpOutput)_pv("Cstp _$lang.loadfail :  _$lang.filenotfound");
 		return false;
@@ -349,7 +349,7 @@ bool _$cstp_writeapiN(string file) {
 	for (int readptr = 1; true; readptr++) {
 		cachecstp = LineReader(file, readptr);
 		if (cachecstp == "overline") {
-			if(CstpOutput)_p("End LoadScript. Total :  " + to_string(readptr));
+			if(CstpOutput)_p("End LoadScript. Total :  " + std::to_string(readptr));
 			break;
 		}
 		if (cachecstp == "ReadFailed") {
@@ -360,7 +360,7 @@ bool _$cstp_writeapiN(string file) {
 	_soildwrite_write("$CSTP_FILE_RECORD_MARK_ID_END(" + cache_filepath + ");");
 	return true;
 }
-bool _cstp_makerN(string make_file_header,string file) {
+bool _cstp_makerN(std::string make_file_header,std::string file) {
 	CreateFileMap_txt("makedirmap.txt", make_file_header);
 	_cstp_file_write = file;
 	filiter_mfh = make_file_header;
@@ -398,11 +398,11 @@ bool _cstp_makerN(string make_file_header,string file) {
 	_fileapi_del("empty.txt");
 	return true;
 }
-bool _$cstp_unpackapiN(string file,string resourcefile,int startline,string extract_dir) {
+bool _$cstp_unpackapiN(std::string file,std::string resourcefile,int startline,std::string extract_dir) {
 
 	_dapi_create_full_path(extract_dir + "/" + file);
 	readptr++;
-	if (CstpOutput)cout << "\r                                                             \r Extract File :  " + file;
+	if (CstpOutput)std::cout << "\r                                                             \r Extract File :  " + file;
 	if (check_file_existence(extract_dir + "/" + file)) {
 		_fileapi_del(extract_dir + "/" + file);
 	}
@@ -435,7 +435,7 @@ bool _$cstp_unpackapiN(string file,string resourcefile,int startline,string extr
 
 	return false;
 }
-bool _cstp_unpackN(string unpack_path, string file) {
+bool _cstp_unpackN(std::string unpack_path, std::string file) {
 	if (CstpOutput)_p("Extract Package " + file);
 	if (!check_file_existence(file)) {
 		if (CstpOutput)_pv("Cstp Unpack failed :   _$lang.filenotfound " + file);
@@ -463,7 +463,7 @@ bool _cstp_unpackN(string unpack_path, string file) {
 
 
 //Legacy CSTP
-bool _Legacy_$cstp_writeapi(string file) {
+bool _Legacy_$cstp_writeapi(std::string file) {
 	if (!check_file_existence(file)) {
 		_pv("Cstp _$lang.loadfail :  _$lang.filenotfound");
 		return false;
@@ -474,7 +474,7 @@ bool _Legacy_$cstp_writeapi(string file) {
 	for (int readptr = 1; true; readptr++) {
 		cachecstp = LineReader(file, readptr);
 		if (cachecstp == "overline") {
-			_p("End LoadScript. Total :  " + to_string(readptr));
+			_p("End LoadScript. Total :  " + std::to_string(readptr));
 			break;
 		}
 		if (cachecstp == "ReadFailed") {
@@ -485,7 +485,7 @@ bool _Legacy_$cstp_writeapi(string file) {
 	_soildwrite_write("$sign_file_close;");
 	return true;
 }
-bool _Legacy_cstp_maker(string make_file_header, string file) {
+bool _Legacy_cstp_maker(std::string make_file_header, std::string file) {
 	CreateFileMap_txt("makedirmap.txt", make_file_header);
 	_cstp_file_write = file;
 	filiter_mfh = make_file_header;
@@ -523,10 +523,10 @@ bool _Legacy_cstp_maker(string make_file_header, string file) {
 	_fileapi_del("empty.txt");
 	return true;
 }
-bool _Legacy_$cstp_unpackapi(string file, string resourcefile, int startline, string extract_dir) {
+bool _Legacy_$cstp_unpackapi(std::string file, std::string resourcefile, int startline, std::string extract_dir) {
 	_dapi_create_full_path(extract_dir + "/" + file);
 	readptr++;
-	if (CstpOutput)cout << "\r                                                             \r Extract File :  " + file;
+	if (CstpOutput)std::cout << "\r                                                             \r Extract File :  " + file;
 	if (check_file_existence(extract_dir + "/" + file)) {
 		_fileapi_del(extract_dir + "/" + file);
 	}
@@ -556,7 +556,7 @@ bool _Legacy_$cstp_unpackapi(string file, string resourcefile, int startline, st
 
 	return false;
 }
-bool _Legacy_cstp_unpack(string unpack_path, string file) {
+bool _Legacy_cstp_unpack(std::string unpack_path, std::string file) {
 	if (CstpOutput)_p("Extract Package " + file);
 	if (!check_file_existence(file)) {
 		_pv("Cstp Unpack failed :   _$lang.filenotfound " + file);
@@ -582,8 +582,8 @@ bool _Legacy_cstp_unpack(string unpack_path, string file) {
 	return true;
 }
 
-string dircache;
-bool _packsetup(string packid) {
+std::string dircache;
+bool _packsetup(std::string packid) {
 	dircache = _$GetSelfPath + "/Setup_" + _get_random_s(1,10000);
 	if (!_api_request_download(packid,dircache)) {
 		if (!_api_request_clear_cache(packid, dircache)) {
@@ -604,11 +604,11 @@ int tbd_year;
 int tbd_month;
 int tbd_day;
 bool _TBD_WARNING;
-string TBD_STR;
-string TBD_cache;
-bool _Time_Bomb_Detect(string CurrentRV) {
-	TBD_STR = to_string(tbd_year) + "/" + to_string(tbd_month) + "/" + to_string(tbd_day);
-	TBD_cache = __GetCurrentTimeAPI(__Time_Year, false) + "/" + to_string(_GetCurrentTimeAPI(__Time_Month, false)) + "/" + to_string(_GetCurrentTimeAPI(__Time_Day, false));
+std::string TBD_STR;
+std::string TBD_cache;
+bool _Time_Bomb_Detect(std::string CurrentRV) {
+	TBD_STR = std::to_string(tbd_year) + "/" + std::to_string(tbd_month) + "/" + std::to_string(tbd_day);
+	TBD_cache = __GetCurrentTimeAPI(__Time_Year, false) + "/" + std::to_string(_GetCurrentTimeAPI(__Time_Month, false)) + "/" + std::to_string(_GetCurrentTimeAPI(__Time_Day, false));
 
 	_TBD_WARNING = false;
 	if (atoi(CurrentRV.c_str()) > 4) {
@@ -647,10 +647,10 @@ bool _Time_Bomb_Detect(string CurrentRV) {
 	return false;
 }
 
-string activate_id;
-string at_cache;
+std::string activate_id;
+std::string at_cache;
 bool _TrustedServer;
-bool _activate_calcium(string Key_Register) {
+bool _activate_calcium(std::string Key_Register) {
 	if (_rcset_trustcheck == true) {
 		if (!_urldown_api_nocache("http://githubimage.foxaxu.com/TrustedServer.txt", "TrustedList.txt")) {
 			_TrustedServer = false;
@@ -712,7 +712,7 @@ bool _activate_calcium(string Key_Register) {
 	return false;
 }
 
-bool _activate_request(string key_reg) {
+bool _activate_request(std::string key_reg) {
 	_kernel_activate = _activate_calcium(key_reg);
 	if (_kernel_activate == true) {
 		if (key_reg != "{Nokey}") {
@@ -723,7 +723,7 @@ bool _activate_request(string key_reg) {
 	return _kernel_activate;
 }
 
-void _var_typetext(string file) {
+void _var_typetext(std::string file) {
 	if (_existfile(file)) {
 		int maxdocsize = getdocmax(file);
 
@@ -740,14 +740,14 @@ void _var_typetext(string file) {
 	}
 }
 
-void _Create_Analysis_File(string savefile) {
+void _Create_Analysis_File(std::string savefile) {
 	_soildwrite_open(savefile);
 	_soildwrite_write("::Calcium Analysis File");
 	_soildwrite_write("::Copyright FoxaXu " + $year_message);
 	_soildwrite_write("::Kernel Message");
 	_soildwrite_write("-Execute File Path :   " + _$GetSelfFull);
 	_soildwrite_write("-System :  " + _Run_SysKernel);
-	_soildwrite_write("-Calcium Activate Status :  " + to_string(_kernel_activate));
+	_soildwrite_write("-Calcium Activate Status :  " + std::to_string(_kernel_activate));
 	_soildwrite_write("-Language :  " + _rcset_lang + "    Second Language :  " + _rcset_seclang);
 	_soildwrite_write("-Version :  " + _KernelVersion);
 	_soildwrite_write("-Created Time :  " + __GetFullTime());
@@ -771,13 +771,13 @@ void _Create_Analysis_File(string savefile) {
 	_soildwrite_write("----End varspace ----");
 	_soildwrite_write("");
 	_soildwrite_write("----Execute Address----");
-	_soildwrite_write("Script File :  " + _global_scriptload + " Line :  " + to_string(_gf_line) + "  breakpoint :  " + to_string(_gf_cg));
+	_soildwrite_write("Script File :  " + _global_scriptload + " Line :  " + std::to_string(_gf_line) + "  breakpoint :  " + std::to_string(_gf_cg));
 	_soildwrite_write("---- End address----");
 	_soildwrite_write("");
 }
 
 int ExecCache;
-string _PluginExecuteAPI(string execplugin,string script,int address) {
+std::string _PluginExecuteAPI(std::string execplugin,std::string script,int address) {
 	if (!check_file_existenceA(execplugin)) {
 		execplugin = _rcbind_pluginpath + "/" + execplugin;
 			if (!check_file_existenceA(execplugin)) {
@@ -787,7 +787,7 @@ string _PluginExecuteAPI(string execplugin,string script,int address) {
 			}
 	}
 
-	ExecCache = _system_autoRun(execplugin, _$quo + script + _$quo + " " + to_string(address));
+	ExecCache = _system_autoRun(execplugin, _$quo + script + _$quo + " " + std::to_string(address));
 
 
 }
@@ -795,8 +795,8 @@ string _PluginExecuteAPI(string execplugin,string script,int address) {
 //New Goto API
 // -4 NotFound
 int fal_cache,cd_cache;
-string fal_buffer;
-int _FindAllLine(int startline, int skipline, string file, string charData) {
+std::string fal_buffer;
+int _FindAllLine(int startline, int skipline, std::string file, std::string charData) {
 	cd_cache = charData.size();
 	fal_cache = FindCharLineA(startline, skipline, file, charData);
 	if (fal_cache == -4) return -4;
@@ -818,8 +818,8 @@ int _FindAllLine(int startline, int skipline, string file, string charData) {
 }
 
 int FC_A, FC_B, CP_POINT;
-string CP_CACHE_A, CP_CACHE_B;
-bool FileCompare_(string fileA, string fileB) {
+std::string CP_CACHE_A, CP_CACHE_B;
+bool FileCompare_(std::string fileA, std::string fileB) {
 
 	if (!check_file_existence(fileA))return false;
 	if (!check_file_existence(fileB))return false;
@@ -868,7 +868,7 @@ bool FileCompare_(string fileA, string fileB) {
 	//P2
 }
 
-string CharFilter_(string msg) {
+std::string CharFilter_(std::string msg) {
 	msg = ReplaceChar(msg, "\\r", "\r");
 
 	msg = ReplaceChar(msg, "\\t", "\t");
@@ -900,7 +900,7 @@ int FileWriteSpeedTest() {
 	SWTTStop = false;
 	TotalWrtSize = 1;
 	_fileapi_write(_$GetSelfPath + "/bmwf.tmp","Start BenchMark");
-	thread SpeedWrite(SpeedWriteTestThread);
+	std::thread SpeedWrite(SpeedWriteTestThread);
 	SpeedWrite.detach();
 	sleepapi_ms(3000);
 	SWTTStop = true;
@@ -939,7 +939,7 @@ int FileCmdProcessSpeedTest() {
 	CMDPROCStop = false;
 	TotalProcSize = 0;
 
-	thread ProcessCmd(FileCmdProcThread);
+	std::thread ProcessCmd(FileCmdProcThread);
 	ProcessCmd.detach();
 	sleepapi_ms(3000);
 	CMDPROCStop = true;
@@ -966,7 +966,7 @@ int MAX_TPC, MAX_TPD;
 bool ProcessReqStop = false;
 bool is_TPC_already_Running = false;
 bool TPC_all_exit = true;
-string PerfCNT_ID,PerfCNT_File,Address_TrackFile,Error_TrackFile;
+std::string PerfCNT_ID,PerfCNT_File,Address_TrackFile,Error_TrackFile;
 int Thread_PerfCurrentGet() {
 	//StartLE
 
@@ -1006,13 +1006,13 @@ int Thread_PerfCurrentGet() {
 
 		_fileapi_del(PerfCNT_File);
 		_fileapi_write(PerfCNT_File, "Calcium Performance Record Tool");
-		_fileapi_write(PerfCNT_File, "Current Command Speed :   " + to_string(LastCache_TPC) + " / Every second     MaxSpeed:  " + to_string(MAX_TPC));
-		_fileapi_write(PerfCNT_File, "Total Execute Command :    " + to_string(TotalCommandExec_TPC));
+		_fileapi_write(PerfCNT_File, "Current Command Speed :   " + std::to_string(LastCache_TPC) + " / Every second     MaxSpeed:  " + std::to_string(MAX_TPC));
+		_fileapi_write(PerfCNT_File, "Total Execute Command :    " + std::to_string(TotalCommandExec_TPC));
 		_fileapi_write(PerfCNT_File, " ");
-		_fileapi_write(PerfCNT_File, "Disk IO :   " + to_string(LastCache_TPD) + " / Every second     MaxSpeed:  " + to_string(MAX_TPD));
-		_fileapi_write(PerfCNT_File, "Total Disk CR :    " + to_string(TotalCE_TPD));
+		_fileapi_write(PerfCNT_File, "Disk IO :   " + std::to_string(LastCache_TPD) + " / Every second     MaxSpeed:  " + std::to_string(MAX_TPD));
+		_fileapi_write(PerfCNT_File, "Total Disk CR :    " + std::to_string(TotalCE_TPD));
 		_fileapi_write(PerfCNT_File, " ");
-		_fileapi_write(PerfCNT_File, "Processing address.  File :  " + _global_scriptload + " Line :  " + to_string(_gf_line) + "  breakpoint :  " + to_string(_gf_cg));
+		_fileapi_write(PerfCNT_File, "Processing address.  File :  " + _global_scriptload + " Line :  " + std::to_string(_gf_line) + "  breakpoint :  " + std::to_string(_gf_cg));
 		if (ProcessReqStop == true) break;
 		
 		continue;

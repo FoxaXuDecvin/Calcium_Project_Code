@@ -48,18 +48,18 @@ void _KernelVersion_LoadText(void) {
 }
 
 //Define-Head
-string _runcode_api(string command);
-string PartReadA(string Info, string StartMark, string EndMark, int RPartSizeA);
+std::string _runcode_api(std::string command);
+std::string PartReadA(std::string Info, std::string StartMark, std::string EndMark, int RPartSizeA);
 
 //HeadSpaceClean .  Default = true
 bool _gf_hsc = true;
 void _gfL_reset(void);
 //GetFULL API
 bool _gf_status;
-string _gf_FLMark = ";";
-string _gf_charget;
-string _gf_makebuffer,_gf_getbuffer;
-string _get_fullLine(string load_script, string EndMark) {
+std::string _gf_FLMark = ";";
+std::string _gf_charget;
+std::string _gf_makebuffer,_gf_getbuffer;
+std::string _get_fullLine(std::string load_script, std::string EndMark) {
 	_gf_FLMark = EndMark;
 	if (!check_file_existence(load_script)) {
 		return "badfound";
@@ -71,7 +71,7 @@ string _get_fullLine(string load_script, string EndMark) {
 	for (; true; _gf_line++) {
 		//Reset Char
 		for (; true; _gf_cg++) {
-			//_p("Road Fresh    Line :   " + to_string(_gf_line));
+			//_p("Road Fresh    Line :   " + std::to_string(_gf_line));
 			//Textread
 			_gf_getbuffer = _fileapi_textread(load_script, _gf_line);
 			//Check Status Code
@@ -109,7 +109,7 @@ string _get_fullLine(string load_script, string EndMark) {
 
 			//GetProcess
 			_gf_cgmax = _gf_getbuffer.size();
-			//_p("   cg :   " + to_string(_gf_cg) + " cgmax :  " + to_string(_gf_cgmax));
+			//_p("   cg :   " + std::to_string(_gf_cg) + " cgmax :  " + std::to_string(_gf_cgmax));
 
 			//OpenProcess
 			while (true) {
@@ -128,7 +128,7 @@ string _get_fullLine(string load_script, string EndMark) {
 					return "Over Size";
 				}
 
-				//_p("line :  " + to_string(_gf_line) + "   cg :   " + to_string(_gf_cg) + " cgmax :  " + to_string(_gf_cgmax) + "   charMake = " + _gf_makebuffer);
+				//_p("line :  " + std::to_string(_gf_line) + "   cg :   " + std::to_string(_gf_cg) + " cgmax :  " + std::to_string(_gf_cgmax) + "   charMake = " + _gf_makebuffer);
 
 				_gf_charget = _gf_getbuffer[_gf_cg];
 				if (_gf_charget == "\\") {
@@ -158,7 +158,7 @@ string _get_fullLine(string load_script, string EndMark) {
 //END GETFULL API
 
 //Direct read
-string _get_direct_read(string load_script) {;
+std::string _get_direct_read(std::string load_script) {;
 	if (!check_file_existence(load_script)) {
 		return "badfound";
 	}
@@ -170,7 +170,7 @@ string _get_direct_read(string load_script) {;
 	while (true) {
 		//_p("D START");
 		_gf_getbuffer = LineReader(load_script, _gf_line);
-		//_p("DATA :   " + _gf_getbuffer + "    " + to_string(_gf_line));
+		//_p("DATA :   " + _gf_getbuffer + "    " + std::to_string(_gf_line));
 
 		if (_gf_line > _gf_line_maxallow) {
 			_gf_status = false;
@@ -217,13 +217,13 @@ string _get_direct_read(string load_script) {;
 
 //Main Script Load
 bool _CK_ShellMode = false;
-string _cmd_marks = "_";
-string cmdbuffer;
-string _api_result;
+std::string _cmd_marks = "_";
+std::string cmdbuffer;
+std::string _api_result;
 bool _stop_exec_script = false;
-string _ckapi_scriptload(string load_Script,string Sargs) {
+std::string _ckapi_scriptload(std::string load_Script,std::string Sargs) {
 	//_p("Load Main Kernel");
-	ifstream _SessionLock;
+	std::ifstream _SessionLock;
 	_SessionLock.open(load_Script);
 	if (!_language_mode) {
 		if (!_kernel_activate) {
@@ -253,18 +253,18 @@ string _ckapi_scriptload(string load_Script,string Sargs) {
 		//_p("Speed check point 6");
 		if (_direct_read_script == false) {
 			if (is_TPC_already_Running == true) {
-				_fileapi_write(Address_TrackFile, "Method :  Full Line Read.  File :  " + _global_scriptload + " Line :  " + to_string(_gf_line) + "  breakpoint :  " + to_string(_gf_cg));
+				_fileapi_write(Address_TrackFile, "Method :  Full Line Read.  File :  " + _global_scriptload + " Line :  " + std::to_string(_gf_line) + "  breakpoint :  " + std::to_string(_gf_cg));
 			}
 			cmdbuffer = _get_fullLine(load_Script, ";");
 		}
 		else {
 			if (is_TPC_already_Running == true) {
-				_fileapi_write(Address_TrackFile, "Method :  Direct Read.  File :  " + _global_scriptload + " Line :  " + to_string(_gf_line - 1) + "  breakpoint :  " + to_string(_gf_cg));
+				_fileapi_write(Address_TrackFile, "Method :  Direct Read.  File :  " + _global_scriptload + " Line :  " + std::to_string(_gf_line - 1) + "  breakpoint :  " + std::to_string(_gf_cg));
 			}
 			cmdbuffer = _get_direct_read(load_Script);
 		}
 		if (_gf_status == false) {
-			_pv("_$lang.stoprun.  Return status code :  " + cmdbuffer + "  . Args :  " + _global_scriptload + "   Line :  " + to_string(_gf_line) + " + " + to_string(_gf_cg));
+			_pv("_$lang.stoprun.  Return status code :  " + cmdbuffer + "  . Args :  " + _global_scriptload + "   Line :  " + std::to_string(_gf_line) + " + " + std::to_string(_gf_cg));
 			return "ok";
 		}
 		
@@ -316,7 +316,7 @@ string _ckapi_scriptload(string load_Script,string Sargs) {
 }
 
 int thread_debug_status;
-int _Thread_CreateScript(string File,string argument_s) {
+int _Thread_CreateScript(std::string File,std::string argument_s) {
 	thread_debug_status = _system_autoRun(_$GetSelfFull, _$GetSelfFull + "  -run \"" + File + "\" -args \"" + argument_s + "\" -threadmode -anticrash_ok");
 	return thread_debug_status;
 }
@@ -327,9 +327,9 @@ void _gfL_reset(void) {
 	_gf_line = 1;
 	return;
 }
-string langfile;
-string seclangfile;
-string Pre_Script_args;
+std::string langfile;
+std::string seclangfile;
+std::string Pre_Script_args;
 bool _skipcheck_language = false;
 bool LanguageLoad() {
 	langfile = _rcbind_langpath + "/" + _rcset_lang;
@@ -355,10 +355,10 @@ bool LanguageLoad() {
 	return true;
 }
 
-string varbufA;
-string charCutA, charCutB, CharCutC, CharCutD;
-string chartempA, chartempB, chartempC, chartempD;
-string _rc_varid, _rc_varinfo;
+std::string varbufA;
+std::string charCutA, charCutB, CharCutC, CharCutD;
+std::string chartempA, chartempB, chartempC, chartempD;
+std::string _rc_varid, _rc_varinfo;
 int intCutA, intCutB, intCutC;
 int dbA, dbB, dbC, dbD;
 long long LdbA, LdbB, LdbC, LdbD;
@@ -369,30 +369,30 @@ bool _debug_type_detected = false;
 bool _var_auto_void = false;
 bool _shell_lock = false;
 bool _if_reverse = false;
-string lost_memory;
+std::string lost_memory;
 //KernelCommand
 
 int ModifyCount;
 int procesid_ccode;
 char CK_ConvertTemp[1024];
-string _RunSuperMaker,_WorkDIRECTORY_FOLDER;
-string Net_script_nameid;
-int __CreateNewThreads(string Script,string args,string originEnv,string proces_runid) {
-	string CurrentRSM = _RunSuperMaker;
+std::string _RunSuperMaker,_WorkDIRECTORY_FOLDER;
+std::string Net_script_nameid;
+int __CreateNewThreads(std::string Script,std::string args,std::string originEnv,std::string proces_runid) {
+	std::string CurrentRSM = _RunSuperMaker;
 	procesid_ccode = _system_autoRun_A(CurrentRSM, "-run \"" + Script + "\" -args \"" + args + "\" -loadenv \"" + originEnv + "\" -runid \"" + proces_runid + "\" -fastmode",true);
 	_fileapi_del (CurrentRSM);
 	return procesid_ccode;
 }
 
-string _runcode_api(string command) {
+std::string _runcode_api(std::string command) {
 	CommandSpeed_CountNum++;
-	//cout << "Origin Execute Command :   " << command << endl;
+	//std::cout << "Origin Execute Command :   " << command << std::endl;
 	sleepapi_ms(_exec_runtimesleep);
 
 	if (_gf_hsc == true) {
 		command = HeadSpaceCleanA(command);
 	}
-	string oldcmd = command;
+	std::string oldcmd = command;
 	command = _Old_VSAPI_TransVar(command);
 	if (oldcmd == command) {
 		_var_auto_void = false;
@@ -485,7 +485,7 @@ string _runcode_api(string command) {
 		return "ok";
 	}
 	if (SizeRead(command, 5) == "_var ") {
-		string _rc_varbind;
+		std::string _rc_varbind;
 		if (checkChar(command, "=")) {
 			//Detecd illegal char = 
 
@@ -517,7 +517,7 @@ string _runcode_api(string command) {
 
 			_rc_varinfo[ModifyCount] = '?';
 		}
-		//_p("Report ENV  " + to_string(ModifyCount) + " VRB:  " + to_string(VarSpaceRandomError) + "  AllBreak Num  " + to_string(intCutA) + "   B " + to_string(intCutB) + "   C " + to_string(intCutC));
+		//_p("Report ENV  " + std::to_string(ModifyCount) + " VRB:  " + std::to_string(VarSpaceRandomError) + "  AllBreak Num  " + std::to_string(intCutA) + "   B " + std::to_string(intCutB) + "   C " + std::to_string(intCutC));
 		_varspaceadd(_rc_varbind, _rc_varinfo);
 
 		return "ok";
@@ -559,14 +559,14 @@ string _runcode_api(string command) {
 	if (SizeRead(command, 5) == "_exit") {
 		ProcessReqStop = true;
 		while (!TPC_all_exit) {
-			cout << "Waiting TPC Service Exit" << endl;
+			std::cout << "Waiting TPC Service Exit" << std::endl;
 		}
 		return "runid.exit";
 	}
 	if (SizeRead(command, 4) == "exit") {
 		ProcessReqStop = true;
 		while (!TPC_all_exit) {
-			cout << "Waiting TPC Service Exit" << endl;
+			std::cout << "Waiting TPC Service Exit" << std::endl;
 		}
 		return "runid.exit";
 	}
@@ -584,7 +584,7 @@ string _runcode_api(string command) {
 
 		if (check_file_existence(charCutB))_fileapi_del(charCutB);
 
-		_fileapi_write(charCutB, to_string(VarSpaceMax));
+		_fileapi_write(charCutB, std::to_string(VarSpaceMax));
 		_fileapi_write(charCutB, VarSpace);
 
 
@@ -811,7 +811,7 @@ string _runcode_api(string command) {
 		}
 		intCutA = _system_autoRun(_rc_varid, _rc_varinfo);
 
-		return to_string(intCutA);
+		return std::to_string(intCutA);
 	}
 	if (SizeRead(command, 6) == "_goto ") {
 		if (_CK_ShellMode == true) {
@@ -835,7 +835,7 @@ string _runcode_api(string command) {
 		}
 
 		if (_debug_type_detected == true) {
-			_p("Find char mark in " + to_string(intCutA));
+			_p("Find char mark in " + std::to_string(intCutA));
 		}
 
 		intCutA++;
@@ -879,9 +879,9 @@ string _runcode_api(string command) {
 		int _old$_gf_cgmax = _gf_cgmax;
 		int _old$_gf_line = _gf_line;
 		bool _old$_direct_read_script = _direct_read_script;
-		string _old$_args = script_args;
+		std::string _old$_args = script_args;
 		bool _old$_CK_ShellMode = _CK_ShellMode;
-		string _old$_global_scriptload = _global_scriptload;
+		std::string _old$_global_scriptload = _global_scriptload;
 
 		//Create New Space
 
@@ -940,7 +940,7 @@ string _runcode_api(string command) {
 		}
 
 		if (!_urldown_api_nocache(charCutB, Net_script_nameid)) {
-			cout << "[Error] Download URL Script failed .  please check your Internet and try again" << endl;
+			std::cout << "[Error] Download URL Script failed .  please check your Internet and try again" << std::endl;
 			return "false";
 		};
 
@@ -971,9 +971,9 @@ string _runcode_api(string command) {
 		int _old$_gf_cgmax = _gf_cgmax;
 		int _old$_gf_line = _gf_line;
 		bool _old$_direct_read_script = _direct_read_script;
-		string _old$_args = script_args;
+		std::string _old$_args = script_args;
 		bool _old$_CK_ShellMode = _CK_ShellMode;
-		string _old$_global_scriptload = _global_scriptload;
+		std::string _old$_global_scriptload = _global_scriptload;
 
 		//Create New Space
 
@@ -1074,7 +1074,7 @@ string _runcode_api(string command) {
 
 		_fileapi_del(_pagefile_savedir);
 		_dapi_create_full_path(_pagefile_savedir);
-		_fileapi_write(_pagefile_savedir, to_string(VarSpaceMax));
+		_fileapi_write(_pagefile_savedir, std::to_string(VarSpaceMax));
 		_fileapi_write(_pagefile_savedir, VarSpace);
 
 		//Add New Threads
@@ -1090,7 +1090,7 @@ string _runcode_api(string command) {
 		_write_sipcfg(_WorkDIRECTORY_FOLDER + "/calcium_settings.cfg", "ExecuteFile", "voidcheck");
 
 		if (check_file_existence(_RunSuperMaker)) {
-			_p("[CalciumThreadManager] A Exist same name thread is running");
+			_p("[CalciumThreadManager] A Exist same name std::thread is running");
 			_p("[CalciumThreadManager] Failed to Create Threads");
 			return "fail";
 		}
@@ -1103,7 +1103,7 @@ string _runcode_api(string command) {
 			return "fail";
 		}
 
-		thread sec(__CreateNewThreads, charCutB, chartempA, _pagefile_savedir,chartempC);
+		std::thread sec(__CreateNewThreads, charCutB, chartempA, _pagefile_savedir,chartempC);
 		sec.detach();
 		
 		//_p("Wait " + Reg_Process_Map + "  To Callback :  " + chartempC);
@@ -1147,10 +1147,10 @@ string _runcode_api(string command) {
 
 	//PERF
 	if (SizeRead(command, 15) == "_perftest-write") {
-		return to_string(FileWriteSpeedTest());
+		return std::to_string(FileWriteSpeedTest());
 	}
 	if (SizeRead(command, 13) == "_perftest-cmd") {
-		return to_string(FileCmdProcessSpeedTest());
+		return std::to_string(FileCmdProcessSpeedTest());
 	}
 
 	if (SizeRead(command, 7) == "_invoke") {
@@ -1173,9 +1173,9 @@ string _runcode_api(string command) {
 		int _old$_gf_cgmax = _gf_cgmax;
 		int _old$_gf_line = _gf_line;
 		bool _old$_direct_read_script = _direct_read_script;
-		string _old$_args = script_args;
+		std::string _old$_args = script_args;
 		bool _old$_CK_ShellMode = _CK_ShellMode;
-		string _old$_global_scriptload = _global_scriptload;
+		std::string _old$_global_scriptload = _global_scriptload;
 
 		//Create New Space
 
@@ -1279,7 +1279,7 @@ string _runcode_api(string command) {
 		_rc_varinfo = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", ",", ")", 1)));
 
 
-		if (stod(_rc_varid.c_str()) < stod(_rc_varinfo.c_str())) {
+		if (std::stod(_rc_varid.c_str()) < std::stod(_rc_varinfo.c_str())) {
 			return "true";
 		}
 		else {
@@ -1295,7 +1295,7 @@ string _runcode_api(string command) {
 		_rc_varinfo = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", ",", ")", 1)));
 
 
-		if (stod(_rc_varid.c_str()) <= stod(_rc_varinfo.c_str())) {
+		if (std::stod(_rc_varid.c_str()) <= std::stod(_rc_varinfo.c_str())) {
 			return "true";
 		}
 		else {
@@ -1311,7 +1311,7 @@ string _runcode_api(string command) {
 		_rc_varinfo = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", ",", ")", 1)));
 
 
-		if (stod(_rc_varid.c_str()) > stod(_rc_varinfo.c_str())) {
+		if (std::stod(_rc_varid.c_str()) > std::stod(_rc_varinfo.c_str())) {
 			return "true";
 		}
 		else {
@@ -1327,7 +1327,7 @@ string _runcode_api(string command) {
 		_rc_varinfo = _runcode_api((PartReadA("(" + PartReadA(oldcmd, "(", ")", 1) + ")", ",", ")", 1)));
 
 
-		if (stod(_rc_varid.c_str()) >= stod(_rc_varinfo.c_str())) {
+		if (std::stod(_rc_varid.c_str()) >= std::stod(_rc_varinfo.c_str())) {
 			return "true";
 		}
 		else {
@@ -1339,52 +1339,52 @@ string _runcode_api(string command) {
 
 	//IntMath
 	if (SizeRead(command, 2) == "_+") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
 		dbA = atoi(calc_A.c_str());
 		dbB = atoi(calc_B.c_str());
 
 		dbC = dbA + dbB;
 
-		charCutA = to_string(dbC);
+		charCutA = std::to_string(dbC);
 		return charCutA;
 	}
 	if (SizeRead(command, 2) == "_-") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
 		dbA = atoi(calc_A.c_str());
 		dbB = atoi(calc_B.c_str());
 
 		dbC = dbA - dbB;
 
-		charCutA = to_string(dbC);
+		charCutA = std::to_string(dbC);
 		return charCutA;
 	}
 	if (SizeRead(command, 2) == "_*") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
 		dbA = atoi(calc_A.c_str());
 		dbB = atoi(calc_B.c_str());
 
 		dbC = dbA * dbB;
 
-		charCutA = to_string(dbC);
+		charCutA = std::to_string(dbC);
 		return charCutA;
 	}
 	if (SizeRead(command, 2) == "_/") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
 		dbA = atoi(calc_A.c_str());
 		dbB = atoi(calc_B.c_str());
@@ -1396,14 +1396,14 @@ string _runcode_api(string command) {
 
 		dbC = dbA / dbB;
 
-		charCutA = to_string(dbC);
+		charCutA = std::to_string(dbC);
 		return charCutA;
 	}
 	if (SizeRead(command, 2) == "_%") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
 		dbA = atoi(calc_A.c_str());
 		dbB = atoi(calc_B.c_str());
@@ -1415,60 +1415,60 @@ string _runcode_api(string command) {
 
 		dbC = dbA % dbB;
 
-		charCutA = to_string(dbC);
+		charCutA = std::to_string(dbC);
 		return charCutA;
 	}
 
 	if (SizeRead(command, 3) == "_l+") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
-		LdbA = stoll(calc_A);
-		LdbB = stoll(calc_B);
+		LdbA = std::stoll(calc_A);
+		LdbB = std::stoll(calc_B);
 
 		LdbC = LdbA + LdbB;
 
-		charCutA = to_string(LdbC);
+		charCutA = std::to_string(LdbC);
 		return charCutA;
 	}
 	if (SizeRead(command, 3) == "_l-") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
-		LdbA = stoll(calc_A);
-		LdbB = stoll(calc_B);
+		LdbA = std::stoll(calc_A);
+		LdbB = std::stoll(calc_B);
 
 		LdbC = LdbA - LdbB;
 
-		charCutA = to_string(LdbC);
+		charCutA = std::to_string(LdbC);
 		return charCutA;
 	}
 	if (SizeRead(command, 3) == "_l*") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
-		LdbA = stoll(calc_A);
-		LdbB = stoll(calc_B);
+		LdbA = std::stoll(calc_A);
+		LdbB = std::stoll(calc_B);
 
 		LdbC = LdbA * LdbB;
 
-		charCutA = to_string(LdbC);
+		charCutA = std::to_string(LdbC);
 		return charCutA;
 	}
 	if (SizeRead(command, 3) == "_l/") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
-		LdbA = stoll(calc_A);
-		LdbB = stoll(calc_B);
+		LdbA = std::stoll(calc_A);
+		LdbB = std::stoll(calc_B);
 
 		if (LdbB == 0) {
 			_p("Exception::Integer_division_by_zero");
@@ -1477,17 +1477,17 @@ string _runcode_api(string command) {
 
 		LdbC = LdbA / LdbB;
 
-		charCutA = to_string(LdbC);
+		charCutA = std::to_string(LdbC);
 		return charCutA;
 	}
 	if (SizeRead(command, 3) == "_l%") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
-		LdbA = stoll(calc_A);
-		LdbB = stoll(calc_B);
+		LdbA = std::stoll(calc_A);
+		LdbB = std::stoll(calc_B);
 
 		if (LdbB == 0) {
 			_p("Exception::Integer_division_by_zero");
@@ -1496,119 +1496,119 @@ string _runcode_api(string command) {
 
 		LdbC = LdbA % LdbB;
 
-		charCutA = to_string(LdbC);
+		charCutA = std::to_string(LdbC);
 		return charCutA;
 	}
 
 	//Float Compute
 	if (SizeRead(command, 3) == "_f+") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
-		FdbA = stof(calc_A.c_str());
-		FdbB = stof(calc_B.c_str());
+		FdbA = std::stof(calc_A.c_str());
+		FdbB = std::stof(calc_B.c_str());
 
 		FdbC = FdbA + FdbB;
 
-		charCutA = to_string(FdbC);
+		charCutA = std::to_string(FdbC);
 		return charCutA;
 	}
 	if (SizeRead(command, 3) == "_f-") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
-		FdbA = stof(calc_A.c_str());
-		FdbB = stof(calc_B.c_str());
+		FdbA = std::stof(calc_A.c_str());
+		FdbB = std::stof(calc_B.c_str());
 
 		FdbC = FdbA - FdbB;
 
-		charCutA = to_string(FdbC);
+		charCutA = std::to_string(FdbC);
 		return charCutA;
 	}
 	if (SizeRead(command, 3) == "_f*") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
-		FdbA = stof(calc_A.c_str());
-		FdbB = stof(calc_B.c_str());
+		FdbA = std::stof(calc_A.c_str());
+		FdbB = std::stof(calc_B.c_str());
 
 		FdbC = FdbA * FdbB;
 
-		charCutA = to_string(FdbC);
+		charCutA = std::to_string(FdbC);
 		return charCutA;
 	}
 	if (SizeRead(command, 3) == "_f/") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
-		FdbA = stof(calc_A.c_str());
-		FdbB = stof(calc_B.c_str());
+		FdbA = std::stof(calc_A.c_str());
+		FdbB = std::stof(calc_B.c_str());
 
 		FdbC = FdbA / FdbB;
 
-		charCutA = to_string(FdbC);
+		charCutA = std::to_string(FdbC);
 		return charCutA;
 	}
 
 	//Double Compute
 	if (SizeRead(command, 3) == "_d+") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
-		HdbA = stod(calc_A.c_str());
-		HdbB = stod(calc_B.c_str());
+		HdbA = std::stod(calc_A.c_str());
+		HdbB = std::stod(calc_B.c_str());
 
 		HdbC = HdbA + HdbB;
 
-		charCutA = to_string(HdbC);
+		charCutA = std::to_string(HdbC);
 		return charCutA;
 	}
 	if (SizeRead(command, 3) == "_d-") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
-		HdbA = stod(calc_A.c_str());
-		HdbB = stod(calc_B.c_str());
+		HdbA = std::stod(calc_A.c_str());
+		HdbB = std::stod(calc_B.c_str());
 
 		HdbC = HdbA - HdbB;
 
-		charCutA = to_string(HdbC);
+		charCutA = std::to_string(HdbC);
 		return charCutA;
 	}
 	if (SizeRead(command, 3) == "_d*") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
-		HdbA = stod(calc_A.c_str());
-		HdbB = stod(calc_B.c_str());
+		HdbA = std::stod(calc_A.c_str());
+		HdbB = std::stod(calc_B.c_str());
 
 		HdbC = HdbA * HdbB;
 
-		charCutA = to_string(HdbC);
+		charCutA = std::to_string(HdbC);
 		return charCutA;
 	}
 	if (SizeRead(command, 3) == "_d/") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
-		string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
+		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
-		HdbA = stod(calc_A.c_str());
-		HdbB = stod(calc_B.c_str());
+		HdbA = std::stod(calc_A.c_str());
+		HdbB = std::stod(calc_B.c_str());
 
 //		if (HdbB == 0) {
 //			_pv("_$lang.calc.zero");
@@ -1617,21 +1617,21 @@ string _runcode_api(string command) {
 
 		HdbC = HdbA / HdbB;
 
-		charCutA = to_string(HdbC);
+		charCutA = std::to_string(HdbC);
 		return charCutA;
 	}
 
 	//SRQT
 	if (SizeRead(command, 7) == "_d_sqrt") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ")", false)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ")", false)));
 
-		if (stod(calc_A.c_str()) == 0) {
+		if (std::stod(calc_A.c_str()) == 0) {
 			return charCutA;
 		}
 
-		HdbA = stod(calc_A.c_str());
+		HdbA = std::stod(calc_A.c_str());
 
 		//		if (HdbB == 0) {
 		//			_pv("_$lang.calc.zero");
@@ -1640,45 +1640,45 @@ string _runcode_api(string command) {
 
 		HdbB = sqrt(HdbA);
 
-		charCutA = to_string(HdbB);
+		charCutA = std::to_string(HdbB);
 		return charCutA;
 	}
 	if (SizeRead(command, 7) == "_f_sqrt") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ")", false)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ")", false)));
 
-		if (stof(calc_A.c_str()) == 0) {
+		if (std::stof(calc_A.c_str()) == 0) {
 			return charCutA;
 		}
 
-		FdbA = stof(calc_A.c_str());
+		FdbA = std::stof(calc_A.c_str());
 
 		FdbB = sqrt(FdbA);
 
-		charCutA = to_string(FdbB);
+		charCutA = std::to_string(FdbB);
 		return charCutA;
 	}
 	if (SizeRead(command, 7) == "_l_sqrt") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ")", false)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ")", false)));
 
-		if (stoll(calc_A.c_str()) == 0) {
+		if (std::stoll(calc_A.c_str()) == 0) {
 			return charCutA;
 		}
 
-		LdbA = stoll(calc_A);
+		LdbA = std::stoll(calc_A);
 
 		LdbB = sqrt(LdbA);
 
-		charCutA = to_string(LdbB);
+		charCutA = std::to_string(LdbB);
 		return charCutA;
 	}
 	if (SizeRead(command, 7) == "_i_sqrt") {
-		string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
+		std::string tempbase = "(" + PartRead(oldcmd, "(", ")", true) + ")";
 
-		string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ")", false)));
+		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ")", false)));
 
 		if (atoi(calc_A.c_str()) == 0) {
 			return charCutA;
@@ -1688,7 +1688,7 @@ string _runcode_api(string command) {
 
 		dbB = sqrt(dbA);
 
-		charCutA = to_string(dbB);
+		charCutA = std::to_string(dbB);
 		return charCutA;
 	}
 
@@ -1703,43 +1703,43 @@ string _runcode_api(string command) {
 		intCutA = atoi(charCutA.c_str());
 		intCutA = abs(intCutA);
 
-		return to_string(intCutA);
+		return std::to_string(intCutA);
 	}
 	if (SizeRead(command, 6) == "_l_abs") {
 		charCutA = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ")", 1)));
 
-		if (stoll(charCutA.c_str()) == 0) {
+		if (std::stoll(charCutA.c_str()) == 0) {
 			return charCutA;
 		}
 
-		LdbA = stoll(charCutA.c_str());
+		LdbA = std::stoll(charCutA.c_str());
 		LdbA = abs(LdbA);
 
-		return to_string(LdbA);
+		return std::to_string(LdbA);
 	}
 	if (SizeRead(command, 6) == "_f_abs") {
 		charCutA = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ")", 1)));
 
-		if (stof(charCutA.c_str()) == 0) {
+		if (std::stof(charCutA.c_str()) == 0) {
 			return charCutA;
 		}
 
-		FdbA = stof(charCutA.c_str());
+		FdbA = std::stof(charCutA.c_str());
 		FdbA = abs(FdbA);
 
-		return to_string(FdbA);
+		return std::to_string(FdbA);
 	}
 	if (SizeRead(command, 6) == "_d_abs") {
 		charCutA = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ")", 1)));
 
-		if (stod(charCutA.c_str()) == 0) {
+		if (std::stod(charCutA.c_str()) == 0) {
 			return charCutA;
 		}
 
-		HdbA = stod(charCutA.c_str());
+		HdbA = std::stod(charCutA.c_str());
 		HdbA = abs(HdbA);
 
-		return to_string(HdbA);
+		return std::to_string(HdbA);
 	}
 
 	//Get
@@ -1780,7 +1780,7 @@ string _runcode_api(string command) {
 
 		intCutC = _get_random(intCutA, intCutB);
 
-		charCutA = to_string(intCutC);
+		charCutA = std::to_string(intCutC);
 		return charCutA;
 	}
 	if (SizeRead(command, 10) == "_getkernel") {
@@ -1852,7 +1852,7 @@ string _runcode_api(string command) {
 		return "ok";
 	}
 	if (SizeRead(command, 9) == "_fun_test") {
-		string CCFK =  NULL;
+		std::string CCFK =  NULL;
 
 		_prtoutmsg(CCFK);
 
@@ -1874,7 +1874,7 @@ string _runcode_api(string command) {
 			if (VarSpace[ModifyCount] == '=') goto NullREGETRANDOMBRK;
 
 			VarSpace[ModifyCount] = '?';
-			_p("Address : " + to_string(ModifyCount) + " data is break.  Max Data :  " + to_string(intCutB) + "  Request Break :  " + to_string(intCutA) + "  Current :  " + to_string(count_addr));
+			_p("Address : " + std::to_string(ModifyCount) + " data is break.  Max Data :  " + std::to_string(intCutB) + "  Request Break :  " + std::to_string(intCutA) + "  Current :  " + std::to_string(count_addr));
 		}
 		return "ok";
 	}
@@ -1915,7 +1915,7 @@ string _runcode_api(string command) {
 	}
 	if (SizeRead(command, 20) == "_$enable_perf_record") {
 		if (is_TPC_already_Running == true) {
-			cout << "Performance Record Service is already running.  use _$disable_perf_record to stop this service" << endl;
+			std::cout << "Performance Record Service is already running.  use _$disable_perf_record to stop this service" << std::endl;
 			return "ok";
 		}
 
@@ -1923,16 +1923,16 @@ string _runcode_api(string command) {
 		
 		if (PerfCNT_ID == "unknown.command")PerfCNT_ID = "Unnamed_" + _get_random_s(111111,999999);
 
-		thread monitor_pfr(Thread_PerfCurrentGet);
+		std::thread monitor_pfr(Thread_PerfCurrentGet);
 		monitor_pfr.detach();
 
-		cout << "Service Start." <<endl;
+		std::cout << "Service Start." <<std::endl;
 
 		return "ok";
 	}
 	if (SizeRead(command, 21) == "_$disable_perf_record") {
 		ProcessReqStop = true;
-		cout << "Service Stop." << endl;
+		std::cout << "Service Stop." << std::endl;
 		return "ok";
 	}
 
@@ -2011,8 +2011,8 @@ string _runcode_api(string command) {
 		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1)));
 		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));
 		CreateDirMap_txt(_rc_varid, _rc_varinfo);
-		//cout << "Save File :    " << _rc_varid << endl;
-		//cout << "DIRECTORY :   " << _rc_varinfo << endl;
+		//std::cout << "Save File :    " << _rc_varid << std::endl;
+		//std::cout << "DIRECTORY :   " << _rc_varinfo << std::endl;
 		return "true";
 	}
 	if (SizeRead(command, 9) == "_dir_full") {
@@ -2214,13 +2214,13 @@ string _runcode_api(string command) {
 		
 		intCutA = atoi(_rc_varinfo.c_str());
 		intCutB = _rc_varid.size();
-		//cout << "INFO " << intCutA << "MEM2 " << intCutB << endl;
+		//std::cout << "INFO " << intCutA << "MEM2 " << intCutB << std::endl;
 		if (intCutA >= intCutB) {
-			cout << "string fetch out of size" <<endl;
+			std::cout << "std::string fetch out of size" <<std::endl;
 			return "0";
 		}
 		if (intCutA < 0) {
-			cout << "string fetch below of size" << endl;
+			std::cout << "std::string fetch below of size" << std::endl;
 			return "0";
 		}
 
@@ -2415,7 +2415,7 @@ string _runcode_api(string command) {
 			return _Run_SysKernel;
 		}
 		if (charCutA == "clfmv") {
-			return to_string(CL_FMV_ID);
+			return std::to_string(CL_FMV_ID);
 		}
 
 		return "null";
@@ -2424,9 +2424,9 @@ string _runcode_api(string command) {
 	if (_var_auto_void == true) {
 		return command;
 	}
-	_pv("_$lang.nullcmd   :  <" + _global_scriptload + ">  Line " + to_string(_gf_line) + "  INFO --> " + command + "    (Resource -->  " + oldcmd + ")");
+	_pv("_$lang.nullcmd   :  <" + _global_scriptload + ">  Line " + std::to_string(_gf_line) + "  INFO --> " + command + "    (Resource -->  " + oldcmd + ")");
 	if (is_TPC_already_Running == true) {
-		_fileapi_write(Error_TrackFile, "Calcium Error, execute. On  Full Line Read.  File :  " + _global_scriptload + " Line :  " + to_string(_gf_line) + "  Command --> " + command + "    (Resource -->  " + oldcmd + ")");
+		_fileapi_write(Error_TrackFile, "Calcium Error, execute. On  Full Line Read.  File :  " + _global_scriptload + " Line :  " + std::to_string(_gf_line) + "  Command --> " + command + "    (Resource -->  " + oldcmd + ")");
 	}
 	return "unknown.command";
 }

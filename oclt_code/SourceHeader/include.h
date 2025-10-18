@@ -16,7 +16,7 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
-void _sh_throw_error(string message) {
+void _sh_throw_error(std::string message) {
 	if (__settings_throwErrorMode == false)return;
 	_api_prtmsg("----[ERROR](MESSAGE) :  " + message + "\n");
 	return;
@@ -36,7 +36,7 @@ void _sh_throw_error(string message) {
 //Load Core API
 
 //Directory and File Full Path
-string _$GetSelfPath = GetFilePath();
-string _$GetSelfFull = GetFileName();
+std::string _$GetSelfPath = GetFilePath();
+std::string _$GetSelfFull = GetFileName();
 
 //END
