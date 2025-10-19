@@ -9,7 +9,7 @@
 #include<thread>
 
 
-int CL_FMV_ID = 2501; // Calcium Lang Format Version
+int CL_FMV_ID = 2503; // Calcium Lang Format Version
 //_$req_cl_fmv <Version>
 
 /// <VERSION>
@@ -47,7 +47,7 @@ std::string _KV_softwareVersion = "117"; //(Software Version)
 
 std::string _KV_gen = "5";//(General)
 
-std::string _KV_rv = "6";//(Release Version)
+std::string _KV_rv = "7";//(Release Version)
 
 std::string _KV_releaseVer = _KV_rV_Stable;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 
@@ -218,7 +218,7 @@ bool _RcApiLoadConfig() {
 		_soildwrite_write("$DefaultPluginPath={path}/Plugin;");
 		_soildwrite_write("$DefaultPluginScript={path}/script;");
 		_soildwrite_write("$DefaultLanguagePath={path}/lang;");
-		_soildwrite_write("$PageFile=envswap.tmp;");
+		_soildwrite_write("$PageFile={path}/envswap.tmp;");
 		_soildwrite_write("$OriginWorkDir=" + _$GetSelfPath + ";");
 		_soildwrite_write("");
 		_soildwrite_write("//Display Settings");
