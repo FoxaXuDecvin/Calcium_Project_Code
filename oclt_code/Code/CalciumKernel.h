@@ -265,7 +265,7 @@ std::string _ckapi_scriptload(std::string load_Script,std::string Sargs) {
 		}
 		if (_gf_status == false) {
 			_pv("_$lang.stoprun.  Return status code :  " + cmdbuffer + "  . Args :  " + _global_scriptload + "   Line :  " + std::to_string(_gf_line) + " + " + std::to_string(_gf_cg));
-			return "ok";
+			return "The script terminated unexpectedly.";
 		}
 		
 
