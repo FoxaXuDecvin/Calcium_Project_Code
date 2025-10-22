@@ -395,3 +395,8 @@ void sleepapi_ms(int secondsNum) {
 	usleep(secondsNum * 1000);
 	return;
 }
+
+void __beep_api(int precodeA, int precodeB) {
+	beep(precodeA, precodeB);
+	return;
+}

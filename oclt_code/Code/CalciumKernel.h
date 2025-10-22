@@ -2249,7 +2249,7 @@ std::string _runcode_api(std::string command) {
 		
 		intCutA = atoi(_rc_varid.c_str());
 		intCutB = atoi(_rc_varinfo.c_str());
-		Beep(intCutA, intCutB);	
+		__beep_api(intCutA, intCutB);	
 
 		return "true";
 	}
