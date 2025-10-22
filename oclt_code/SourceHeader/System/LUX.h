@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include<curses.h>
 
 const std::string Win32_kernel = "Win32";
 const std::string Linux_kernel = "Linux";
