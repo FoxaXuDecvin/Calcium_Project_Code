@@ -396,7 +396,7 @@ void sleepapi_ms(int secondsNum) {
 	return;
 }
 
-void __beep_api(int precodeA, int precodeB) {
+void __sysbeep_api(int precodeA, int precodeB) {
 	//Linux cannot achieve this functionality
 	beep();
 	return;
