@@ -2243,6 +2243,16 @@ std::string _runcode_api(std::string command) {
 
 		return _rc_varid;
 	}
+	if (SizeRead(command, 5) == "_beep") {
+		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1)));
+		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));
+		
+		intCutA = atoi(_rc_varid.c_str());
+		intCutB = atoi(_rc_varinfo.c_str());
+		Beep(intCutA, intCutB);	
+
+		return "true";
+	}
 
 	//pack/unpack Tools
 	if (SizeRead(command, 10) == "_file_pack") {
