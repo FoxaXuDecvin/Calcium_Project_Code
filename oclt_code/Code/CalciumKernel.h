@@ -2194,9 +2194,15 @@ std::string _runcode_api(std::string command) {
 
 		return "false";
 	}
-	if (SizeRead(command, 12) == "_str_replace") {
+	if (SizeRead(command, 13) == "_str_replace ") {
 		_rc_varid = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, " ", "(", 1)));
+		if (_rc_varid == "") {
+			return "nulltype";
+		}
 		CharCutC = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, "(", ",", 1)));
+		if (CharCutC == "") {
+			return "nulltype";
+		}
 		_rc_varinfo = _runcode_api(_Old_VSAPI_TransVar(PartReadA(oldcmd, ",", ")", 1)));
 
 		return ReplaceCharA(_rc_varid, CharCutC, _rc_varinfo);
