@@ -9,7 +9,7 @@
 #include<thread>
 
 
-int CL_FMV_ID = 2609; // Calcium Lang Format Version
+int CL_FMV_ID = 2611; // Calcium Lang Format Version
 //_$req_cl_fmv <Version>
 
 /// <VERSION>
@@ -47,7 +47,7 @@ std::string _KV_softwareVersion = "117"; //(Software Version)
 
 std::string _KV_gen = "6";//(General)
 
-std::string _KV_rv = "1";//(Release Version)
+std::string _KV_rv = "2";//(Release Version)
 
 std::string _KV_releaseVer = _KV_rV_Stable;//(Debug/Preview/preRelease/demo/Release  1 - 4)
 

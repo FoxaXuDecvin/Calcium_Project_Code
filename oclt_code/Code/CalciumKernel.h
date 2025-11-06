@@ -1345,6 +1345,10 @@ std::string _runcode_api(std::string command) {
 		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
 		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
+		if (calc_A == "true")calc_A = "1";
+		if (calc_A == "false")calc_A = "0";
+		if (calc_B == "true")calc_B = "1";
+		if (calc_B == "false")calc_B = "0";
 		dbA = atoi(calc_A.c_str());
 		dbB = atoi(calc_B.c_str());
 
@@ -1359,8 +1363,13 @@ std::string _runcode_api(std::string command) {
 		std::string calc_A = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, "(", ",", false)));
 		std::string calc_B = _runcode_api(_Old_VSAPI_TransVar(PartRead(tempbase, ",", ")", true)));
 
+		if (calc_A == "true")calc_A = "1";
+		if (calc_A == "false")calc_A = "0";
+		if (calc_B == "true")calc_B = "1";
+		if (calc_B == "false")calc_B = "0";
 		dbA = atoi(calc_A.c_str());
 		dbB = atoi(calc_B.c_str());
+
 
 		dbC = dbA - dbB;
 
